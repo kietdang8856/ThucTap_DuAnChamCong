@@ -1,0 +1,42 @@
+.box-tools .breadcrumb{
+	margin-bottom: 0;
+	padding: 5px;
+	background: none;
+}
+.box-tools .breadcrumb li{
+	margin-right: 15px;
+	float: left
+}
+.box-tools .breadcrumb li a{
+	color: #333
+}
+.content-header > .breadcrumb{
+	padding: 0 7px
+}
+.content .panel-body{
+	padding: 5px
+}
+.table-form .form-inline .input-group>.form-control{
+	width: 300px;
+}
+.panel-pagination .panel-body{
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.post-category{
+	padding-left: 0
+}
+.post-category ul{
+	padding-left: 15px
+}
+.btn-social{
+	padding-left: 32px
+}
+.btn-social > :first-child {
+    width: 32px;
+    line-height: 32px;
+    font-size: 16px;
+}
+.table-action a.label{
+	margin-left: 5px
+}
