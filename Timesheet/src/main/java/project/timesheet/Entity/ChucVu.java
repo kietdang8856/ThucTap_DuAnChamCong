@@ -1,5 +1,4 @@
-package DuAnChamCong.backend.Entity;
-
+package project.timesheet.Entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
