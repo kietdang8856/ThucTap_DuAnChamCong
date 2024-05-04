@@ -31,14 +31,19 @@
 
     <header class="main-header">
         <!-- Logo -->
-        <a href="../../index2.html" class="logo">
+
+        <a th:href="@{/}" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>A</b>LT</span>
+            <img th:src="@{/img/logo-hutech.jpg}" class="logo-mini">
+            <span class="logo-mini"></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg">BACKHOA_APTECH</span>
+            <span class="logo-lg">HUTECH </span>
+            <img th:src="@{/img/logo-hutech.jpg}" class="logo-lg">
         </a>
+
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
+
             <!-- Sidebar toggle button-->
             <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
                 <span class="sr-only">Toggle navigation</span>
@@ -129,24 +134,23 @@
             <ul class="sidebar-menu" data-widget="tree">
 
                 <li>
-                    <a href="menu.html">
-                        <i class="fa fa-th"></i> <span>Quản lý Menu </span>
+                    <a th:href="@{/}">
+                        <i class="fa fa-dashboard"></i> <span>Trang chủ</span>
                         <span class="pull-right-container">
-              <small class="label pull-right bg-green">FE</small>
             </span>
                     </a>
                 </li>
 
                 <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-dashboard"></i> <span>Quản lý banner</span>
+                    <a href="">
+                        <i class="fa fa-th"></i> <span>Quản lý nhân viên</span>
                         <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href=""><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-                        <li><a href=""><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+                        <li><a th:href="@{/users/all}"><i class="fa fa-circle-o"></i>Nhân viên</a></li>
+                        <li><a href=""><i class="fa fa-circle-o"></i> Tài khoản</a></li>
                     </ul>
                 </li>
 
