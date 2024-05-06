@@ -1,4 +1,4 @@
-package DuAnChamCong.backend.Entity;
+package project.timesheet.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
