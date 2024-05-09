@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import project.timesheet.Entity.ChucVu;
 import project.timesheet.Entity.NhanVien;
 import project.timesheet.Entity.NhanVienModel;
 import project.timesheet.Entity.VanPhong;
@@ -43,6 +44,11 @@ public class NhanVienController {
         nv.setNgayBatDauLam(create.getNgayBatDauLam());
         nv.setGioiTinh(create.isGioiTinh());
        //setter cho chuc vu va van phong
+        VanPhong vp = vanPhongService.getOne(create.getVpLamViecChinh_id());
+        ChucVu cv = chucVuService.getOne(create.getChucVu_id());
+        nv.setVpLamViecChinh(vp);
+        nv.setChucvu(cv);
+        service.create(nv);
         return ResponseEntity.ok().build();
     }
 }

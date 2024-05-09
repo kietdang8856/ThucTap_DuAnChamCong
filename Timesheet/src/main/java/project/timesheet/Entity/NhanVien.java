@@ -21,10 +21,10 @@ public class NhanVien {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String tenNV;
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "chucvu_id")
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "chucvu_id",updatable = true, insertable = true)
     private ChucVu chucvu;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private VanPhong vpLamViecChinh;
     @Nullable
     private String sdt;

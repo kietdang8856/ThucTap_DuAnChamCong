@@ -2,10 +2,12 @@ package project.timesheet.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.timesheet.Entity.ChucVu;
 import project.timesheet.Entity.VanPhong;
 import project.timesheet.Repository.VanPhongRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VanPhongService {
@@ -17,7 +19,8 @@ public class VanPhongService {
     }
     public VanPhong getOne(int id)
     {
-        return repo.findById(id);
+        Optional<VanPhong> optional =repo.findById(id);
+        return optional.orElse(null);
     }
     public void create(VanPhong vp)
     {
