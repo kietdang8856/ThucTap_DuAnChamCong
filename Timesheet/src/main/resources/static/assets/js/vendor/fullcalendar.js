@@ -5,11 +5,11 @@
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("moment"), require("jquery"));
+		module.exports = factory(require("static/assets/js/vendor/moment"), require("jquery"));
 	else if(typeof define === 'function' && define.amd)
-		define(["moment", "jquery"], factory);
+		define(["static/assets/js/vendor/moment", "jquery"], factory);
 	else if(typeof exports === 'object')
-		exports["FullCalendar"] = factory(require("moment"), require("jquery"));
+		exports["FullCalendar"] = factory(require("static/assets/js/vendor/moment"), require("jquery"));
 	else
 		root["FullCalendar"] = factory(root["moment"], root["jQuery"]);
 })(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_3__) {

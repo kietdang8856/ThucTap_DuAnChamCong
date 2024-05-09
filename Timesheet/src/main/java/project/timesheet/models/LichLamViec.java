@@ -1,6 +1,5 @@
-package project.timesheet.Entity;
+package project.timesheet.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
