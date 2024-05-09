@@ -28,8 +28,8 @@ public class LichLamViec {
     @ManyToOne
     private NhanVien nhanVien;
     private Date ngayLam;
-    private Time gioBatDau;
-    private Time gioKetThuc;
+    private int gioBatDau;
+    private int gioKetThuc;
     private String tenCongViec;
 
 }
