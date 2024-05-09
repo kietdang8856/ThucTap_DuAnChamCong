@@ -18,9 +18,10 @@ public class TrangThaiLamViecService {
     {
         return repo.findAll();
     }
-    public Optional<TrangThaiLamViec> getOne(int id)
+    public TrangThaiLamViec getOne(int id)
     {
-        return repo.findById(id);
+        Optional<TrangThaiLamViec> optional =repo.findById(id);
+        return optional.orElse(null);
     }
     public void create(TrangThaiLamViec tt)
     {

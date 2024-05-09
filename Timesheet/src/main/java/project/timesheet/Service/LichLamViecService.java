@@ -2,6 +2,7 @@ package project.timesheet.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.timesheet.Entity.ChucVu;
 import project.timesheet.Entity.LichLamViec;
 import project.timesheet.Entity.NhanVien;
 import project.timesheet.Repository.LichLamViecRepository;
@@ -18,9 +19,10 @@ public class LichLamViecService {
     {
         return repo.findAll();
     }
-    public Optional<LichLamViec> getOne(int id)
+    public LichLamViec getOne(int id)
     {
-        return repo.findById(id);
+        Optional<LichLamViec> optional =repo.findById(id);
+        return optional.orElse(null);
     }
     public void create(LichLamViec nv)
     {

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.timesheet.Entity.ChucVu;
 import project.timesheet.Entity.NhanVien;
+import project.timesheet.Entity.VanPhong;
 import project.timesheet.Repository.ChucVuRepository;
 import project.timesheet.Repository.NhanVienRepository;
 
@@ -18,9 +19,11 @@ public class NhanVienService {
     {
         return repo.findAll();
     }
-    public Optional<NhanVien> getOne(int id)
+    public NhanVien getOne(int id)
     {
-        return repo.findById(id);
+        Optional<NhanVien> optional =repo.findById(id);
+        return optional.orElse(null);
+
     }
     public void create(NhanVien nv)
     {

@@ -24,7 +24,7 @@ public class TrangThaiLamViecController {
         return ResponseEntity.ok(service.getALL());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<TrangThaiLamViec>> getOne(@PathVariable int id){
+    public ResponseEntity<TrangThaiLamViec> getOne(@PathVariable int id){
         return ResponseEntity.ok(service.getOne(id));
     }
 }

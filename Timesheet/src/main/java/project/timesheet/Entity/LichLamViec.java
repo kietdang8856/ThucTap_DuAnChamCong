@@ -19,7 +19,6 @@ public class LichLamViec {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     @ManyToOne
     @Nullable
     private VanPhong vpCongTac;
@@ -31,5 +30,71 @@ public class LichLamViec {
     private int gioBatDau;
     private int gioKetThuc;
     private String tenCongViec;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Nullable
+    public VanPhong getVpCongTac() {
+        return vpCongTac;
+    }
+
+    public void setVpCongTac(@Nullable VanPhong vpCongTac) {
+        this.vpCongTac = vpCongTac;
+    }
+
+    public TrangThaiLamViec getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(TrangThaiLamViec trangThai) {
+        this.trangThai = trangThai;
+    }
+
+    public NhanVien getNhanVien() {
+        return nhanVien;
+    }
+
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
+    }
+
+    public Date getNgayLam() {
+        return ngayLam;
+    }
+
+    public void setNgayLam(Date ngayLam) {
+        this.ngayLam = ngayLam;
+    }
+
+    public int getGioBatDau() {
+        return gioBatDau;
+    }
+
+    public void setGioBatDau(int gioBatDau) {
+        this.gioBatDau = gioBatDau;
+    }
+
+    public int getGioKetThuc() {
+        return gioKetThuc;
+    }
+
+    public void setGioKetThuc(int gioKetThuc) {
+        this.gioKetThuc = gioKetThuc;
+    }
+
+    public String getTenCongViec() {
+        return tenCongViec;
+    }
+
+    public void setTenCongViec(String tenCongViec) {
+        this.tenCongViec = tenCongViec;
+    }
+
 
 }

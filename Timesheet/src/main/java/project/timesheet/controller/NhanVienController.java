@@ -29,7 +29,7 @@ public class NhanVienController {
         return ResponseEntity.ok(service.getALL());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<NhanVien>> getOne(@PathVariable int id){
+    public ResponseEntity<NhanVien> getOne(@PathVariable int id){
         return ResponseEntity.ok(service.getOne(id));
     }
     @PostMapping("/create")
