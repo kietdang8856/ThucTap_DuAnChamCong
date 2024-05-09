@@ -26,7 +26,7 @@ public class User {
     private String password;
 
     @Column(name = "enabled")
-    private boolean enabled;
+    private Boolean enabled;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<UserRole> userRoles;

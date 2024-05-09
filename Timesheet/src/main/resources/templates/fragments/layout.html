@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:fragment="layout (content, activeLink, pageTitle)" xmlns:th="http://www.w3.org/1999/html">
+<html th:fragment="layout (content, activeLink, pageTitle)" xmlns:th="http://www.w3.org/1999/html" xmlns:sec="https://www.thymeleaf.org/extras/spring-security6">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -58,7 +58,7 @@
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="images/user2-160x160.jpg" class="user-image" alt="User Image">
-                            <span class="hidden-xs">Alexander Pierce</span>
+                            <span class="hidden-xs"><span sec:authentication="name"></span></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
@@ -66,7 +66,7 @@
                                 <img src="images/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                                 <p>
-                                    Alexander Pierce - Web Developer
+                                    <span sec:authentication="name"></span>
                                     <small>Member since Nov. 2012</small>
                                 </p>
                             </li>
@@ -91,7 +91,7 @@
                                     <a href="#" class="btn btn-default btn-flat">Profile</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                    <a th:href="@{/logout}" class="btn btn-default btn-flat">Sign out</a>
                                 </div>
                             </li>
                         </ul>
@@ -114,7 +114,7 @@
                     <img src="images/user2-160x160.jpg" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Alexander Pierce</p>
+                    <p><span sec:authentication="name"></span></p>
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
             </div>
