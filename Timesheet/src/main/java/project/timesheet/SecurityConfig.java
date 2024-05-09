@@ -25,11 +25,11 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception{
         http.csrf(csrf-> csrf.disable()).authorizeHttpRequests((auth) -> auth.
                         requestMatchers("/*").permitAll().
-                        requestMatchers("/admin/**").hasAnyRole("ADMIN","USER").
+                        requestMatchers("/admin/**").hasAuthority("ADMIN").
                 anyRequest().authenticated())
                 .formLogin(login->login.loginPage("/login").loginProcessingUrl("/login")
                 .usernameParameter("username").passwordParameter("password").
-                defaultSuccessUrl("/",true));
+                defaultSuccessUrl("/",true)).logout(logout->logout.logoutUrl("/logout").logoutSuccessUrl("/login"));
 
         return http.build();
     }
