@@ -14,7 +14,7 @@ import java.util.Optional;
 public class LichLamViecService {
     @Autowired
     private LichLamViecRepository repo;
-    public List<LichLamViec> getALL()
+    public List<LichLamViec> getAll()
     {
         return repo.findAll();
     }
