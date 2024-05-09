@@ -14,23 +14,23 @@ import java.util.Optional;
 public class TrangThaiLamViecService {
     @Autowired
     private TrangThaiLamViecRepository repo;
-    private List<TrangThaiLamViec> getALL()
+    public List<TrangThaiLamViec> getALL()
     {
         return repo.findAll();
     }
-    private Optional<TrangThaiLamViec> getOne(int id)
+    public Optional<TrangThaiLamViec> getOne(int id)
     {
         return repo.findById(id);
     }
-    private void create(TrangThaiLamViec tt)
+    public void create(TrangThaiLamViec tt)
     {
         repo.save(tt);
     }
-    private void update(TrangThaiLamViec tt)
+    public void update(TrangThaiLamViec tt)
     {
         repo.save(tt);
     }
-    private void delete(int id)
+    public void delete(int id)
     {
         repo.deleteById(id);
     }

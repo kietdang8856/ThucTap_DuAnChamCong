@@ -12,23 +12,23 @@ import java.util.Optional;
 public class ChucVuService {
     @Autowired
     private ChucVuRepository repo;
-    private List<ChucVu> getALL()
+    public List<ChucVu> getALL()
     {
         return repo.findAll();
     }
-    private Optional<ChucVu> getOne(int id)
+    public Optional<ChucVu> getOne(int id)
     {
         return repo.findById(id);
     }
-    private void create(ChucVu cv)
+    public void create(ChucVu cv)
     {
         repo.save(cv);
     }
-    private void update(ChucVu cv)
+    public void update(ChucVu cv)
     {
         repo.save(cv);
     }
-    private void delete(int id)
+    public void delete(int id)
     {
         repo.deleteById(id);
     }

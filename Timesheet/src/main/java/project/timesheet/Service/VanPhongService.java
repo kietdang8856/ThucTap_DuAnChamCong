@@ -14,23 +14,23 @@ import java.util.Optional;
 public class VanPhongService {
     @Autowired
     private VanPhongRepository repo;
-    private List<VanPhong> getALL()
+    public List<VanPhong> getALL()
     {
         return repo.findAll();
     }
-    private Optional<VanPhong> getOne(int id)
+    public Optional<VanPhong> getOne(int id)
     {
         return repo.findById(id);
     }
-    private void create(VanPhong vp)
+    public void create(VanPhong vp)
     {
         repo.save(vp);
     }
-    private void update(VanPhong vp)
+    public void update(VanPhong vp)
     {
         repo.save(vp);
     }
-    private void delete(int id)
+    public void delete(int id)
     {
         repo.deleteById(id);
     }

@@ -1,5 +1,8 @@
 package project.timesheet.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +24,7 @@ public class ChucVu {
     private String TenChucVu;
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "chucvu")
+
     private List<NhanVien> nhanViens
             = new ArrayList<>();
 

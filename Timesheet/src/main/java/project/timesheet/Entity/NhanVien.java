@@ -1,6 +1,8 @@
 package project.timesheet.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,6 +17,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "NhanVien")
+
 public class NhanVien {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +25,7 @@ public class NhanVien {
     private String tenNV;
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "chucvu_id", insertable = false, updatable = false)
+    @JsonIgnore
     private ChucVu chucvu;
     @ManyToOne
     private VanPhong vpLamViecChinh;

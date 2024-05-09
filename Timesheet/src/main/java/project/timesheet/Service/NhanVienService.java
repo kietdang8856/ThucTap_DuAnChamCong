@@ -14,23 +14,23 @@ import java.util.Optional;
 public class NhanVienService {
     @Autowired
     private NhanVienRepository repo;
-    private List<NhanVien> getALL()
+    public List<NhanVien> getALL()
     {
         return repo.findAll();
     }
-    private Optional<NhanVien> getOne(int id)
+    public Optional<NhanVien> getOne(int id)
     {
         return repo.findById(id);
     }
-    private void create(NhanVien nv)
+    public void create(NhanVien nv)
     {
         repo.save(nv);
     }
-    private void update(NhanVien nv)
+    public void update(NhanVien nv)
     {
         repo.save(nv);
     }
-    private void delete(int id)
+    public void delete(int id)
     {
         repo.deleteById(id);
     }
