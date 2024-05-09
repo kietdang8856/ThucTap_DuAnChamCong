@@ -1,30 +1,36 @@
-package project.timesheet.Entity;
+package project.timesheet.models;
 
 import jakarta.persistence.*;
+import lombok.*;
 
-import java.util.HashSet;
 import java.util.Set;
 
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "username")
+    @Getter
     private String username;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "enabled")
     private boolean enabled;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<UserRole> userRoles;
 
-    public Long getId() {
-        return id;
-    }
 
     // remaining getters and setters are not shown for brevity
 }

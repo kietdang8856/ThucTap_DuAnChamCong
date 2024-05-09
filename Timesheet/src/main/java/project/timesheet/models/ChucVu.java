@@ -1,9 +1,8 @@
-package project.timesheet.Entity;
+package project.timesheet.models;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.aspectj.weaver.ast.Literal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +13,11 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "ChucVu")
 public class ChucVu {
+    @Column(name = "id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "tenchucvu")
     private String TenChucVu;
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "chucvu")

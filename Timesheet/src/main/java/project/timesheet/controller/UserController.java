@@ -8,11 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/users")
 public class UserController {
 
-    @GetMapping("/login")
-    public String Login() {
-
-        return "users/login";
-    }
     @GetMapping("/all")
     public String showUsers() {
 

@@ -1,11 +1,10 @@
-package project.timesheet.Entity;
+package project.timesheet.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -16,10 +15,15 @@ import java.util.List;
 public class VanPhong {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Column(name = "id")
     private int id;
+    @Column(name = "tenvp")
     private String tenVP;
+    @Column(name = "diachi")
     private String diaChi;
     @OneToMany
+    @Column(name = "lichlamviec")
     private List<LichLamViec> lichLamViecs ;
     public int getId() {
         return id;
