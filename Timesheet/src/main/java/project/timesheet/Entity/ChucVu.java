@@ -1,8 +1,6 @@
 package project.timesheet.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,16 +15,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ChucVu")
+
 public class ChucVu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String TenChucVu;
     @OneToMany(cascade = CascadeType.ALL,
-            mappedBy = "chucvu")
-
-    private List<NhanVien> nhanViens
-            = new ArrayList<>();
+            mappedBy = "chucvu",fetch = FetchType.LAZY)
+   @JsonIgnore
+    private List<NhanVien> nhanViens;
 
     public int getId() {
         return id;

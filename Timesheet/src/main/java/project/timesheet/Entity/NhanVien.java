@@ -1,8 +1,6 @@
 package project.timesheet.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,15 +15,13 @@ import java.sql.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "NhanVien")
-
 public class NhanVien {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String tenNV;
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "chucvu_id", insertable = false, updatable = false)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "chucvu_id")
     private ChucVu chucvu;
     @ManyToOne
     private VanPhong vpLamViecChinh;
