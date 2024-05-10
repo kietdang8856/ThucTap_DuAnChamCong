@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html th:fragment="layout (content, activeLink, pageTitle)" xmlns:th="http://www.w3.org/1999/html" xmlns:sec="https://www.thymeleaf.org/extras/spring-security6">
+<intercept-url pattern="/**" access="authenticated"/>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
