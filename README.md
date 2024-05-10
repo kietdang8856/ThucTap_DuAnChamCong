@@ -9,3 +9,13 @@
 
 2. Để bật Spring security 
 -> thì bỏ (exclude = SecurityAutoConfiguration.class) trong src/main/java/TimesheetApplication
+
+update 07/05/2024
+-Entity chuyển thành models
+ + Thêm CustomUserDetail để custom user trong spring security
+-thêm Package Repository -> Service (khi controller chạy sẽ gọi service ,0 gọi repo)
+
+update 08/05/2024
++ Thêm User_role (Mục đích phân quyền)
++ chỉnh sửa lại model của user và role 
++ Tiến hành tạo file SecurityConfig
