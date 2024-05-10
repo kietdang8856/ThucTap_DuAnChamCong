@@ -1,4 +1,4 @@
-package project.timesheet.Entity;
+package project.timesheet.Model;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Blob;
 import java.sql.Date;
-import java.util.Optional;
 
 @Data
 @NoArgsConstructor

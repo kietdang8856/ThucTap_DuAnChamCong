@@ -4,16 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import project.timesheet.Entity.ChucVu;
-import project.timesheet.Entity.NhanVien;
-import project.timesheet.Entity.NhanVienModel;
-import project.timesheet.Entity.VanPhong;
+import project.timesheet.Model.ChucVu;
+import project.timesheet.Model.NhanVien;
+import project.timesheet.Model.NhanVienModel;
+import project.timesheet.Model.VanPhong;
 import project.timesheet.Service.ChucVuService;
 import project.timesheet.Service.NhanVienService;
 import project.timesheet.Service.VanPhongService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/nhanvien")

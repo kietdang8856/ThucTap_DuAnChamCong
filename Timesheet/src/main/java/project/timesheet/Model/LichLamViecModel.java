@@ -1,7 +1,4 @@
-package project.timesheet.Entity;
-
-import jakarta.annotation.Nullable;
-import jakarta.persistence.ManyToOne;
+package project.timesheet.Model;
 
 import java.sql.Date;
 

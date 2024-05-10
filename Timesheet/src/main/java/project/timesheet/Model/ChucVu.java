@@ -1,13 +1,11 @@
-package project.timesheet.Entity;
+package project.timesheet.Model;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.aspectj.weaver.ast.Literal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

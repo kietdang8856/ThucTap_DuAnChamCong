@@ -1,6 +1,5 @@
-package project.timesheet.Entity;
+package project.timesheet.Model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
-import java.sql.Time;
 
 @Data
 @Entity

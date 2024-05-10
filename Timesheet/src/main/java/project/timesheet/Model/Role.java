@@ -1,4 +1,4 @@
-package project.timesheet.Entity;
+package project.timesheet.Model;
 
 import jakarta.persistence.*;
 
