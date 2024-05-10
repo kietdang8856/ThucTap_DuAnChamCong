@@ -9,7 +9,6 @@ public class LichLamViecModel {
 
     private int  vpCongTac_id;
     private int trangThaiLamViec_Id;
-
     private int nhanVien_id;
     private Date ngayLam;
     private int gioBatDau;
