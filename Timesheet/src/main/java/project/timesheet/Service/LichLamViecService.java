@@ -2,8 +2,8 @@ package project.timesheet.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import project.timesheet.Model.LichLamViec;
-import project.timesheet.Repository.LichLamViecRepository;
+import project.timesheet.models.LichLamViec;
+import project.timesheet.repository.LichLamViecRepository;
 
 import java.util.List;
 import java.util.Optional;

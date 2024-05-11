@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import project.timesheet.Model.ChucVu;
-import project.timesheet.Model.NhanVien;
-import project.timesheet.Model.NhanVienModel;
-import project.timesheet.Model.VanPhong;
+import project.timesheet.models.ChucVu;
+import project.timesheet.models.NhanVien;
+import project.timesheet.models.NhanVienModel;
+import project.timesheet.models.VanPhong;
 import project.timesheet.Service.ChucVuService;
 import project.timesheet.Service.NhanVienService;
 import project.timesheet.Service.VanPhongService;
@@ -42,7 +42,7 @@ public class NhanVienController {
         nv.setDiaChi(create.getDiaChi());
         nv.setNgayBatDauLam(create.getNgayBatDauLam());
         nv.setGioiTinh(create.isGioiTinh());
-       //setter cho chuc vu va van phong
+        //setter cho chuc vu va van phong
         VanPhong vp = vanPhongService.getOne(create.getVpLamViecChinh_id());
         ChucVu cv = chucVuService.getOne(create.getChucVu_id());
         nv.setVpLamViecChinh(vp);

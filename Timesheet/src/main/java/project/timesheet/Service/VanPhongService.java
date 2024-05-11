@@ -2,8 +2,8 @@ package project.timesheet.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import project.timesheet.Model.VanPhong;
-import project.timesheet.Repository.VanPhongRepository;
+import project.timesheet.models.VanPhong;
+import project.timesheet.repository.VanPhongRepository;
 
 import java.util.List;
 import java.util.Optional;

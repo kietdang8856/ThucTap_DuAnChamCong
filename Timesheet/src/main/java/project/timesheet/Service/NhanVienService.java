@@ -2,8 +2,8 @@ package project.timesheet.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import project.timesheet.Model.NhanVien;
-import project.timesheet.Repository.NhanVienRepository;
+import project.timesheet.models.NhanVien;
+import project.timesheet.repository.NhanVienRepository;
 
 import java.util.List;
 import java.util.Optional;

@@ -2,8 +2,8 @@ package project.timesheet.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import project.timesheet.Model.TrangThaiLamViec;
-import project.timesheet.Repository.TrangThaiLamViecRepository;
+import project.timesheet.models.TrangThaiLamViec;
+import project.timesheet.repository.TrangThaiLamViecRepository;
 
 import java.util.List;
 import java.util.Optional;

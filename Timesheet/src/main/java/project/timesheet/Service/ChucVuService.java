@@ -2,8 +2,8 @@ package project.timesheet.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import project.timesheet.Model.ChucVu;
-import project.timesheet.Repository.ChucVuRepository;
+import project.timesheet.models.ChucVu;
+import project.timesheet.repository.ChucVuRepository;
 
 import java.util.List;
 import java.util.Optional;

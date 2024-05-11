@@ -6,12 +6,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 import org.springframework.web.bind.annotation.*;
-import project.timesheet.Model.LichLamViec;
-import project.timesheet.Model.LichLamViecModel;
+import project.timesheet.models.LichLamViec;
+import project.timesheet.models.LichLamViec;
 import project.timesheet.Service.LichLamViecService;
 import project.timesheet.Service.NhanVienService;
 import project.timesheet.Service.TrangThaiLamViecService;
 import project.timesheet.Service.VanPhongService;
+import project.timesheet.models.LichLamViecModel;
 
 import java.util.Date;
 import java.util.List;
@@ -28,20 +29,20 @@ public class LichLamViecController {
     @Autowired
     private VanPhongService vanPhongService;
 
-    @PostMapping("/create")
-    public ResponseEntity<LichLamViec> create(@RequestBody LichLamViecModel lichlam) {
-        LichLamViec lich = new LichLamViec();
-        lich.setGioBatDau(lichlam.getGioBatDau());
-        lich.setGioKetThuc(lichlam.getGioKetThuc());
-        lich.setNgayLam(lichlam.getNgayLam());
-        lich.setTenCongViec(lichlam.getTenCongViec());
-        //setter cho nhanvien, van phong va trang thai lam viec
-        lich.setNhanVien(nhanVienService.getOne(lichlam.getNhanVien_id()));
-        lich.setTrangThai(trangThaiLamViecService.getOne(lichlam.getTrangThaiLamViec_Id()));
-        lich.setVpCongTac(vanPhongService.getOne(lichlam.getVpCongTac_id()));
-        service.create(lich);
-        return ResponseEntity.ok().build();
-    }
+        @PostMapping("/create")
+        public ResponseEntity<LichLamViec> create(@RequestBody LichLamViecModel lichlam) {
+            LichLamViec lich = new LichLamViec();
+            lich.setGioBatDau(lichlam.getGioBatDau());
+            lich.setGioKetThuc(lichlam.getGioKetThuc());
+            lich.setNgayLam(lichlam.getNgayLam());
+            lich.setTenCongViec(lichlam.getTenCongViec());
+            //setter cho nhanvien, van phong va trang thai lam viec
+            lich.setNhanVien(nhanVienService.getOne(lichlam.getNhanVien_id()));
+            lich.setTrangThai(trangThaiLamViecService.getOne(lichlam.getTrangThaiLamViec_Id()));
+            lich.setVpCongTac(vanPhongService.getOne(lichlam.getVpCongTac_id()));
+            service.create(lich);
+            return ResponseEntity.ok().build();
+        }
 
     @GetMapping("/index")
     public ResponseEntity<List<LichLamViec>> getAll() {
