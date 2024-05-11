@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.timesheet.models.TrangThaiLamViec;
-import project.timesheet.Service.TrangThaiLamViecService;
+import project.timesheet.services.TrangThaiLamViecService;
 
 import java.util.List;
 

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.timesheet.models.VanPhong;
-import project.timesheet.Service.VanPhongService;
+import project.timesheet.services.VanPhongService;
 
 import java.util.List;
 import java.util.Optional;

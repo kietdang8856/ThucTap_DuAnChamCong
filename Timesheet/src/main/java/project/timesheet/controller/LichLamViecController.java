@@ -4,17 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.LinkedCaseInsensitiveMap;
 import org.springframework.web.bind.annotation.*;
 import project.timesheet.models.LichLamViec;
-import project.timesheet.models.LichLamViec;
-import project.timesheet.Service.LichLamViecService;
-import project.timesheet.Service.NhanVienService;
-import project.timesheet.Service.TrangThaiLamViecService;
-import project.timesheet.Service.VanPhongService;
+import project.timesheet.services.LichLamViecService;
+import project.timesheet.services.NhanVienService;
+import project.timesheet.services.TrangThaiLamViecService;
+import project.timesheet.services.VanPhongService;
 import project.timesheet.models.LichLamViecModel;
 
-import java.util.Date;
 import java.util.List;
 
 @Controller

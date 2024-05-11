@@ -8,9 +8,9 @@ import project.timesheet.models.ChucVu;
 import project.timesheet.models.NhanVien;
 import project.timesheet.models.NhanVienModel;
 import project.timesheet.models.VanPhong;
-import project.timesheet.Service.ChucVuService;
-import project.timesheet.Service.NhanVienService;
-import project.timesheet.Service.VanPhongService;
+import project.timesheet.services.ChucVuService;
+import project.timesheet.services.NhanVienService;
+import project.timesheet.services.VanPhongService;
 
 import java.util.List;
 
