@@ -19,3 +19,6 @@ update 08/05/2024
 + Thêm User_role (Mục đích phân quyền)
 + chỉnh sửa lại model của user và role 
 + Tiến hành tạo file SecurityConfig
+
+update 09/05/2024
++ Login thành công
