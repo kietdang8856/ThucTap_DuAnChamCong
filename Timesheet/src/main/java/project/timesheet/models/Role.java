@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,8 +25,8 @@ public class Role {
     public long getId() {
         return id;
     }
-    @OneToMany(mappedBy = "role")
-    private Set<UserRole> roleUsers;
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserRole> roleUsers = new HashSet<>();
 
     // remaining getters and setters
 }

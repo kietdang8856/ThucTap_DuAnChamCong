@@ -18,6 +18,12 @@ public class UserRole {
     @ManyToOne
     @JoinColumn(name = "roleId", referencedColumnName = "id")
     private Role role;
+    public UserRole(User user, Role role) {
+        this.user = user;
+        this.role = role;
+    }
 
+    public UserRole() {
 
+    }
 }

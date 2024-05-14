@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listUser','đăng ký')}"
+>
+<head>
+    <title>Register</title>
+</head>
+<body>
+<h1>Register</h1>
+<form th:action="@{/users/register}" method="post">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required />
+    <br/>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required />
+    <br/>
+    <label for="roles">Roles:</label>
+    <select id="roles" name="roles" multiple required>
+        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+    </select>
+    <br/>
+    <button type="submit">Register</button>
+</form>
+</body>
+</html>
