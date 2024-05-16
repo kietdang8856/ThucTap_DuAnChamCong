@@ -8,7 +8,7 @@ import project.timesheet.repository.RoleRepository;
 import java.util.List;
 
 public interface UserService {
-
+    public List<User> getAllUsers();
     public User saveUser(User user);
     public List<Role> getAllRoles();
 
