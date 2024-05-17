@@ -26,6 +26,8 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Getter
+    @Setter
     @Column(name = "enabled")
     private Boolean enabled;
 

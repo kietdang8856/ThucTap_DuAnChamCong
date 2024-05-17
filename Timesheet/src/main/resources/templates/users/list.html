@@ -18,7 +18,7 @@
             </div><!-- /.container-fluid -->
             <hr>
             <div class="box-header">
-                <a href="add-menu.html" class="btn btn-success">+Thêm nhân viên</a>
+                <a th:href="@{/users/register}" class="btn btn-success">+Thêm nhân viên</a>
 
                 <div class="box-tools">
                     <div class="input-group input-group-sm" style="width: 150px;">
@@ -38,22 +38,26 @@
         <th>ID</th>
         <th>TÊN TÀI KHOẢN</th>
         <th>QUYỀN</th>
+        <th>TRẠNG THÁI</th>
+        <th>CHỨC NĂNG</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="user : ${users}">
         <td th:text="${user.id}"></td>
         <td th:text="${user.username}"></td>
-        <td>
-            <ul th:each="userRole : ${user.userRoles}">
-                <li >
+        <td th:each="userRole : ${user.userRoles}">
                     <span th:text="${userRole.role.name}"></span>
-                </li>
-            </ul>
+        </td>
+        <td th:text="${user.enabled} ? 'Đang hoạt động' : ''">Đang hoạt động</td>
+        <td>
+            <a th:href="@{'/users/' + ${user.id} + '/edit'}" class="btn btn-sm btn-success">Sửa</a>
+            <a href="@Url.Action("Details","User",new { id = item.user_id })" class="btn btn-sm btn-info">Chi tiết</a>
+            <a href="@Url.Action("DeleteTemporary","User",new { id = item.user_id })" class="btn btn-sm btn-danger">Xóa</a>
         </td>
     </tr>
     </tbody>
-                    </table>
+                </table>
             </div>
             <!-- /.box-body -->
         </div>

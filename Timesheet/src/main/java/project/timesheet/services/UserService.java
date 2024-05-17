@@ -15,4 +15,10 @@ public interface UserService {
     public Role getRoleById(Long id);
     User findByUsername(String username);
 
+    public User findById(Long id);
+
+    public List<User> findAll();
+
+    public void deleteUser(User user);
+
 }
