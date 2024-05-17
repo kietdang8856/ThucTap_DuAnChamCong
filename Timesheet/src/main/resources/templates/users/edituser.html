@@ -18,8 +18,9 @@
     </div>
     <div>
         <label for="roles">Roles:</label>
-        <select id="roles" name="roles" multiple>
-            <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}" th:selected="${user.userRoles.contains(userRole)}"></option>
+        <select id="roles" name="roles">
+            <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"
+                    th:selected="${userRoles.contains(role)}"></option>
         </select>
     </div>
     <div>

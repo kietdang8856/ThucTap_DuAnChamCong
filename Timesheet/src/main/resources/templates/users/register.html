@@ -14,7 +14,7 @@
     <input type="password" id="password" name="password" required />
     <br/>
     <label for="roles">Roles:</label>
-    <select id="roles" name="roles" multiple required>
+    <select id="roles" name="roles">
         <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
     </select>
     <br/>

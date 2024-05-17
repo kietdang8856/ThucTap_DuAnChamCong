@@ -15,6 +15,7 @@ import project.timesheet.services.UserServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/users")
@@ -64,12 +65,16 @@ public class UserController {
         return "users/show";
     }
 
-        @GetMapping("/{id}/edit")
-        public String showEditForm(@PathVariable Long id, Model model) {
-            User user = userService.findById(id);
-            model.addAttribute("user", user);
-            return "users/edituser";
-        }
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        User user = userService.findById(id);
+        List<Role> roles = userService.getAllRoles();
+        List<Role> userRoles = user.getUserRoles().stream().map(UserRole::getRole).collect(Collectors.toList());
+        model.addAttribute("roles", roles);
+        model.addAttribute("user", user);
+        model.addAttribute("userRoles", userRoles);
+        return "users/edituser";
+    }
 
         @PostMapping("/{id}/edit")
         public String editUser(@PathVariable Long id,
@@ -99,7 +104,7 @@ public class UserController {
             } else {
                 model.addAttribute("error", "User not found with ID: " + id);
             }
-            return "redirect:/users";
+            return "redirect:/users/list";
         }
 
     @GetMapping("/{id}/delete")
