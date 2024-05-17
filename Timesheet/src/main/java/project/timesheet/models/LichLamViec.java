@@ -24,6 +24,7 @@ public class LichLamViec {
     private TrangThaiLamViec trangThai;
     @ManyToOne
     private NhanVien nhanVien;
+
     private Date ngayLam;
     private int gioBatDau;
     private int gioKetThuc;

@@ -19,7 +19,7 @@ public class ChucVuService {
     public ChucVu getOne(int id)
     {
         Optional<ChucVu > optional =repo.findById(id);
-    return optional.orElse(null);
+        return optional.orElse(null);
     }
     public void create(ChucVu cv)
     {

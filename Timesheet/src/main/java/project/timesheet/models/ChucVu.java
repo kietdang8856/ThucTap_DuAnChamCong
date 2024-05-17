@@ -1,4 +1,5 @@
 package project.timesheet.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,17 +13,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ChucVu")
+
 public class ChucVu {
-    @Column(name = "id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "tenchucvu")
     private String TenChucVu;
     @OneToMany(cascade = CascadeType.ALL,
-            mappedBy = "chucvu")
-    private List<NhanVien> nhanViens
-            = new ArrayList<>();
+            mappedBy = "chucvu",fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<NhanVien> nhanViens;
 
     public int getId() {
         return id;

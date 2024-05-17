@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import project.timesheet.models.LichLamViec;
 import project.timesheet.repository.LichLamViecRepository;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,22 @@ public class LichLamViecService {
     {
         Optional<LichLamViec> optional =repo.findById(id);
         return optional.orElse(null);
+    }
+    public List<LichLamViec> getAllBetweenDate(Date tuNgay,Date denNgay)
+    {
+        return repo.findAllByNgayLamBetween(tuNgay,denNgay);
+    }
+    public List<LichLamViec> getAllByNhanVienId(int nvid)
+    {
+        return repo.findAllByNhanVienId(nvid);
+    }
+    public List<LichLamViec> getAllByVanPhongId(int vpid)
+    {
+        return repo.findAllByVpCongTacId(vpid);
+    }
+    public List<LichLamViec> getAllByTrangThaiId(int ttid)
+    {
+        return repo.findAllByTrangThaiId(ttid);
     }
     public void create(LichLamViec nv)
     {

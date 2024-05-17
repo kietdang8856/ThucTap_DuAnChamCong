@@ -1,7 +1,12 @@
 package project.timesheet.models;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.sql.Date;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class LichLamViecModel {
 
     private int  vpCongTac_id;
