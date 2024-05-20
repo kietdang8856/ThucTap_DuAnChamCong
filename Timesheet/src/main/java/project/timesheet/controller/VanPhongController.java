@@ -23,6 +23,6 @@ public class VanPhongController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<Optional<VanPhong>> getOne(@PathVariable int id){
-        return ResponseEntity.ok(Optional.ofNullable(service.getOne(id)));
+        return ResponseEntity.ok(Optional.ofNullable(service.getVanPhongById(id)));
     }
 }

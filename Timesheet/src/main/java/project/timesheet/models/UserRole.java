@@ -13,13 +13,13 @@ public class UserRole {
 
     @ManyToOne
     @JoinColumn(name = "userId",referencedColumnName = "id")
-    private User user;
+    private NhanVien NhanVien;
     @Getter
     @ManyToOne
     @JoinColumn(name = "roleId", referencedColumnName = "id")
     private Role role;
-    public UserRole(User user, Role role) {
-        this.user = user;
+    public UserRole(NhanVien NhanVien, Role role) {
+        this.NhanVien = NhanVien;
         this.role = role;
     }
 

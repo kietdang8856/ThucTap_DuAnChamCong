@@ -1,5 +1,9 @@
 package project.timesheet.models;
 
+import jakarta.persistence.Column;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.sql.Date;
 
 public class NhanVienModel {
@@ -10,7 +14,21 @@ public class NhanVienModel {
     private String diaChi;
     private Date ngayBatDauLam;
     private boolean gioiTinh;
+    @Column(unique = true)
     private String email;
+
+    @Column(unique = true)
+    @Getter
+    @Setter
+    private String username;
+
+    @Getter
+    @Setter
+    private String password;
+
+    @Getter
+    @Setter
+    private int enabled;
 
     public String getTenNV() {
         return tenNV;

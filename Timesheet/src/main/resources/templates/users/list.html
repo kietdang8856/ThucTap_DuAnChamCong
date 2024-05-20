@@ -51,9 +51,9 @@
         </td>
         <td th:text="${user.enabled} ? 'Đang hoạt động' : ''">Đang hoạt động</td>
         <td>
-            <a th:href="@{'/users/' + ${user.id} + '/edit'}" class="btn btn-sm btn-success">Sửa</a>
-            <a href="@Url.Action("Details","User",new { id = item.user_id })" class="btn btn-sm btn-info">Chi tiết</a>
-            <a href="@Url.Action("DeleteTemporary","User",new { id = item.user_id })" class="btn btn-sm btn-danger">Xóa</a>
+            <a th:href="@{'/users/edit/'+ ${user.id}}" class="btn btn-sm btn-success">Sửa</a>
+            <a th:href="@{'/users/'+ ${user.id}}" class="btn btn-sm btn-info">Chi tiết</a>
+            <a th:href="@{'/users/delete/'+ ${user.id}}"  class="btn btn-sm btn-danger">Xóa</a>
         </td>
     </tr>
     </tbody>

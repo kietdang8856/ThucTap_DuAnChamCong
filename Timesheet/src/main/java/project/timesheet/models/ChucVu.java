@@ -17,7 +17,7 @@ import java.util.List;
 public class ChucVu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String TenChucVu;
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "chucvu",fetch = FetchType.LAZY)

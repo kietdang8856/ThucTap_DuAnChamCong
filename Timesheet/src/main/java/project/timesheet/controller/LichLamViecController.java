@@ -64,7 +64,7 @@ public class LichLamViecController {
             //setter cho nhanvien, van phong va trang thai lam viec
             lich.setNhanVien(nhanVienService.getOne(update.getNhanVien_id()));
             lich.setTrangThai(trangThaiLamViecService.getOne(update.getTrangThaiLamViec_Id()));
-            lich.setVpCongTac(vanPhongService.getOne(update.getVpCongTac_id()));
+            lich.setVpCongTac(vanPhongService.getVanPhongById(update.getVpCongTac_id()));
             service.create(lich);
             return ResponseEntity.ok().build();
         }
@@ -125,7 +125,7 @@ public class LichLamViecController {
         //setter cho nhanvien, van phong va trang thai lam viec
         lich.setNhanVien(nhanVienService.getOne(lichlam.getNhanVien_id()));
         lich.setTrangThai(trangThaiLamViecService.getOne(lichlam.getTrangThaiLamViec_Id()));
-        lich.setVpCongTac(vanPhongService.getOne(lichlam.getVpCongTac_id()));
+        lich.setVpCongTac(vanPhongService.getVanPhongById(lichlam.getVpCongTac_id()));
         service.create(lich);
     }
     @GetMapping("/getbydate")

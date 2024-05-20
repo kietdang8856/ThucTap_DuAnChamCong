@@ -40,3 +40,8 @@
 .table-action a.label{
 	margin-left: 5px
 }
+/* Trong file CSS của bạn (ví dụ: style.css) */
+.disabled-input {
+
+	color: #999; /* Màu chữ nhạt hơn */
+}

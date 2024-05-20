@@ -11,7 +11,7 @@ import java.util.Collection;
 
 // Dùng để custom user
 public class CustomUserDetails implements UserDetails {
-    private User user;
+    private NhanVien user;
     private Collection<? extends GrantedAuthority> authorities;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -21,7 +21,7 @@ public class CustomUserDetails implements UserDetails {
     public CustomUserDetails() {
     }
 
-    public CustomUserDetails(User user, Collection<? extends GrantedAuthority> authorities) {
+    public CustomUserDetails(NhanVien user, Collection<? extends GrantedAuthority> authorities) {
         super();
         this.user = user;
         this.authorities = authorities;

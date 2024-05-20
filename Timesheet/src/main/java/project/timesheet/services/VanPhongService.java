@@ -16,11 +16,14 @@ public class VanPhongService {
     {
         return repo.findAll();
     }
-    public VanPhong getOne(int id)
-    {
-        Optional<VanPhong> optional =repo.findById(id);
-        return optional.orElse(null);
-    }
+//    public VanPhong getOne(int id)
+//    {
+//        Optional<VanPhong> optional =repo.findById(id);
+//        return optional.orElse(null);
+//    }
+public VanPhong getVanPhongById(Integer id) {
+    return repo.findById(id).orElse(null);
+}
     public void create(VanPhong vp)
     {
         repo.save(vp);

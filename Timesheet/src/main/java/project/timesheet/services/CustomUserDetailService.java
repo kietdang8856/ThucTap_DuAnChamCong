@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import project.timesheet.models.CustomUserDetails;
 import project.timesheet.models.Role;
-import project.timesheet.models.User;
+import project.timesheet.models.NhanVien;
 import project.timesheet.models.UserRole;
 
 import java.util.Collection;
@@ -20,10 +20,10 @@ import java.util.Set;
 public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
-    private UserService userService;
+    private NhanVienService userService;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.findByUsername(username);
+        NhanVien user = userService.findByUsername(username);
         if(user == null){
             throw new UsernameNotFoundException("Không tìm thấy user");
         }

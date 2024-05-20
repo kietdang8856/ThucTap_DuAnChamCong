@@ -16,11 +16,14 @@ public class ChucVuService {
     {
         return repo.findAll();
     }
-    public ChucVu getOne(int id)
-    {
-        Optional<ChucVu > optional =repo.findById(id);
-        return optional.orElse(null);
-    }
+//    public ChucVu getOne(int id)
+//    {
+//        Optional<ChucVu > optional =repo.findById(id);
+//        return optional.orElse(null);
+//    }
+public ChucVu getChucVuById(Integer id) {
+    return repo.findById(id).orElse(null);
+}
     public void create(ChucVu cv)
     {
         repo.save(cv);

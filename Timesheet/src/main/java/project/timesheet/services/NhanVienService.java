@@ -1,37 +1,34 @@
 package project.timesheet.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import project.timesheet.models.NhanVien;
-import project.timesheet.repository.NhanVienRepository;
+import project.timesheet.models.Role;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
-public class NhanVienService {
-    @Autowired
-    private NhanVienRepository repo;
-    public List<NhanVien> getALL()
-    {
-        return repo.findAll();
-    }
-    public NhanVien getOne(int id)
-    {
-        Optional<NhanVien> optional =repo.findById(id);
-        return optional.orElse(null);
 
-    }
-    public void create(NhanVien nv)
-    {
-        repo.save(nv);
-    }
-    public void update(NhanVien nv)
-    {
-        repo.save(nv);
-    }
-    public void delete(int id)
-    {
-        repo.deleteById(id);
-    }
+public interface NhanVienService {
+    public NhanVien getOne(int id);
+
+    public List<NhanVien> getAllUsers();
+
+    public NhanVien saveUser(NhanVien user);
+
+    public List<Role> getAllRoles();
+
+    public Role getRoleById(Long id);
+
+    NhanVien findByUsername(String username);
+
+    public NhanVien findById(int id);
+
+    public List<NhanVien> findAll();
+
+    public void deleteUser(NhanVien user);
+
+    boolean existsByUsername(String username);
+    public boolean existsByEmail(String email);
+    Role getRoleByName(String name);
+    boolean existsAdmin();
+    boolean existsOtherAdmin(int userId);
 }

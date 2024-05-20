@@ -1,30 +1,42 @@
 package project.timesheet.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.timesheet.execption.ResourceNotFoundException;
 import project.timesheet.models.Role;
-import project.timesheet.models.User;
+import project.timesheet.models.NhanVien;
+import project.timesheet.models.UserRole;
 import project.timesheet.repository.RoleRepository;
-import project.timesheet.repository.UserRepository;
+import project.timesheet.repository.NhanVienRepository;
+import project.timesheet.repository.UserRoleRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public  class UserServiceImpl implements UserService {
+public class UserServiceImpl implements NhanVienService {
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
-    private UserRepository userRepository;
+    private NhanVienRepository userRepository;
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
     public List<Role> getAllRoles(){
         return roleRepository.findAll();
     }
-    public User saveUser(User user) {
+    public NhanVien saveUser(NhanVien user) {
         return userRepository.save(user);
     }
-    public List<User> getAllUsers() {
+
+    @Override
+    public NhanVien getOne(int id) {
+        Optional<NhanVien> optional =userRepository.findById(id);
+        return optional.orElse(null);
+    }
+
+    public List<NhanVien> getAllUsers() {
         return userRepository.findAll();
     }
     @Override
@@ -33,12 +45,14 @@ public  class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
+    public NhanVien findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
-    public User findById(Long id) {
-        Optional<User> userOptional = userRepository.findById(id);
+
+    @Override
+    public NhanVien findById(int id) {
+        Optional<NhanVien> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             return userOptional.get();
         } else {
@@ -46,11 +60,36 @@ public  class UserServiceImpl implements UserService {
         }
     }
 
-    public List<User> findAll() {
+    public List<NhanVien> findAll() {
         return userRepository.findAll();
     }
 
-    public void deleteUser(User user) {
+    @Transactional
+    public void deleteUser(NhanVien user) {
+        userRepository.deleteUserRoleByNhanVien(user);
         userRepository.delete(user);
+    }
+
+    //kiểm tra
+    //user tồn tại hay không ?
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+    @Override
+    public Role getRoleByName(String name) {
+        return roleRepository.findByName(name);
+    }
+    //Kiểm tra admin đã tồn tại hay chưa
+    @Override
+    public boolean existsAdmin() {
+        return userRepository.existsByRoleName("ADMIN");
+    }
+    @Override
+    public boolean existsOtherAdmin(int userId) {
+        return userRoleRepository.existsByRoleNameAndUserIdNot("ADMIN", userId);
     }
 }

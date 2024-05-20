@@ -1,24 +1,96 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listUser','đăng ký')}"
->
-<head>
-    <title>Register</title>
-</head>
-<body>
-<h1>Register</h1>
-<form th:action="@{/users/register}" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required />
-    <br/>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required />
-    <br/>
-    <label for="roles">Roles:</label>
-    <select id="roles" name="roles">
-        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
-    </select>
-    <br/>
-    <button type="submit">Register</button>
-</form>
-</body>
-</html>
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listUser','đăng ký')}">
+    <body>
+    <h1>Register</h1>
+
+    <form th:action="@{/users/register}" method="post" enctype="multipart/form-data">
+        <label for="tenNV">Tên nhân viên:</label>
+        <input type="text" id="tenNV" name="tenNV" th:value="${nhanVien?.tenNV}" required />
+        <br/>
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" th:value="${nhanVien?.username}" required />
+        <div th:if="${usernameError}" class="error" th:text="${usernameError}"></div>
+        <br/>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" />
+        <div th:if="${passwordError}" class="error" th:text="${passwordError}"></div>
+        <br/>
+
+        <label for="sdt">Số điện thoại:</label>
+        <input type="text" id="sdt" name="sdt" th:value="${nhanVien?.sdt}" />
+        <br/>
+
+        <label for="diaChi">Địa chỉ:</label>
+        <input type="text" id="diaChi" name="diaChi" th:value="${nhanVien?.diaChi}" />
+        <br/>
+
+        <label for="avatar">Avatar:</label>
+        <input type="file" id="avatar" name="avatar" accept="image/*" onchange="previewImage(this);" />
+        <img id="avatarPreview" src="#" alt="Avatar Preview" style="display: none; max-width: 200px; max-height: 200px;"/>
+        <div th:if="${avatarError}" class="error" th:text="${avatarError}"></div>
+        <br/>
+
+        <label for="ngayBatDauLam">Ngày bắt đầu làm:</label>
+        <input type="date" id="ngayBatDauLam" name="ngayBatDauLam" th:value="${#dates.format(nhanVien?.ngayBatDauLam, 'yyyy-MM-dd')}" />
+        <br/>
+
+        <label for="gioiTinh">Giới tính:</label>
+        <select id="gioiTinh" name="gioiTinh">
+            <option value="0" th:selected="${nhanVien?.gioiTinh == 0}">Nam</option>
+            <option value="1" th:selected="${nhanVien?.gioiTinh == 1}">Nữ</option>
+            <option value="2" th:selected="${nhanVien?.gioiTinh == 2}">Khác</option>
+        </select>
+        <br/>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" th:value="${nhanVien?.email}" />
+        <div th:if="${emailError}" class="error" th:text="${emailError}"></div>
+        <br/>
+
+        <label for="chucvuId">Chức vụ:</label>
+        <select id="chucvuId" name="chucvuId">
+            <option th:each="chucvu : ${chucVus}"
+                    th:value="${chucvu.id}"
+                    th:text="${chucvu.tenChucVu}"
+                    th:selected="${nhanVien?.chucvu != null && nhanVien?.chucvu.id == chucvu.id}">
+            </option>
+        </select>
+        <br/>
+
+        <label for="vpchinhId">Văn phòng chính:</label>
+        <select id="vpchinhId" name="vpchinhId">
+            <option th:each="vanPhong : ${vanPhongs}"
+                    th:value="${vanPhong.id}"
+                    th:text="${vanPhong.tenVP}"
+                    th:selected="${nhanVien?.vpLamViecChinh != null && nhanVien?.vpLamViecChinh.id == vanPhong.id}">
+            </option>
+        </select>
+        <br/>
+
+        <label for="roles">Roles:</label>
+        <select id="roles" name="roles">
+            <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+        </select>
+        <div th:if="${roleError}" class="error" th:text="${roleError}"></div>
+        <br/>
+
+        <button type="submit">Register</button>
+    </form>
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#avatarPreview').attr('src', e.target.result);
+                    $('#avatarPreview').show();
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+    </body>
+    </html>
