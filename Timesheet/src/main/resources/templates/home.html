@@ -154,10 +154,12 @@
         console.log(listLichLam);
         var listEvent =[];
         listLichLam.forEach(function(lich){
+            startTime="";
+            endTime="";
             var event={
                 title:lich.tenCongViec,
-                start: lich.ngayLam,
-                end:lich.ngayLam,
+                start: startTime.concat(lich.ngayLam,"T",lich.gioBatDau,":00:00"),
+                end:endTime.concat(lich.ngayLam,"T",lich.gioKetThuc,":00:00"),
                 allDay:false
             };
             listEvent.push(event);
