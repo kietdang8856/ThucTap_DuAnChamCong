@@ -5,7 +5,7 @@
 </head>
 <body>
 <div style="margin: 0 100px 0 100px;">
-    <h2>Edit User</h2>
+    <h2>Sửa Nhân Viên</h2>
     <form th:action="@{/admin/staff/edit/{id}(id=${user.id})}" method="post" enctype="multipart/form-data" class="forms-sample">
         <div class="row">
             <div class="col-md-6">
@@ -16,8 +16,8 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" class="form-control" id="username" name="username" th:value="${user.username}" readonly />
+                    <label for="diaChi">Địa chỉ:</label>
+                    <input type="text" class="form-control" id="diaChi" name="diaChi" th:value="${user.diaChi}" />
                 </div>
             </div>
         </div>
@@ -39,13 +39,13 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="diaChi">Địa chỉ:</label>
-                    <input type="text" class="form-control" id="diaChi" name="diaChi" th:value="${user.diaChi}" />
+                    <label for="username">Username:</label>
+                    <input type="text" class="form-control" id="username" name="username" th:value="${user.username}" readonly />
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <span>Old Avatar:</span>
+                    <span>Hình đại diện cũ:</span>
                     <img th:if="${user.avatarPath != null}"
                          th:src="@{'/user/img/' + ${user.avatarPath}}"
                          alt="Avatar"
@@ -53,7 +53,7 @@
                     <br>
 
                     <span></span>
-                    <label for="avatar">New Avatar:</label>
+                    <label for="avatar">Hình đại diện mới:</label>
                     <input type="file" id="avatar" name="avatar" accept="image/*" onchange="previewImage(this);" />
                     <img id="avatarPreview" src="#" alt="Avatar Preview" style="display: none; max-width: 200px; max-height: 200px;"/>
                     <div th:if="${avatarError}" class="error" th:text="${avatarError}"></div>
@@ -114,7 +114,8 @@
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary mr-2">Save</button>
+        <a class="btn btn-danger  mr-2" href="/admin/staff"><i class="mdi mdi-arrow-left"></i>Trở về</a>
+        <button type="submit" class="btn btn-primary mr-2">Lưu</button>
     </form>
 </div>
 
