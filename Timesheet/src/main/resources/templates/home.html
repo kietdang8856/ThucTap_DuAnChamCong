@@ -22,51 +22,68 @@
                             <div class="sticky-top mb-3">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4 class="card-title">Draggable Events</h4>
+                                        <h4 class="card-title">CÔNG VIỆC</h4>
                                     </div>
-                                    <div class="card-body">
-                                        <!-- the events -->
-                                        <div id="external-events">
-                                            <div class="external-event bg-success">Lunch</div>
-                                            <div class="external-event bg-warning">Go home</div>
-                                            <div class="external-event bg-info">Do homework</div>
-                                            <div class="external-event bg-primary">Work on UI design</div>
-                                            <div class="external-event bg-danger">Sleep tight</div>
-                                            <div class="checkbox">
-                                                <label for="drop-remove">
-                                                    <input type="checkbox" id="drop-remove">
-                                                    remove after drop
-                                                </label>
-                                            </div>
-                                        </div>
+                                    <div class="card-body todo-input" >
+                                        <span>To-do: </span>
+                                        <input type="text" placeholder="Enter new to-do" id="todoInputTextbox">
+                                        <span>Category: </span>
+                                        <input type="text" placeholder="Enter category" list="categoryList" id="categoryInput">
+                                        <datalist id="categoryList">
+                                            <option value="Tokyo"></option>
+                                            <option value="Yokohama"></option>
+                                            <option value="Mi"></option>
+                                            <option value="Aya"></option>
+                                        </datalist>
+                                        <span>Date:</span>
+                                        <input type="date" id="dateInput">
+                                        <span>Time:</span>
+                                        <input type="time" id="timeInput">
+                                        <span>Link:</span>
+                                        <input type="text" id="urlInput">
+                                        <span></span>
+                                        <button id="addBtn">Add</button>
+                                        <span></span>
+                                        <button id="sortBtn">Sort by Date</button>
+                                        <span></span>
+                                        <label><input type="checkbox" id="shortlistBtn"> Incomplete First </label>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
                                 <!-- /.card -->
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3 class="card-title">Create Event</h3>
+                                        <h3 class="card-title">Lịch công việc</h3>
                                     </div>
                                     <div class="card-body">
-                                        <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-                                            <ul class="fc-color-picker" id="color-chooser">
-                                                <li><a class="text-primary" href="#"><i class="fas fa-square"></i></a></li>
-                                                <li><a class="text-warning" href="#"><i class="fas fa-square"></i></a></li>
-                                                <li><a class="text-success" href="#"><i class="fas fa-square"></i></a></li>
-                                                <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
-                                                <li><a class="text-muted" href="#"><i class="fas fa-square"></i></a></li>
-                                            </ul>
-                                        </div>
-                                        <!-- /btn-group -->
-                                        <div class="input-group">
-                                            <input id="new-event" type="text" class="form-control" placeholder="Event Title">
-
-                                            <div class="input-group-append">
-                                                <button id="add-new-event" type="button" class="btn btn-primary">Add</button>
+                                        <div class="todoTable-block">
+                                            <div class="itemsPerPage">
+                                                <span>items per page</span>
+                                                <select id="itemsPerPageSelectElem">
+                                                    <option>5</option>
+                                                    <option>10</option>
+                                                    <option>20</option>
+                                                </select>
                                             </div>
-                                            <!-- /btn-group -->
+
+                                            <table id="todoTable">
+                                                <tr>
+                                                    <td></td>
+                                                    <td>Date</td>
+                                                    <td>Time</td>
+                                                    <td>to-do</td>
+                                                    <td>
+                                                        <select id="categoryFilter">
+                                                        </select>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            </table>
+
+                                            <div class="pagination-pages">
+
+                                            </div>
                                         </div>
-                                        <!-- /input-group -->
                                     </div>
                                 </div>
                             </div>
@@ -89,6 +106,29 @@
         </section>
         <!-- /.content -->
     </div>
+    </div>
+    <div class="todo-overlay" id="todo-overlay">
+        <div class="todo-modal" id="todo-modal">
+            <div class="todo-input todo-block">
+                <span>To-do: </span>
+                <input type="text" placeholder="Enter new to-do" id="todo-edit-todo">
+                <span>Category: </span>
+                <input type="text" placeholder="Enter category" list="categoryList" id="todo-edit-category">
+                <datalist id="categoryList">
+                    <option value="Personal"></option>
+                    <option value="Work"></option>
+                </datalist>
+                <span>Date:</span>
+                <input type="date" id="todo-edit-date">
+                <span>Time:</span>
+                <input type="time" id="todo-edit-time">
+                <span>Link:</span>
+                <input type="text" id="todo-edit-url">
+                <span></span>
+                <button id="changeBtn">Save Change</button>
+            </div>
+        </div>
+        <div class="todo-modal-close-btn" id="todo-modal-close-btn">X</div>
     </div>
 </section>
 <script th:inline="javascript">
