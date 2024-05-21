@@ -15,7 +15,6 @@
     @Table(name = "NhanVien")
 
     public class NhanVien {
-
         @Getter
         @Setter
         @Id
@@ -81,9 +80,7 @@
         private int enabled;
 
 
-        @Setter
-        @Getter
-        @OneToMany(mappedBy = "NhanVien", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+        @OneToMany(mappedBy = "nhanVien", cascade = CascadeType.ALL, orphanRemoval = true)
         private Set<UserRole> userRoles = new HashSet<>();
 
         public ChucVu getChucvu() {
@@ -101,8 +98,6 @@
         public void setVpLamViecChinh(VanPhong vpLamViecChinh) {
             this.vpLamViecChinh = vpLamViecChinh;
         }
-
-
 
 
     }

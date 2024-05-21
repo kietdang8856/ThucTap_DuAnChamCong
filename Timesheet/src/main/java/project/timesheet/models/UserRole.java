@@ -1,9 +1,11 @@
 package project.timesheet.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 
 @Entity
+@Data
 @Table(name="users_roles")
 public class UserRole {
     @Id
@@ -13,13 +15,12 @@ public class UserRole {
 
     @ManyToOne
     @JoinColumn(name = "userId",referencedColumnName = "id")
-    private NhanVien NhanVien;
-    @Getter
+    private NhanVien nhanVien;
     @ManyToOne
     @JoinColumn(name = "roleId", referencedColumnName = "id")
     private Role role;
     public UserRole(NhanVien NhanVien, Role role) {
-        this.NhanVien = NhanVien;
+        this.nhanVien = NhanVien;
         this.role = role;
     }
 

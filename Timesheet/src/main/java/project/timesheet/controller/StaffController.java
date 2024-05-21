@@ -2,38 +2,39 @@ package project.timesheet.controller;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import project.timesheet.execption.ResourceNotFoundException;
 import project.timesheet.models.*;
-import project.timesheet.repository.NhanVienRepository;
-import project.timesheet.repository.VanPhongRepository;
-import project.timesheet.services.*;
+import project.timesheet.services.ChucVuService;
+import project.timesheet.services.NhanVienService;
+import project.timesheet.services.StaffService;
+import project.timesheet.services.VanPhongService;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.Blob;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Controller
-@RequestMapping("/users")
 
-public class UserController {
+@Controller
+@RequestMapping("/admin/staff")
+public class StaffController {
+
+    @Autowired
+    private StaffService staffService;
     @Autowired
     private NhanVienService userService;
     @Autowired
@@ -42,7 +43,35 @@ public class UserController {
     private ChucVuService chucVuService;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-    @GetMapping("/register")
+    @GetMapping
+    public String staffs( Model model,
+                        @RequestParam(defaultValue = "0") Integer pageNo,
+                        @RequestParam(defaultValue = "4") Integer pageSize,
+                        @RequestParam(defaultValue = "Id") String sortBy){
+        List<NhanVien> allStaff = staffService.getAllStaff(pageNo, pageSize, sortBy);
+        model.addAttribute("allStaff", allStaff);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", staffService.getAllStaff().size() / pageSize);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        model.addAttribute("username", username);
+        return "admin/staff/list";
+    }
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") int id, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        model.addAttribute("username", username);
+
+        List<NhanVien> allStaff = staffService.getAllStaff();
+        model.addAttribute("allStaff", allStaff);
+
+        model.addAttribute("staff", staffService.getStaffById(id));
+        return "Edit"; //trả về view của templates/book/edit
+    }
+
+    @GetMapping("/add")
     public String showRegistrationForm(Model model) {
         List<Role> roles = userService.getAllRoles();
         List<VanPhong> vanPhongs = vanPhongService.getALL();
@@ -52,10 +81,10 @@ public class UserController {
         model.addAttribute("vanPhongs", vanPhongs);
         model.addAttribute("chucVus", chucVus);
         model.addAttribute("roles", roles);
-        return "users/register";
+        return "admin/staff/add";
     }
 
-    @PostMapping("/register")
+    @PostMapping("/add")
     public String registerUser(
             @RequestParam("tenNV") String tenNV,
             @RequestParam("username") String username,
@@ -106,7 +135,7 @@ public class UserController {
             model.addAttribute("roles", userService.getAllRoles());
             model.addAttribute("chucVus", chucVuService.getALL());
             model.addAttribute("vanPhongs", vanPhongService.getALL());
-            return "users/register"; // Trả về lại trang đăng ký nếu có lỗi
+            return "admin/staff/add"; // Trả về lại trang đăng ký nếu có lỗi
         }
 
         try {
@@ -152,16 +181,8 @@ public class UserController {
         userRoles.forEach(userRole -> nhanVien.getUserRoles().add(userRole));
         userService.saveUser(nhanVien);
 
-        return "redirect:/";
+        return "redirect:/admin/staff";
     }
-
-    @GetMapping("/{id}")
-    public String showDetails(@PathVariable int id, Model model) {
-        NhanVien user = userService.findById(id);
-        model.addAttribute("user", user);
-        return "users/show";
-    }
-
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable int id, Model model) {
         NhanVien user = userService.findById(id);
@@ -174,7 +195,7 @@ public class UserController {
         model.addAttribute("userRoles", userRoles);
         model.addAttribute("vanPhongs", vanPhongs);
         model.addAttribute("chucVus", chucVus);
-        return "users/edituser";
+        return "admin/staff/edit";
     }
 
     @PostMapping("/edit/{id}")
@@ -197,7 +218,7 @@ public class UserController {
 
         if (existingNhanVien == null) {
             model.addAttribute("error", "User not found with ID: " + id);
-            return "redirect:/users/list";
+            return "redirect:/admin/staff";
         }
 
         existingNhanVien.setTenNV(tenNV);
@@ -213,7 +234,7 @@ public class UserController {
         if (userService.existsOtherAdmin(id) && roleIds.contains(userService.getRoleByName("ADMIN").getId())) {
             redirectAttributes.addFlashAttribute("roleError", "Chỉ có một tài khoản được phép có role ADMIN");
             redirectAttributes.addFlashAttribute("nhanVien", existingNhanVien);
-            return "redirect:/users/edit/" + id;
+            return "redirect:/admin/staff/edit/" + id;
         }
         try {
             if (!avatarFile.isEmpty()) {
@@ -242,7 +263,7 @@ public class UserController {
         } catch (IOException e) {
             // Xử lý lỗi đọc/lưu file
             model.addAttribute("avatarError", "Lỗi tải lên ảnh đại diện.");
-            return "users/edituser";
+            return "admin/staff/edit";
         }
 
         List<UserRole> userRoles = new ArrayList<>();
@@ -264,34 +285,12 @@ public class UserController {
         userService.saveUser(existingNhanVien);
 
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thành công");
-        return "redirect:/users/list";
+        return "redirect:/admin/staff";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable int id, Model model) {
-        NhanVien user = userService.findById(id);
-        userService.deleteUser(user); // Bây giờ bạn có thể xóa nhân viên
-        model.addAttribute("message", "User deleted successfully");
-        return "redirect:/users/list";
+    public String deleteStaff(@PathVariable("id") int id) {
+        staffService.deleteStaffAndAssociatedUserRoles(id);
+        return "redirect:/admin/staff";
     }
-
-    @GetMapping("/list")
-    public String showAll(Model model) {
-        List<NhanVien> users = userService.getAllUsers();
-        model.addAttribute("users", users);
-        return "users/list";
-    }
-
-    @GetMapping("/all")
-    public String showUsers() {
-
-        return "users/listusers";
-    }
-    @GetMapping("/edit")
-    public String showUsersDetail() {
-
-        return "users/edituser";
-    }
-
-
 }
