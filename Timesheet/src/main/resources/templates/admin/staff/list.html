@@ -68,7 +68,7 @@
                     </tr>
                     </tbody>
                 </table>
-                <nav aria-label="Page navigation example" style="display: flex; justify-content: flex-end; margin-top: 20px; font-size: 15px;" class="page">
+                <nav aria-label="Page navigation example" style="display: flex; justify-content: flex-end; font-size: 15px;" class="page">
                     <ul class="pagination justify-content-center" th:each="i : ${#numbers.sequence(0, totalPages)}" style="">
                         <li class="page-item" th:classappend="${currentPage == i} ? 'active'" style="margin: 0 3px;">
                             <a class="page-link" th:href="@{/admin/staff(pageNo=${i})}" th:text="${i+1}"></a>

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.timesheet.models.NhanVien;
 import project.timesheet.models.UserRole;
+import project.timesheet.repository.NhanVienRepository;
 import project.timesheet.repository.StaffRepository;
 import project.timesheet.repository.UserRoleRepository;
 
@@ -16,6 +17,10 @@ import java.util.Set;
 public class StaffService {
     @Autowired
     private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private NhanVienRepository nhanVienRepository;
+
 
     @Autowired
     private StaffRepository staffRepository;
@@ -39,11 +44,11 @@ public class StaffService {
     }
 
     @Transactional
-    public void deleteStaffAndAssociatedUserRoles(int id) {
-        // Xóa tất cả các user_role liên quan đến NhanVien có ID là id
+    public void deleteNhanVienById(int id) {
+        // Xóa tất cả các UserRole liên quan đến NhanVien này
         userRoleRepository.deleteByNhanVienId(id);
 
-        // Xóa NhanVien có ID là id
-        staffRepository.deleteById(id);
+        // Xóa NhanVien
+        nhanVienRepository.deleteById(id);
     }
 }

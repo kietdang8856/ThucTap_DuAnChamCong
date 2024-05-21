@@ -290,7 +290,7 @@ public class StaffController {
 
     @GetMapping("/delete/{id}")
     public String deleteStaff(@PathVariable("id") int id) {
-        staffService.deleteStaffAndAssociatedUserRoles(id);
+        staffService.deleteNhanVienById(id);
         return "redirect:/admin/staff";
     }
 }
