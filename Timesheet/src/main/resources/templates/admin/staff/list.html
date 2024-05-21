@@ -33,6 +33,7 @@
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
                 <table class="table table-hover">
+                    <!-- Table header -->
                     <thead>
                     <tr>
                         <th>ID</th>
@@ -44,8 +45,10 @@
                         <th>CHỨC VỤ</th>
                         <th>VĂN PHÒNG LÀM VIỆC</th>
                         <th>NGÀY BẮT ĐẦU LÀM</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
+                    <!-- Table body -->
                     <tbody>
                     <!-- Iterate over the list of NhanVien and display their attributes -->
                     <tr th:each="staff : ${allStaff}">
@@ -63,13 +66,13 @@
                             <a class="btn btn-sm btn-danger"
                                th:href="@{/admin/staff/delete/{id}(id=${staff.id})}"
                                onclick="return confirm('Are you sure?')">Xóa</a>
-
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <nav aria-label="Page navigation example" style="display: flex; justify-content: flex-end; font-size: 15px;" class="page">
-                    <ul class="pagination justify-content-center" th:each="i : ${#numbers.sequence(0, totalPages)}" style="">
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example" style="font-size: 15px; display: flex; justify-content: center;">
+                    <ul class="pagination" th:each="i : ${#numbers.sequence(0, totalPages)}">
                         <li class="page-item" th:classappend="${currentPage == i} ? 'active'" style="margin: 0 3px;">
                             <a class="page-link" th:href="@{/admin/staff(pageNo=${i})}" th:text="${i+1}"></a>
                         </li>
