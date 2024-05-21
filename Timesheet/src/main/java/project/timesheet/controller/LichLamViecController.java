@@ -109,6 +109,7 @@
         }
         @RequestMapping("/taolich")
         public String createMVC(Model model) {
+
             LichLamViecModel lich = new LichLamViecModel();
             model.addAttribute("lichlam",lich);
             model.addAttribute("vanPhongList",vanPhongService.getALL());
@@ -132,6 +133,7 @@
         public ResponseEntity<List<LichLamViec>> getFromDateToDate(@RequestBody LichLamViecRequest lichlam) {
             return ResponseEntity.ok(service.getAllBetweenDate(lichlam.getTuNgay(),lichlam.getDenNgay()));
         }
+
         @GetMapping("/getbyvp/{id}")
         public ResponseEntity<List<LichLamViec>> getAllByVanPhong(@PathVariable("id") int id) {
             return ResponseEntity.ok(service.getAllByVanPhongId(id));

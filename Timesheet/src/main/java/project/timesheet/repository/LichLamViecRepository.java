@@ -1,6 +1,8 @@
 package project.timesheet.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import project.timesheet.models.LichLamViec;
 
@@ -13,4 +15,5 @@ public interface LichLamViecRepository extends JpaRepository<LichLamViec,Integer
     List<LichLamViec> findAllByNhanVienId(int id);
     List<LichLamViec> findAllByVpCongTacId(int id);
     List<LichLamViec> findAllByTrangThaiId(int id);
+
 }

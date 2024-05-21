@@ -150,6 +150,19 @@
 </section>
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function() {
+        let listLichLam = [[${listLichLam}]];
+        console.log(listLichLam);
+        var listEvent =[];
+        listLichLam.forEach(function(lich){
+            var event={
+                title:lich.tenCongViec,
+                start: lich.ngayLam,
+                end:lich.ngayLam,
+                allDay:false
+            };
+            listEvent.push(event);
+        });
+        console.log( listEvent);
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             headerToolbar: { left: 'prev,next today',
@@ -171,21 +184,7 @@
                     // other view-specific options here
                 }
             },
-            events: [
-                {
-                    title:  'My Event',
-                    start:  '2024-05-03T14:30:00',
-                    end:     '2024-05-03T15:00:00',
-                    allDay: false
-                },
-                {
-                    title:  'My Event 2',
-                    start:  '2024-05-03T15:10:00',
-                    end:     '2024-05-03T16:00:00',
-                    allDay: false
-                }
-                // other events here...
-            ],
+            events: listEvent,
         });
         calendar.render();
     });
