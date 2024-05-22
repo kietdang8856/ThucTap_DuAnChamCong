@@ -37,11 +37,15 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Giờ bắt đầu</td>:</td>
-                                                    <td><input type="text" th:field="*{gioBatDau}" /></td>
+                                                    <td>
+                                                        <input type="time" th:field="*{gioBatDau}" min="08:00" max="17:00" onchange="formatTimeInput(this);"/>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Giờ kết thúc</td>
-                                                    <td><input type="text" th:field="*{gioKetThuc}" /></td>
+                                                    <td>
+                                                        <input type="time" th:field="*{gioKetThuc}" min="08:00" max="17:00" onchange="formatTimeInput(this);"/>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Van phong</td>
@@ -149,17 +153,18 @@
     </div>
 </section>
 <script th:inline="javascript">
+
     document.addEventListener('DOMContentLoaded', function() {
         let listLichLam = [[${listLichLam}]];
         console.log(listLichLam);
         var listEvent =[];
+
         listLichLam.forEach(function(lich){
-            startTime="";
-            endTime="";
             var event={
                 title:lich.tenCongViec,
-                start: startTime.concat(lich.ngayLam,"T",lich.gioBatDau,":00:00"),
-                end:endTime.concat(lich.ngayLam,"T",lich.gioKetThuc,":00:00"),
+                start: lich.ngayLam + "T" + lich.gioBatDau,
+                //end: endTime.concat(lich.ngayLam,"T",lich.gioKetThuc,":00:00"),
+                end: lich.ngayLam + "T" + lich.gioKetThuc,
                 allDay:false
             };
             listEvent.push(event);
@@ -176,6 +181,11 @@
             firstDay: 1,
             height: 530,
             contentHeight: 200,
+            eventTimeFormat: { // like '14:30:00'
+                hour: 'numeric',
+                minute: '2-digit',
+                meridiem: false // Ẩn ký hiệu AM/PM
+            },
             views: {
                 dayGridMonth: { // name of view
                     titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit' }

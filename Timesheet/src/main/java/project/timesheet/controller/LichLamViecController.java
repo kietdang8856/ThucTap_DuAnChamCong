@@ -91,13 +91,13 @@
             if(java.time.LocalDate.now().isEqual(delete.getNgayLam().toLocalDate()))
             {
                 //kiem tra gio thuc hien delele lich lam viec say ra truoc gio thuc hien cong viec
-                if(java.time.LocalTime.now().getHour()< delete.getGioBatDau())
-                {
-                    service.delete(id);
-                    return ResponseEntity.ok().build();
-                }
-                else
-                    return ResponseEntity.badRequest().build();
+//                if(java.time.LocalTime.now().getHour()< delete.getGioBatDau())
+//                {
+//                    service.delete(id);
+//                    return ResponseEntity.ok().build();
+//                }
+//                else
+//                    return ResponseEntity.badRequest().build();
             }
             //th ngay thuc hien delete say ra sau ngay thuc hien cong viec
             return ResponseEntity.badRequest().build();

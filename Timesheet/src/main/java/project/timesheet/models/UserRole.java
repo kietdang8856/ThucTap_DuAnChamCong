@@ -14,12 +14,11 @@ public class UserRole {
 
     @ManyToOne
     @JoinColumn(name = "userId",referencedColumnName = "id")
-    @JsonIgnore
     private NhanVien NhanVien;
     @Getter
     @ManyToOne
-    @JoinColumn(name = "roleId", referencedColumnName = "id")
     @JsonIgnore
+    @JoinColumn(name = "roleId", referencedColumnName = "id")
     private Role role;
     public UserRole(NhanVien NhanVien, Role role) {
         this.NhanVien = NhanVien;
