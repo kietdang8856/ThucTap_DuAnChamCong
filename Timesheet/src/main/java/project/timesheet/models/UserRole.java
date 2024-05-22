@@ -1,5 +1,6 @@
 package project.timesheet.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public class UserRole {
     private NhanVien NhanVien;
     @Getter
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "roleId", referencedColumnName = "id")
     private Role role;
     public UserRole(NhanVien NhanVien, Role role) {

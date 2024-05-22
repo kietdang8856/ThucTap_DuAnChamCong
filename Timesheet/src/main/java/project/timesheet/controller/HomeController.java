@@ -1,14 +1,33 @@
 package project.timesheet.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import project.timesheet.models.LichLamViec;
+import project.timesheet.models.LichLamViecModel;
+import project.timesheet.services.LichLamViecService;
+import project.timesheet.services.TrangThaiLamViecService;
+import project.timesheet.services.VanPhongService;
+
+import java.util.List;
 
 @Controller
 public class HomeController {
+    @Autowired
+    private LichLamViecService service;
+    @Autowired
+    private VanPhongService vanPhongService;
+    @Autowired
+    private TrangThaiLamViecService trangThaiLamViecService;
     @GetMapping("/")
-    public String showHome() {
-
+    public String showHome(Model model) {
+        LichLamViecModel lich = new LichLamViecModel();
+        List<LichLamViec> listLich = service.getAll();
+        model.addAttribute("listLichLam",listLich);
+        model.addAttribute("lichlam",lich);
+        model.addAttribute("vanPhongList",vanPhongService.getALL());
+        model.addAttribute("trangThaiList",trangThaiLamViecService.getALL());
         return "home";
     }
     @GetMapping("/login")
