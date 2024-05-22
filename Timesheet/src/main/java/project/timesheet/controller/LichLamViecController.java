@@ -2,11 +2,14 @@
 
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.http.ResponseEntity;
+    import org.springframework.security.core.context.SecurityContextHolder;
+    import org.springframework.security.core.userdetails.UserDetails;
     import org.springframework.stereotype.Controller;
     import org.springframework.ui.Model;
     import org.springframework.web.bind.annotation.*;
     import project.timesheet.models.LichLamViec;
     import project.timesheet.models.LichLamViecRequest;
+    import project.timesheet.models.NhanVien;
     import project.timesheet.services.LichLamViecService;
     import project.timesheet.services.NhanVienService;
     import project.timesheet.services.TrangThaiLamViecService;
@@ -124,7 +127,8 @@
             lich.setNgayLam(lichlam.getNgayLam());
             lich.setTenCongViec(lichlam.getTenCongViec());
             //setter cho nhanvien, van phong va trang thai lam viec
-            lich.setNhanVien(nhanVienService.getOne(lichlam.getNhanVien_id()));
+
+            lich.setNhanVien(nhanVienService.findByUsername(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
             lich.setTrangThai(trangThaiLamViecService.getOne(lichlam.getTrangThaiLamViec_Id()));
             lich.setVpCongTac(vanPhongService.getVanPhongById(lichlam.getVpCongTac_id()));
             service.create(lich);
