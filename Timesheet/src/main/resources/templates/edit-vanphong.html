@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listVanPhong','Danh sách văn phòng')}">
+<head>
+    <title>Chỉnh Sửa Văn Phòng</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <!-- Thay thế layout bằng layout phù hợp -->
+</head>
+<body>
+<section>
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><a th:href="@{/}" th:text="${pageTitle}">.</a></h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+            <hr>
+            <!-- Form chỉnh sửa thông tin văn phòng -->
+            <form th:action="@{/vanphongs/update/{id}(id=${vanphong.id})}" th:object="${vanphong}" method="post">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="name">Tên:</label>
+                        <input type="text" id="name" th:field="*{name}" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="officeAddress">Địa chỉ văn phòng:</label>
+                        <input type="text" id="officeAddress" th:field="*{officeAddress}" class="form-control" />
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <a href="/vanphongs" class="btn btn-secondary">Quay lại Danh sách</a>
+                </div>
+            </form>
+        </div>
+        <!-- /.box -->
+    </div>
+</section>
+</body>
+</html>

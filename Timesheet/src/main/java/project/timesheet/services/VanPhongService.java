@@ -10,30 +10,38 @@ import java.util.Optional;
 
 @Service
 public class VanPhongService {
+
     @Autowired
-    private VanPhongRepository repo;
-    public List<VanPhong> getALL()
-    {
-        return repo.findAll();
+    private VanPhongRepository vanPhongRepository;
+
+    public List<VanPhong> searchVanPhongByName(String name) {
+        return vanPhongRepository.findByNameContaining(name);
     }
-//    public VanPhong getOne(int id)
-//    {
-//        Optional<VanPhong> optional =repo.findById(id);
-//        return optional.orElse(null);
-//    }
-public VanPhong getVanPhongById(Integer id) {
-    return repo.findById(id).orElse(null);
-}
-    public void create(VanPhong vp)
-    {
-        repo.save(vp);
+
+    public List<VanPhong> getAllVanPhongs() {
+        return vanPhongRepository.findAll();
     }
-    public void update(VanPhong vp)
-    {
-        repo.save(vp);
+
+    public Optional<VanPhong> getVanPhongById(Long id) {
+        return vanPhongRepository.findById(id);
     }
-    public void delete(int id)
-    {
-        repo.deleteById(id);
+
+    public VanPhong createVanPhong(VanPhong vanPhong) {
+        return vanPhongRepository.save(vanPhong);
     }
+
+    public Optional<VanPhong> updateVanPhong(Long id, VanPhong vanPhongDetails) {
+        return vanPhongRepository.findById(id).map(vanPhong -> {
+            vanPhong.setName(vanPhongDetails.getName());
+            vanPhong.setOfficeAddress(vanPhongDetails.getOfficeAddress());
+            return vanPhongRepository.save(vanPhong);
+        });
+    }
+
+    public void deleteVanPhong(Long id) {
+        vanPhongRepository.deleteById(id);
+    }
+
+    // Removing redundant methods
+    // If needed, rename methods to maintain consistency
 }

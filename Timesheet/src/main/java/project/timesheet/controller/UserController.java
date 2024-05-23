@@ -45,11 +45,11 @@ public class UserController {
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         List<Role> roles = userService.getAllRoles();
-        List<VanPhong> vanPhongs = vanPhongService.getALL();
+//        List<VanPhong> vanPhongs = vanPhongService.getALL();
         List<ChucVu> chucVus = chucVuService.getALL();
         NhanVien nhanVien = new NhanVien();
         model.addAttribute("nhanVien", nhanVien);
-        model.addAttribute("vanPhongs", vanPhongs);
+//        model.addAttribute("vanPhongs", vanPhongs);
         model.addAttribute("chucVus", chucVus);
         model.addAttribute("roles", roles);
         return "users/register";
@@ -74,7 +74,7 @@ public class UserController {
     )throws IOException
     {
         List<Role> roles = userService.getAllRoles();
-        List<VanPhong> vanPhongs = vanPhongService.getALL();
+//        List<VanPhong> vanPhongs = vanPhongService.getALL();
         List<ChucVu> chucVus = chucVuService.getALL();
         NhanVien nhanVien = new NhanVien();
         nhanVien.setTenNV(tenNV);
@@ -105,7 +105,7 @@ public class UserController {
             model.addAttribute("nhanVien", nhanVien); // Đưa thông tin đã nhập vào lại form
             model.addAttribute("roles", userService.getAllRoles());
             model.addAttribute("chucVus", chucVuService.getALL());
-            model.addAttribute("vanPhongs", vanPhongService.getALL());
+//            model.addAttribute("vanPhongs", vanPhongService.getALL());
             return "users/register"; // Trả về lại trang đăng ký nếu có lỗi
         }
 
@@ -145,9 +145,9 @@ public class UserController {
             }
         }
         ChucVu chucVu = chucVuService.getChucVuById(chucvuId);
-        VanPhong vanPhong = vanPhongService.getVanPhongById(vpId);
+//        VanPhong vanPhong = vanPhongService.getVanPhongById(vpId);
         nhanVien.setChucvu(chucVu); // Thiết lập chức vụ cho nhân viên
-        nhanVien.setVpLamViecChinh(vanPhong); // Thiết lập văn phòng chính
+//        nhanVien.setVpLamViecChinh(vanPhong); // Thiết lập văn phòng chính
         nhanVien.getUserRoles().clear();
         userRoles.forEach(userRole -> nhanVien.getUserRoles().add(userRole));
         userService.saveUser(nhanVien);
@@ -168,12 +168,12 @@ public class UserController {
         NhanVien user = userService.findById(id);
         List<Role> roles = userService.getAllRoles();
         List<Role> userRoles = user.getUserRoles().stream().map(UserRole::getRole).collect(Collectors.toList());
-        List<VanPhong> vanPhongs = vanPhongService.getALL();
+//        List<VanPhong> vanPhongs = vanPhongService.getALL();
         List<ChucVu> chucVus = chucVuService.getALL();
         model.addAttribute("roles", roles);
         model.addAttribute("user", user);
         model.addAttribute("userRoles", userRoles);
-        model.addAttribute("vanPhongs", vanPhongs);
+//        model.addAttribute("vanPhongs", vanPhongs);
         model.addAttribute("chucVus", chucVus);
         return "users/edituser";
     }
@@ -255,10 +255,10 @@ public class UserController {
             }
         }
         ChucVu chucVu = chucVuService.getChucVuById(chucvuId);
-        VanPhong vanPhong = vanPhongService.getVanPhongById(vpId);
+//        VanPhong vanPhong = vanPhongService.getVanPhongById(vpId);
 
         existingNhanVien.setChucvu(chucVu);
-        existingNhanVien.setVpLamViecChinh(vanPhong);
+//        existingNhanVien.setVpLamViecChinh(vanPhong);
         existingNhanVien.getUserRoles().clear(); // Xóa các role cũ
         userRoles.forEach(userRole -> existingNhanVien.getUserRoles().add(userRole)); // Thêm role mới
 

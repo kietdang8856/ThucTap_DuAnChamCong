@@ -67,7 +67,7 @@
                 //setter cho nhanvien, van phong va trang thai lam viec
                 lich.setNhanVien(nhanVienService.getOne(update.getNhanVien_id()));
                 lich.setTrangThai(trangThaiLamViecService.getOne(update.getTrangThaiLamViec_Id()));
-                lich.setVpCongTac(vanPhongService.getVanPhongById(update.getVpCongTac_id()));
+//                lich.setVpCongTac(vanPhongService.getVanPhongById(update.getVpCongTac_id()));
                 service.create(lich);
                 return ResponseEntity.ok().build();
             }
@@ -115,7 +115,7 @@
 
             LichLamViecModel lich = new LichLamViecModel();
             model.addAttribute("lichlam",lich);
-            model.addAttribute("vanPhongList",vanPhongService.getALL());
+//            model.addAttribute("vanPhongList",vanPhongService.getALL());
             model.addAttribute("trangThaiList",trangThaiLamViecService.getALL());
             return "lich/todo";
         }
@@ -130,7 +130,7 @@
 
             lich.setNhanVien(nhanVienService.findByUsername(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
             lich.setTrangThai(trangThaiLamViecService.getOne(lichlam.getTrangThaiLamViec_Id()));
-            lich.setVpCongTac(vanPhongService.getVanPhongById(lichlam.getVpCongTac_id()));
+//            lich.setVpCongTac(vanPhongService.getVanPhongById(lichlam.getVpCongTac_id()));
             service.create(lich);
         }
         @GetMapping("/getbydate")

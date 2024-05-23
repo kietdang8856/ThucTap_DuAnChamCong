@@ -9,43 +9,35 @@ import java.util.List;
 
 @Data
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "VanPhong")
 public class VanPhong {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String officeAddress;
 
-    @Column(name = "id")
-    private int id;
-    @Column(name = "tenvp")
-    private String tenVP;
-    @Column(name = "diachi")
-    private String diaChi;
-    @OneToMany
-    @Column(name = "lichlamviec")
-    private List<LichLamViec> lichLamViecs ;
-    public int getId() {
+    // Getters and setters
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getTenVP() {
-        return tenVP;
+    public String getName() {
+        return name;
     }
 
-    public void setTenVP(String tenVP) {
-        this.tenVP = tenVP;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDiaChi() {
-        return diaChi;
+    public String getOfficeAddress() {
+        return officeAddress;
     }
 
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
+    public void setOfficeAddress(String officeAddress) {
+        this.officeAddress = officeAddress;
     }
 }
