@@ -51,4 +51,9 @@ public class StaffService {
         // Xóa NhanVien
         nhanVienRepository.deleteById(id);
     }
+
+    public List<NhanVien> searchStaffs(String keyword){
+        return staffRepository.searchStaff(keyword);
+    }
+
 }

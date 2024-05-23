@@ -1,5 +1,6 @@
 package project.timesheet.controller;
 
+import org.antlr.v4.runtime.misc.NotNull;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -46,7 +47,7 @@ public class StaffController {
     @GetMapping
     public String staffs( Model model,
                         @RequestParam(defaultValue = "0") Integer pageNo,
-                        @RequestParam(defaultValue = "4") Integer pageSize,
+                        @RequestParam(defaultValue = "10") Integer pageSize,
                         @RequestParam(defaultValue = "Id") String sortBy){
         List<NhanVien> allStaff = staffService.getAllStaff(pageNo, pageSize, sortBy);
         model.addAttribute("allStaff", allStaff);
@@ -58,17 +59,17 @@ public class StaffController {
         model.addAttribute("username", username);
         return "admin/staff/list";
     }
-    @GetMapping("/detail/{id}")
-    public String detail(@PathVariable("id") int id, Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        model.addAttribute("username", username);
-
-        List<NhanVien> allStaff = staffService.getAllStaff();
-        model.addAttribute("allStaff", allStaff);
-
-        model.addAttribute("staff", staffService.getStaffById(id));
-        return "Edit"; //trả về view của templates/book/edit
+    @GetMapping("/search")
+    public String searchStaffs(Model model,
+                               @RequestParam String keyword,
+                               @RequestParam(defaultValue = "0") Integer pageNo,
+                               @RequestParam(defaultValue = "10") Integer pageSize,
+                               @RequestParam(defaultValue = "Id") String sortBy) {
+        List<NhanVien> searchedStaffs = staffService.searchStaffs(keyword);
+        model.addAttribute("allStaff", searchedStaffs);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", searchedStaffs.size() / pageSize);
+        return "admin/staff/list";
     }
 
     @GetMapping("/add")
