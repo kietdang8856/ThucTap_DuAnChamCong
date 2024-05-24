@@ -2,34 +2,274 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'home','Home')}"
 >
 
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
 <body>
-<form>
-<table>
-<thead>
-<tr>
-    <th>ID</th>
-    <th>Văn phòng công tác</th>
-    <th>Trạng thái làm việc</th>
-    <th>Tên nhân viên</th>
-    <th>Tên Công việc</th>
-    <th>Ngày làm</th>
-</tr>
-</thead>
-<tbody>
-<tr th:each="search : ${listSearch}">
-    <td th:text="${search.id}"></td>
-    <td th:text="${search.vpCongTac.tenVP}"></td>
-    <td th:text="${search.trangThai.tenTrangThai}"></td>
-    <td th:text="${search.nhanVien.tenNV}"></td>
-    <td th:text="${search.tenCongViec}"></td>
-    <td th:text="${search.ngayLam}"></td>
-</tr>
-</tbody>
-</table>
-</form>
+<section class="content-header">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><a th:href="@{/}" th:text="${pageTitle}">.</a></h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+            <hr>
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="sticky-top mb-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">CÔNG VIỆC</h4>
+                                    </div>
+                                    <div class="card-body todo-input" >
+                                        <form th:action="@{/lichlamviec/search}" th:object="${searchFilter}" method="get">
+                                            <table>
+
+                                                <tr>
+                                                    <td>Tu Ngay:</td>
+                                                    <td><input type="date" th:field="*{tuNgay}" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Den Ngay:</td>
+                                                    <td><input type="date" th:field="*{denNgay}" /></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Van phong</td>
+                                                    <td>
+                                                        <select class="form-control" th:field="*{vpCongTac_id}">
+                                                            <option  th:value="NULL" >All</option>
+                                                            <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}" ></option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Trang Thai Lam Viec</td>
+                                                    <td>
+                                                        <select class="form-control" th:field="*{trangThaiLamViec_Id}">
+                                                            <option  th:value="NULL" >All</option>
+                                                            <option th:each="trangthai : ${trangThaiList}" th:value="${trangthai.id}" th:text="${trangthai.tenTrangThai}" ></option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Nhan Vien</td>
+                                                    <td><input type="text" th:field="*{tenNV}" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2"><button type="submit">Search</button> </td>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+<!--                                <div class="card">-->
+<!--                                    <div class="card-header">-->
+<!--                                        <h3 class="card-title">Lịch công việc</h3>-->
+<!--                                    </div>-->
+<!--                                    <div class="card-body">-->
+<!--                                        <div class="todoTable-block">-->
+<!--                                            <div class="itemsPerPage">-->
+<!--                                                <span>items per page</span>-->
+<!--                                                <select id="itemsPerPageSelectElem">-->
+<!--                                                    <option>5</option>-->
+<!--                                                    <option>10</option>-->
+<!--                                                    <option>20</option>-->
+<!--                                                </select>-->
+<!--                                            </div>-->
+
+<!--                                            <table id="todoTable">-->
+<!--                                                <tr>-->
+<!--                                                    <td></td>-->
+<!--                                                    <td>Date</td>-->
+<!--                                                    <td>Time</td>-->
+<!--                                                    <td>to-do</td>-->
+<!--                                                    <td>-->
+<!--                                                        <select id="categoryFilter">-->
+<!--                                                        </select>-->
+<!--                                                    </td>-->
+<!--                                                    <td></td>-->
+<!--                                                </tr>-->
+<!--                                            </table>-->
+
+<!--                                            <div class="pagination-pages">-->
+
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-9">
+                            <div class="card card-primary">
+                                <div class="card-body p-0">
+                                    <!-- THE CALENDAR -->
+                                    <div id="calendar"></div>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
+    </div>
+    <div class="todo-overlay" id="todo-overlay">
+        <div class="todo-modal" id="todo-modal">
+            <div class="todo-input todo-block">
+                <span>To-do: </span>
+                <input type="text" placeholder="Enter new to-do" id="todo-edit-todo">
+                <span>Category: </span>
+                <input type="text" placeholder="Enter category" list="categoryList" id="todo-edit-category">
+                <datalist id="categoryList">
+                    <option value="Personal"></option>
+                    <option value="Work"></option>
+                </datalist>
+                <span>Date:</span>
+                <input type="date" id="todo-edit-date">
+                <span>Time:</span>
+                <input type="time" id="todo-edit-time">
+                <span>Link:</span>
+                <input type="text" id="todo-edit-url">
+                <span></span>
+                <button id="changeBtn">Save Change</button>
+            </div>
+        </div>
+        <div class="todo-modal-close-btn" id="todo-modal-close-btn">X</div>
+    </div>
+</section>
+<script th:inline="javascript">
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        let listLichLam = [[${listLichLam}]];
+        console.log(listLichLam);
+        var listEvent =[];
+
+        listLichLam.forEach(function(lich){
+            var event={
+                title:lich.tenCongViec,
+                start: lich.ngayLam + "T" + lich.gioBatDau,
+                //end: endTime.concat(lich.ngayLam,"T",lich.gioKetThuc,":00:00"),
+                end: lich.ngayLam + "T" + lich.gioKetThuc,
+                allDay:false,
+                extendedProps: { // Thêm thông tin người dùng
+                    nhanVienId: lich.nhanVien.id,
+                    hoTen: lich.nhanVien.tenNV,
+                    username: lich.nhanVien.username,
+                    chucVu: lich.nhanVien.chucvuId,
+                    noiLamViec: lich.vpCongTac.tenVP
+                }
+            };
+            listEvent.push(event);
+        });
+
+        console.log( listEvent);
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+
+            headerToolbar: { left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,list' }, // buttons for switching between views
+            allDaySlot: false,
+            slotMinTime: '08:00:00',
+            slotMaxTime: '18:00:00',
+            firstDay: 1,
+            height: 530,
+            contentHeight: 200,
+            eventTimeFormat: { // like '14:30:00'
+                hour: 'numeric',
+                minute: '2-digit',
+                meridiem: false // Ẩn ký hiệu AM/PM
+            },
+            views: {
+                dayGridMonth: { // name of view
+                    titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit' }
+                    // other view-specific options here
+                },
+                timeGridDay: { // name of view
+                    titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit',  hour: 'numeric', minute: '2-digit', }
+                    // other view-specific options here
+                }
+            },
+            events: listEvent,
+
+            eventDidMount: function (info) {
+                const event = info.event;
+                const extendedProps = event.extendedProps;
+
+                if (extendedProps) {
+                    const tooltipContent = `
+                    <div class="tooltip-content">
+                        <table>
+                            <tr>
+                                <th>ID:</th>
+                                <td>${extendedProps.nhanVienId || "N/A"}</td>
+                            </tr>
+                            <tr>
+                                <th>Họ tên:</th>
+                                <td>${extendedProps.hoTen || "N/A"}</td>
+                            </tr>
+                            <tr>
+                                <th>Username:</th>
+                                <td>${extendedProps.username || "N/A"}</td>
+                            </tr>
+                            <tr>
+                                <th>Chức vụ:</th>
+                                <td>${extendedProps.chucVu || "N/A"}</td>
+                            </tr>
+                            <tr>
+                                <th>Nơi làm việc:</th>
+                                <td>${extendedProps.noiLamViec || "N/A"}</td>
+                            </tr>
+                        </table>
+                    </div>
+                `;
+
+
+                    // Tạo phần tử tooltip
+                    const tooltip = document.createElement('div');
+                    tooltip.classList.add('fc-tooltip');
+                    tooltip.innerHTML = tooltipContent;
+
+                    // Gắn tooltip vào phần tử sự kiện
+                    info.el.appendChild(tooltip);
+
+                    // Xử lý ẩn/hiện tooltip
+                    info.el.addEventListener('mouseenter', () => {
+                        tooltip.style.display = 'block';
+                    });
+
+                    info.el.addEventListener('mouseleave', () => {
+                        tooltip.style.display = 'none';
+                    });
+                    info.el.addEventListener('mouseenter', function () {
+                        // ... (Giữ nguyên phần lấy tọa độ rect)
+                        const scrollY = window.scrollY || document.documentElement.scrollTop; // Lấy vị trí scroll của trang
+                        const scrollX = window.scrollX || document.documentElement.scrollLeft;
+                        tooltip.style.top = `${rect.top + rect.height + scrollY}px`; // Điều chỉnh vị trí tooltip
+                        tooltip.style.left = `${rect.left + scrollX}px`;
+                        tooltip.style.display = 'block';
+                    });
+
+                }
+
+            }
+        });
+
+        calendar.render();
+    });
+</script>
 </body>
+
 </html>

@@ -11,5 +11,5 @@ public class LichLamViecSearchFilter {
     private Date denNgay;
     private Integer  vpCongTac_id;
     private Integer trangThaiLamViec_Id;
-    private Integer nhanVien_id;
+    private String tenNV;
 }

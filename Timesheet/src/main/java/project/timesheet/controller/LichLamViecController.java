@@ -148,16 +148,16 @@
         public ResponseEntity<List<LichLamViec>> getAllByTrangThai(@PathVariable("id") int id) {
             return ResponseEntity.ok(service.getAllByTrangThaiId(id));
         }
-        @RequestMapping("/searchpage")
-        public String searchPage(Model model)
-        {
-            model.addAttribute("vanPhongList",vanPhongService.getALL());
-            model.addAttribute("trangThaiList",trangThaiLamViecService.getALL());
-            model.addAttribute("listNhanVien",nhanVienService.getAllUsers());
-            model.addAttribute("searchFilter",new LichLamViecSearchFilter());
-            return "search";
-        }
-        @GetMapping("/searchresult")
+//        @RequestMapping("/searchpage")
+//        public String searchPage(Model model)
+//        {
+//            model.addAttribute("vanPhongList",vanPhongService.getALL());
+//            model.addAttribute("trangThaiList",trangThaiLamViecService.getALL());
+//            model.addAttribute("listNhanVien",nhanVienService.getAllUsers());
+//            model.addAttribute("searchFilter",new LichLamViecSearchFilter());
+//            return "search";
+//        }
+        @GetMapping("/search")
         public String search(@ModelAttribute("searchFilter") LichLamViecSearchFilter filter,Model model) {
             List<LichLamViec> filter1;
             if (filter.getTuNgay() != null && filter.getDenNgay() != null) {
@@ -174,14 +174,18 @@
                 filter1.removeIf(lich -> lich.getTrangThai().getId() != filter.getTrangThaiLamViec_Id());
             }
 
-            if(filter.getNhanVien_id()!=null) {
-                filter1.removeIf(lich -> lich.getNhanVien().getId() != filter.getNhanVien_id());
+            if(filter.getTenNV()!=null) {
+                filter1.removeIf(lich -> !lich.getNhanVien().getTenNV().equalsIgnoreCase( filter.getTenNV()));
             }
 
             if(filter.getVpCongTac_id()!=null) {
                 filter1.removeIf(lich -> lich.getVpCongTac().getId() != filter.getVpCongTac_id());
             }
-            model.addAttribute("listSearch",filter1);
+            model.addAttribute("listLichLam",filter1);
+            model.addAttribute("vanPhongList",vanPhongService.getALL());
+            model.addAttribute("trangThaiList",trangThaiLamViecService.getALL());
+            model.addAttribute("listNhanVien",nhanVienService.getAllUsers());
+            model.addAttribute("searchFilter",new LichLamViecSearchFilter());
             return "result";
         }
 
