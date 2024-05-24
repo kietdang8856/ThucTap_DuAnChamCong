@@ -158,7 +158,9 @@
     document.addEventListener('DOMContentLoaded', function() {
         let listLichLam = [[${listLichLam}]];
         console.log(listLichLam);
+        let userList = [[${userList}]];
         var listEvent =[];
+
 
         listLichLam.forEach(function(lich){
             var event={
@@ -171,8 +173,9 @@
                     nhanVienId: lich.nhanVien.id,
                     hoTen: lich.nhanVien.tenNV,
                     username: lich.nhanVien.username,
-                    chucVu: lich.nhanVien.chucvuId,
-                    noiLamViec: lich.vpCongTac.tenVP
+                    chucVu: lich.nhanVien.chucvu ? lich.nhanVien.chucvu.tenChucVu : "N/A" ,// Lấy tên chức vụ, kiểm tra null
+                    noiCongTac: lich.vpCongTac.tenVP,
+                    noiLamViec: lich.nhanVien.vpLamViecChinh ? lich.nhanVien.vpLamViecChinh.tenVP : "N/A"
                 }
             };
             listEvent.push(event);
@@ -204,6 +207,17 @@
                 timeGridDay: { // name of view
                     titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit',  hour: 'numeric', minute: '2-digit', }
                     // other view-specific options here
+                },
+                timeGridWeek: {
+                    type: 'timeGridWeek',
+                    slotDuration: '24:00:00', // Đặt khoảng thời gian của mỗi slot là 24h
+
+                    slotLabelFormat: [
+                        {
+                            text: '', // Không hiển thị giờ
+                        },
+                        { weekday: 'short' } // Chỉ hiển thị thứ
+                    ]
                 }
             },
             events: listEvent,
@@ -232,9 +246,13 @@
                                 <th>Chức vụ:</th>
                                 <td>${extendedProps.chucVu || "N/A"}</td>
                             </tr>
-                            <tr>
+                              <tr>
                                 <th>Nơi làm việc:</th>
                                 <td>${extendedProps.noiLamViec || "N/A"}</td>
+                            </tr>
+                            <tr>
+                                <th>Nơi công tác:</th>
+                                <td>${extendedProps.noiCongTac || "N/A"}</td>
                             </tr>
                         </table>
                     </div>
