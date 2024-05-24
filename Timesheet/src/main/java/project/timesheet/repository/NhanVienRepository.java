@@ -1,10 +1,14 @@
 package project.timesheet.repository;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import project.timesheet.models.NhanVien;
+
+import java.util.List;
 
 @Repository
 public interface NhanVienRepository extends JpaRepository<NhanVien,Integer> {
@@ -17,6 +21,7 @@ public interface NhanVienRepository extends JpaRepository<NhanVien,Integer> {
 
     //lệnh này dùng để xóa quan hệ giữa userrole và nhân viên
     @Modifying // Sử dụng @Modifying để đánh dấu đây là một truy vấn thay đổi dữ liệu
-    @Query("DELETE FROM UserRole ur WHERE ur.NhanVien = :user") // Truy vấn JPQL để xóa UserRole
+    @Query("DELETE FROM UserRole ur WHERE ur.nhanVien = :user") // Truy vấn JPQL để xóa UserRole
     void deleteUserRoleByNhanVien(NhanVien user);
+
 }

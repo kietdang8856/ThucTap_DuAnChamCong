@@ -26,7 +26,7 @@ public class HomeController {
         List<LichLamViec> listLich = service.getAll();
         model.addAttribute("listLichLam",listLich);
         model.addAttribute("lichlam",lich);
-//        model.addAttribute("vanPhongList",vanPhongService.getALL());
+        model.addAttribute("vanPhongList",vanPhongService.getAllVanPhongs());
         model.addAttribute("trangThaiList",trangThaiLamViecService.getALL());
         return "home";
     }

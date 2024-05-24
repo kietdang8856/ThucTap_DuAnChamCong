@@ -8,7 +8,7 @@ import project.timesheet.models.VanPhong;
 import java.util.List;
 
 @Repository
-public interface VanPhongRepository extends JpaRepository<VanPhong, Long> {
+public interface VanPhongRepository extends JpaRepository<VanPhong, Integer> {
     @Query("SELECT vp FROM VanPhong vp WHERE vp.name LIKE %:name%")
     List<VanPhong> findByNameContaining(String name);
 }

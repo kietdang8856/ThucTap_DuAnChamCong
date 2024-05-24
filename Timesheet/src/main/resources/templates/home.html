@@ -51,7 +51,7 @@
                                                     <td>Van phong</td>
                                                     <td>
                                                         <select class="form-control" th:field="*{vpCongTac_id}">
-                                                            <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}" ></option>
+                                                            <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.name}" ></option>
                                                         </select>
                                                     </td>
                                                 </tr>

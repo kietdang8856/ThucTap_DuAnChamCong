@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Văn Phòng</title>
-
 </head>
 <body>
 <section>
@@ -40,6 +39,7 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Office Address</th>
+                        <th>Employee</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -48,6 +48,11 @@
                         <td th:text="${vanphong.id}"></td>
                         <td th:text="${vanphong.name}"></td>
                         <td th:text="${vanphong.officeAddress}"></td>
+                        <td>
+                            <ul>
+                                <li th:each="nhanvien : ${vanphong.nhanViens}" th:text="${nhanvien.tenNV}"></li>
+                            </ul>
+                        </td>
                         <td>
                             <a th:href="@{'/vanphongs/edit/'+ ${vanphong.id}}" class="btn btn-sm btn-success">Sửa</a>
                             <a th:href="@{'/vanphongs/delete/'+ ${vanphong.id}}"  class="btn btn-sm btn-danger">Xóa</a>

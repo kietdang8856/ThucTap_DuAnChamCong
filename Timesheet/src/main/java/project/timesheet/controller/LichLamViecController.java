@@ -115,7 +115,7 @@
 
             LichLamViecModel lich = new LichLamViecModel();
             model.addAttribute("lichlam",lich);
-//            model.addAttribute("vanPhongList",vanPhongService.getALL());
+            model.addAttribute("vanPhongList",vanPhongService.getAllVanPhongs());
             model.addAttribute("trangThaiList",trangThaiLamViecService.getALL());
             return "lich/todo";
         }

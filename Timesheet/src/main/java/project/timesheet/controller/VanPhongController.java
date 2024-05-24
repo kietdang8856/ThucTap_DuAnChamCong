@@ -1,11 +1,10 @@
 package project.timesheet.controller;
 
-import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import project.timesheet.models.NhanVien;
 import project.timesheet.models.VanPhong;
 import project.timesheet.services.VanPhongService;
 
@@ -26,12 +25,12 @@ public class VanPhongController {
         return "vanphongs"; // or whatever your HTML template name is
     }
 
-
     @GetMapping("/vanphong/{id}")
-    public String getVanPhongDetails(@PathVariable Long id, Model model) {
+    public String getVanPhongDetails(@PathVariable Integer id, Model model) {
         Optional<VanPhong> vanPhong = vanPhongService.getVanPhongById(id);
         if (vanPhong.isPresent()) {
             model.addAttribute("vanphong", vanPhong.get());
+            model.addAttribute("nhanViens", vanPhong.get().getNhanViens());
             return "vanphong-details";
         } else {
             return "error/404"; // or another error handling page
@@ -46,10 +45,11 @@ public class VanPhongController {
     }
 
     @GetMapping("/{id}")
-    public String getVanPhongById(@PathVariable Long id, Model model) {
+    public String getVanPhongById(@PathVariable Integer id, Model model) {
         Optional<VanPhong> vanPhong = vanPhongService.getVanPhongById(id);
         if (vanPhong.isPresent()) {
             model.addAttribute("vanphong", vanPhong.get());
+            model.addAttribute("nhanViens", vanPhong.get().getNhanViens());
         } else {
             model.addAttribute("error", "VanPhong not found");
         }
@@ -69,7 +69,7 @@ public class VanPhongController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editVanPhongForm(@PathVariable Long id, Model model) {
+    public String editVanPhongForm(@PathVariable Integer id, Model model) {
         Optional<VanPhong> vanPhong = vanPhongService.getVanPhongById(id);
         if (vanPhong.isPresent()) {
             model.addAttribute("vanphong", vanPhong.get());
@@ -80,13 +80,13 @@ public class VanPhongController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateVanPhong(@PathVariable Long id, @ModelAttribute VanPhong vanPhongDetails) {
+    public String updateVanPhong(@PathVariable Integer id, @ModelAttribute VanPhong vanPhongDetails) {
         vanPhongService.updateVanPhong(id, vanPhongDetails);
         return "redirect:/vanphongs";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteVanPhong(@PathVariable Long id) {
+    public String deleteVanPhong(@PathVariable Integer id) {
         vanPhongService.deleteVanPhong(id);
         return "redirect:/vanphongs";
     }

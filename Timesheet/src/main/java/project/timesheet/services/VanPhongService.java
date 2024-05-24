@@ -2,6 +2,7 @@ package project.timesheet.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.timesheet.models.NhanVien;
 import project.timesheet.models.VanPhong;
 import project.timesheet.repository.VanPhongRepository;
 
@@ -22,7 +23,7 @@ public class VanPhongService {
         return vanPhongRepository.findAll();
     }
 
-    public Optional<VanPhong> getVanPhongById(Long id) {
+    public Optional<VanPhong> getVanPhongById(Integer id) {
         return vanPhongRepository.findById(id);
     }
 
@@ -30,18 +31,18 @@ public class VanPhongService {
         return vanPhongRepository.save(vanPhong);
     }
 
-    public Optional<VanPhong> updateVanPhong(Long id, VanPhong vanPhongDetails) {
+    public Optional<VanPhong> updateVanPhong(Integer id, VanPhong vanPhongDetails) {
         return vanPhongRepository.findById(id).map(vanPhong -> {
             vanPhong.setName(vanPhongDetails.getName());
             vanPhong.setOfficeAddress(vanPhongDetails.getOfficeAddress());
+            vanPhong.setNhanViens(vanPhongDetails.getNhanViens()); // Set the list of employees
             return vanPhongRepository.save(vanPhong);
         });
     }
 
-    public void deleteVanPhong(Long id) {
+    public void deleteVanPhong(Integer id) {
         vanPhongRepository.deleteById(id);
     }
 
-    // Removing redundant methods
-    // If needed, rename methods to maintain consistency
+    // Additional methods can be added here if needed
 }
