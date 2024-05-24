@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'home','Home')}"
+>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/lichlamviec/searchresult}" th:object="${searchFilter}" method="get">
+    <table>
+
+        <tr>
+            <td>Tu Ngay:</td>
+            <td><input type="date" th:field="*{tuNgay}" /></td>
+        </tr>
+        <tr>
+            <td>Den Ngay:</td>
+            <td><input type="date" th:field="*{denNgay}" /></td>
+        </tr>
+
+        <tr>
+            <td>Van phong</td>
+            <td>
+                <select class="form-control" th:field="*{vpCongTac_id}">
+                    <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}" ></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Trang Thai Lam Viec</td>
+            <td>
+                <select class="form-control" th:field="*{trangThaiLamViec_Id}">
+                    <option th:each="trangthai : ${trangThaiList}" th:value="${trangthai.id}" th:text="${trangthai.tenTrangThai}" ></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Nhan Vien</td>
+            <td>
+                <select class="form-control" th:field="*{nhanVien_id}">
+                    <option th:each="nhanvien : ${listNhanVien}" th:value="${nhanvien.id}" th:text="${nhanvien.tenNV}" ></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><button type="submit">Search</button> </td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

@@ -17,7 +17,9 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
-
+    public NhanVien getNV(){
+        return this.user;
+    }
     public CustomUserDetails() {
     }
 

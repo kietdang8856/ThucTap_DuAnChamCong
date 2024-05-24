@@ -25,6 +25,8 @@
 
     <script th:src="@{/assets/js/angular.min.js}"></script>
     <script th:src="@{/assets/js/app.js}"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <!-- Site wrapper -->
@@ -152,6 +154,17 @@
                     <ul class="treeview-menu">
                         <li><a th:href="@{/admin/staff}"><i class="fa fa-circle-o"></i>Nhân viên</a></li>
                         <li><a th:href="@{/users/list}"><i class="fa fa-circle-o"></i>Tài khoản</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="">
+                        <i class="fa fa-th"></i> <span>Quản lý chức vụ</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a th:href="@{/admin/position}"><i class="fa fa-circle-o"></i>Chức vụ</a></li>
                     </ul>
                 </li>
 

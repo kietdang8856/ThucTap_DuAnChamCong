@@ -203,3 +203,33 @@ button:hover{
 	text-align: right;
 	margin-bottom: 0.5rem;
 }
+.fc-tooltip {
+	position: relative;
+	background-color: #606c84; /* Màu xanh nhạt */
+	border: 1px solid #b2ebf2; /* Viền xanh nhạt */
+	padding: 10px;
+	z-index: 1000;
+	display: none; /* Ẩn tooltip ban đầu */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+	width: 250px; /* Độ rộng của tooltip */
+	text-align: left; /* Căn trái nội dung */
+}
+
+.fc-tooltip .tooltip-content {
+	font-size: 14px;
+}
+
+.fc-tooltip table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.fc-tooltip th, .fc-tooltip td {
+	padding: 5px;
+	text-align: left;
+	border-bottom: 1px solid #b2ebf2; /* Đường kẻ ngang màu xanh nhạt */
+}
+
+.fc-tooltip th {
+	font-weight: bold;
+}

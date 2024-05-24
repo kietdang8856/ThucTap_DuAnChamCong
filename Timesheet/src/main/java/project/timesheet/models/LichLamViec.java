@@ -5,8 +5,10 @@
     import lombok.AllArgsConstructor;
     import lombok.Data;
     import lombok.NoArgsConstructor;
+    import org.springframework.format.annotation.DateTimeFormat;
 
     import java.sql.Date;
+    import java.time.LocalTime;
 
     @Data
     @Entity
@@ -26,8 +28,10 @@
         private NhanVien nhanVien;
 
         private Date ngayLam;
-        private int gioBatDau;
-        private int gioKetThuc;
+        @DateTimeFormat(pattern = "HH:mm:ss")
+        private LocalTime gioBatDau;
+        @DateTimeFormat(pattern = "HH:mm:ss")
+        private LocalTime gioKetThuc;
         private String tenCongViec;
 
         public int getId() {
@@ -71,19 +75,19 @@
             this.ngayLam = ngayLam;
         }
 
-        public int getGioBatDau() {
+        public LocalTime getGioBatDau() {
             return gioBatDau;
         }
 
-        public void setGioBatDau(int gioBatDau) {
+        public void setGioBatDau(LocalTime gioBatDau) {
             this.gioBatDau = gioBatDau;
         }
 
-        public int getGioKetThuc() {
+        public LocalTime getGioKetThuc() {
             return gioKetThuc;
         }
 
-        public void setGioKetThuc(int gioKetThuc) {
+        public void setGioKetThuc(LocalTime gioKetThuc) {
             this.gioKetThuc = gioKetThuc;
         }
 

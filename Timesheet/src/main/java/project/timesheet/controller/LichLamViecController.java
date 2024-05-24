@@ -2,17 +2,18 @@
 
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.http.ResponseEntity;
+    import org.springframework.security.core.context.SecurityContextHolder;
+    import org.springframework.security.core.userdetails.UserDetails;
     import org.springframework.stereotype.Controller;
     import org.springframework.ui.Model;
     import org.springframework.web.bind.annotation.*;
-    import project.timesheet.models.LichLamViec;
-    import project.timesheet.models.LichLamViecRequest;
+    import project.timesheet.models.*;
     import project.timesheet.services.LichLamViecService;
     import project.timesheet.services.NhanVienService;
     import project.timesheet.services.TrangThaiLamViecService;
     import project.timesheet.services.VanPhongService;
-    import project.timesheet.models.LichLamViecModel;
 
+    import java.util.ArrayList;
     import java.util.List;
 
     @Controller
@@ -88,13 +89,13 @@
             if(java.time.LocalDate.now().isEqual(delete.getNgayLam().toLocalDate()))
             {
                 //kiem tra gio thuc hien delele lich lam viec say ra truoc gio thuc hien cong viec
-                if(java.time.LocalTime.now().getHour()< delete.getGioBatDau())
-                {
-                    service.delete(id);
-                    return ResponseEntity.ok().build();
-                }
-                else
-                    return ResponseEntity.badRequest().build();
+//                if(java.time.LocalTime.now().getHour()< delete.getGioBatDau())
+//                {
+//                    service.delete(id);
+//                    return ResponseEntity.ok().build();
+//                }
+//                else
+//                    return ResponseEntity.badRequest().build();
             }
             //th ngay thuc hien delete say ra sau ngay thuc hien cong viec
             return ResponseEntity.badRequest().build();
@@ -109,6 +110,7 @@
         }
         @RequestMapping("/taolich")
         public String createMVC(Model model) {
+
             LichLamViecModel lich = new LichLamViecModel();
             model.addAttribute("lichlam",lich);
             model.addAttribute("vanPhongList",vanPhongService.getALL());
@@ -123,7 +125,8 @@
             lich.setNgayLam(lichlam.getNgayLam());
             lich.setTenCongViec(lichlam.getTenCongViec());
             //setter cho nhanvien, van phong va trang thai lam viec
-            lich.setNhanVien(nhanVienService.getOne(lichlam.getNhanVien_id()));
+
+            lich.setNhanVien(nhanVienService.findByUsername(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
             lich.setTrangThai(trangThaiLamViecService.getOne(lichlam.getTrangThaiLamViec_Id()));
             lich.setVpCongTac(vanPhongService.getVanPhongById(lichlam.getVpCongTac_id()));
             service.create(lich);
@@ -132,6 +135,7 @@
         public ResponseEntity<List<LichLamViec>> getFromDateToDate(@RequestBody LichLamViecRequest lichlam) {
             return ResponseEntity.ok(service.getAllBetweenDate(lichlam.getTuNgay(),lichlam.getDenNgay()));
         }
+
         @GetMapping("/getbyvp/{id}")
         public ResponseEntity<List<LichLamViec>> getAllByVanPhong(@PathVariable("id") int id) {
             return ResponseEntity.ok(service.getAllByVanPhongId(id));
@@ -144,4 +148,41 @@
         public ResponseEntity<List<LichLamViec>> getAllByTrangThai(@PathVariable("id") int id) {
             return ResponseEntity.ok(service.getAllByTrangThaiId(id));
         }
+        @RequestMapping("/searchpage")
+        public String searchPage(Model model)
+        {
+            model.addAttribute("vanPhongList",vanPhongService.getALL());
+            model.addAttribute("trangThaiList",trangThaiLamViecService.getALL());
+            model.addAttribute("listNhanVien",nhanVienService.getAllUsers());
+            model.addAttribute("searchFilter",new LichLamViecSearchFilter());
+            return "search";
+        }
+        @GetMapping("/searchresult")
+        public String search(@ModelAttribute("searchFilter") LichLamViecSearchFilter filter,Model model) {
+            List<LichLamViec> filter1;
+            if (filter.getTuNgay() != null && filter.getDenNgay() != null) {
+                 filter1 = service.getAllBetweenDate(filter.getTuNgay(), filter.getDenNgay());
+            }
+            else filter1 = service.getAll();
+//            if(filter.getTuNgay()!=null && filter.getDenNgay()!=null)
+//            {
+//                filter1.removeIf(lich -> (lich.getNgayLam().after(filter.getDenNgay())));
+//                filter1.removeIf(lich -> (lich.getNgayLam().before(filter.getTuNgay())));
+//            }
+            if(filter.getTrangThaiLamViec_Id()!=null)
+            {
+                filter1.removeIf(lich -> lich.getTrangThai().getId() != filter.getTrangThaiLamViec_Id());
+            }
+
+            if(filter.getNhanVien_id()!=null) {
+                filter1.removeIf(lich -> lich.getNhanVien().getId() != filter.getNhanVien_id());
+            }
+
+            if(filter.getVpCongTac_id()!=null) {
+                filter1.removeIf(lich -> lich.getVpCongTac().getId() != filter.getVpCongTac_id());
+            }
+            model.addAttribute("listSearch",filter1);
+            return "result";
+        }
+
     }

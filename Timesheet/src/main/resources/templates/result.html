@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'home','Home')}"
+>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form>
+<table>
+<thead>
+<tr>
+    <th>ID</th>
+    <th>Văn phòng công tác</th>
+    <th>Trạng thái làm việc</th>
+    <th>Tên nhân viên</th>
+    <th>Tên Công việc</th>
+    <th>Ngày làm</th>
+</tr>
+</thead>
+<tbody>
+<tr th:each="search : ${listSearch}">
+    <td th:text="${search.id}"></td>
+    <td th:text="${search.vpCongTac.tenVP}"></td>
+    <td th:text="${search.trangThai.tenTrangThai}"></td>
+    <td th:text="${search.nhanVien.tenNV}"></td>
+    <td th:text="${search.tenCongViec}"></td>
+    <td th:text="${search.ngayLam}"></td>
+</tr>
+</tbody>
+</table>
+</form>
+</body>
+</html>

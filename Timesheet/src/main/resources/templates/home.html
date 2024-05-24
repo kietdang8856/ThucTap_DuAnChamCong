@@ -25,28 +25,49 @@
                                         <h4 class="card-title">CÔNG VIỆC</h4>
                                     </div>
                                     <div class="card-body todo-input" >
-                                        <span>To-do: </span>
-                                        <input type="text" placeholder="Enter new to-do" id="todoInputTextbox">
-                                        <span>Category: </span>
-                                        <input type="text" placeholder="Enter category" list="categoryList" id="categoryInput">
-                                        <datalist id="categoryList">
-                                            <option value="Tokyo"></option>
-                                            <option value="Yokohama"></option>
-                                            <option value="Mi"></option>
-                                            <option value="Aya"></option>
-                                        </datalist>
-                                        <span>Date:</span>
-                                        <input type="date" id="dateInput">
-                                        <span>Time:</span>
-                                        <input type="time" id="timeInput">
-                                        <span>Link:</span>
-                                        <input type="text" id="urlInput">
-                                        <span></span>
-                                        <button id="addBtn">Add</button>
-                                        <span></span>
-                                        <button id="sortBtn">Sort by Date</button>
-                                        <span></span>
-                                        <label><input type="checkbox" id="shortlistBtn"> Incomplete First </label>
+                                        <form th:action="@{/lichlamviec/save}" th:object="${lichlam}" method="post">
+                                            <table>
+                                                <tr>
+                                                    <td>Tên Công Việc</td>
+                                                    <td><input type="text" th:field="*{tenCongViec}" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ngày Làm:</td>
+                                                    <td><input type="date" th:field="*{ngayLam}" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Giờ bắt đầu</td>:</td>
+                                                    <td>
+                                                        <input type="time" th:field="*{gioBatDau}" min="08:00" max="17:00"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Giờ kết thúc</td>
+                                                    <td>
+                                                        <input type="time" th:field="*{gioKetThuc}" min="08:00" max="17:00"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Van phong</td>
+                                                    <td>
+                                                        <select class="form-control" th:field="*{vpCongTac_id}">
+                                                            <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}" ></option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Trang Thai Lam Viec</td>
+                                                    <td>
+                                                        <select class="form-control" th:field="*{trangThaiLamViec_Id}">
+                                                            <option th:each="trangthai : ${trangThaiList}" th:value="${trangthai.id}" th:text="${trangthai.tenTrangThai}" ></option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2"><button type="submit">save</button> </td>
+                                                </tr>
+                                            </table>
+                                        </form>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
@@ -132,9 +153,35 @@
     </div>
 </section>
 <script th:inline="javascript">
+
+
     document.addEventListener('DOMContentLoaded', function() {
+        let listLichLam = [[${listLichLam}]];
+        console.log(listLichLam);
+        var listEvent =[];
+
+        listLichLam.forEach(function(lich){
+            var event={
+                title:lich.tenCongViec,
+                start: lich.ngayLam + "T" + lich.gioBatDau,
+                //end: endTime.concat(lich.ngayLam,"T",lich.gioKetThuc,":00:00"),
+                end: lich.ngayLam + "T" + lich.gioKetThuc,
+                allDay:false,
+                extendedProps: { // Thêm thông tin người dùng
+                    nhanVienId: lich.nhanVien.id,
+                    hoTen: lich.nhanVien.tenNV,
+                    username: lich.nhanVien.username,
+                    chucVu: lich.nhanVien.chucvuId,
+                    noiLamViec: lich.vpCongTac.tenVP
+                }
+            };
+            listEvent.push(event);
+        });
+
+        console.log( listEvent);
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
+
             headerToolbar: { left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay,list' }, // buttons for switching between views
@@ -144,6 +191,11 @@
             firstDay: 1,
             height: 530,
             contentHeight: 200,
+            eventTimeFormat: { // like '14:30:00'
+                hour: 'numeric',
+                minute: '2-digit',
+                meridiem: false // Ẩn ký hiệu AM/PM
+            },
             views: {
                 dayGridMonth: { // name of view
                     titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit' }
@@ -154,22 +206,71 @@
                     // other view-specific options here
                 }
             },
-            events: [
-                {
-                    title:  'My Event',
-                    start:  '2024-05-03T14:30:00',
-                    end:     '2024-05-03T15:00:00',
-                    allDay: false
-                },
-                {
-                    title:  'My Event 2',
-                    start:  '2024-05-03T15:10:00',
-                    end:     '2024-05-03T16:00:00',
-                    allDay: false
+            events: listEvent,
+
+            eventDidMount: function (info) {
+                const event = info.event;
+                const extendedProps = event.extendedProps;
+
+                if (extendedProps) {
+                    const tooltipContent = `
+                    <div class="tooltip-content">
+                        <table>
+                            <tr>
+                                <th>ID:</th>
+                                <td>${extendedProps.nhanVienId || "N/A"}</td>
+                            </tr>
+                            <tr>
+                                <th>Họ tên:</th>
+                                <td>${extendedProps.hoTen || "N/A"}</td>
+                            </tr>
+                            <tr>
+                                <th>Username:</th>
+                                <td>${extendedProps.username || "N/A"}</td>
+                            </tr>
+                            <tr>
+                                <th>Chức vụ:</th>
+                                <td>${extendedProps.chucVu || "N/A"}</td>
+                            </tr>
+                            <tr>
+                                <th>Nơi làm việc:</th>
+                                <td>${extendedProps.noiLamViec || "N/A"}</td>
+                            </tr>
+                        </table>
+                    </div>
+                `;
+
+
+                    // Tạo phần tử tooltip
+                    const tooltip = document.createElement('div');
+                    tooltip.classList.add('fc-tooltip');
+                    tooltip.innerHTML = tooltipContent;
+
+                    // Gắn tooltip vào phần tử sự kiện
+                    info.el.appendChild(tooltip);
+
+                    // Xử lý ẩn/hiện tooltip
+                    info.el.addEventListener('mouseenter', () => {
+                        tooltip.style.display = 'block';
+                    });
+
+                    info.el.addEventListener('mouseleave', () => {
+                        tooltip.style.display = 'none';
+                    });
+                    info.el.addEventListener('mouseenter', function () {
+                        // ... (Giữ nguyên phần lấy tọa độ rect)
+                        const scrollY = window.scrollY || document.documentElement.scrollTop; // Lấy vị trí scroll của trang
+                        const scrollX = window.scrollX || document.documentElement.scrollLeft;
+                        tooltip.style.top = `${rect.top + rect.height + scrollY}px`; // Điều chỉnh vị trí tooltip
+                        tooltip.style.left = `${rect.left + scrollX}px`;
+                        tooltip.style.display = 'block';
+                    });
+
                 }
-                // other events here...
-            ],
+
+            }
         });
+
         calendar.render();
     });
 </script>

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,8 +14,8 @@ public class LichLamViecModel {
     private int trangThaiLamViec_Id;
     private int nhanVien_id;
     private Date ngayLam;
-    private int gioBatDau;
-    private int gioKetThuc;
+    private LocalTime gioBatDau;
+    private LocalTime gioKetThuc;
     private String tenCongViec;
 
     public int getVpCongTac_id() {
@@ -49,19 +50,19 @@ public class LichLamViecModel {
         this.ngayLam = ngayLam;
     }
 
-    public int getGioBatDau() {
+    public LocalTime getGioBatDau() {
         return gioBatDau;
     }
 
-    public void setGioBatDau(int gioBatDau) {
+    public void setGioBatDau(LocalTime gioBatDau) {
         this.gioBatDau = gioBatDau;
     }
 
-    public int getGioKetThuc() {
+    public LocalTime getGioKetThuc() {
         return gioKetThuc;
     }
 
-    public void setGioKetThuc(int gioKetThuc) {
+    public void setGioKetThuc(LocalTime gioKetThuc) {
         this.gioKetThuc = gioKetThuc;
     }
 

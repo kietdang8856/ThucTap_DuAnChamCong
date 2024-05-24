@@ -46,7 +46,7 @@ public class UserController {
     public String showRegistrationForm(Model model) {
         List<Role> roles = userService.getAllRoles();
         List<VanPhong> vanPhongs = vanPhongService.getALL();
-        List<ChucVu> chucVus = chucVuService.getALL();
+        List<ChucVu> chucVus = chucVuService.getAll();
         NhanVien nhanVien = new NhanVien();
         model.addAttribute("nhanVien", nhanVien);
         model.addAttribute("vanPhongs", vanPhongs);
@@ -75,7 +75,7 @@ public class UserController {
     {
         List<Role> roles = userService.getAllRoles();
         List<VanPhong> vanPhongs = vanPhongService.getALL();
-        List<ChucVu> chucVus = chucVuService.getALL();
+        List<ChucVu> chucVus = chucVuService.getAll();
         NhanVien nhanVien = new NhanVien();
         nhanVien.setTenNV(tenNV);
         nhanVien.setSdt(sdt);
@@ -104,7 +104,7 @@ public class UserController {
         if (model.containsAttribute("usernameError") || model.containsAttribute("emailError")|| model.containsAttribute("roleError") || model.containsAttribute("passwordError")) {
             model.addAttribute("nhanVien", nhanVien); // Đưa thông tin đã nhập vào lại form
             model.addAttribute("roles", userService.getAllRoles());
-            model.addAttribute("chucVus", chucVuService.getALL());
+            model.addAttribute("chucVus", chucVuService.getAll());
             model.addAttribute("vanPhongs", vanPhongService.getALL());
             return "users/register"; // Trả về lại trang đăng ký nếu có lỗi
         }
@@ -144,7 +144,7 @@ public class UserController {
                 userRoles.add(userRole);
             }
         }
-        ChucVu chucVu = chucVuService.getChucVuById(chucvuId);
+        ChucVu chucVu = chucVuService.getPositionById(chucvuId);
         VanPhong vanPhong = vanPhongService.getVanPhongById(vpId);
         nhanVien.setChucvu(chucVu); // Thiết lập chức vụ cho nhân viên
         nhanVien.setVpLamViecChinh(vanPhong); // Thiết lập văn phòng chính
@@ -168,7 +168,7 @@ public class UserController {
         List<Role> roles = userService.getAllRoles();
         List<Role> userRoles = user.getUserRoles().stream().map(UserRole::getRole).collect(Collectors.toList());
         List<VanPhong> vanPhongs = vanPhongService.getALL();
-        List<ChucVu> chucVus = chucVuService.getALL();
+        List<ChucVu> chucVus = chucVuService.getAll();
         model.addAttribute("roles", roles);
         model.addAttribute("user", user);
         model.addAttribute("userRoles", userRoles);
@@ -253,7 +253,7 @@ public class UserController {
                 userRoles.add(userRole);
             }
         }
-        ChucVu chucVu = chucVuService.getChucVuById(chucvuId);
+        ChucVu chucVu = chucVuService.getPositionById(chucvuId);
         VanPhong vanPhong = vanPhongService.getVanPhongById(vpId);
 
         existingNhanVien.setChucvu(chucVu);
