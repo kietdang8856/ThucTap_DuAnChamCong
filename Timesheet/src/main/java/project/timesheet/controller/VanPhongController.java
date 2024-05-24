@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import project.timesheet.models.NhanVien;
 import project.timesheet.models.VanPhong;
 import project.timesheet.services.VanPhongService;
 
@@ -22,7 +21,7 @@ public class VanPhongController {
     public String searchVanPhong(@RequestParam("searchTerm") String searchTerm, Model model) {
         List<VanPhong> searchResults = vanPhongService.searchVanPhongByName(searchTerm);
         model.addAttribute("vanphongs", searchResults);
-        return "vanphongs"; // or whatever your HTML template name is
+        return "vanphong/list"; // or whatever your HTML template name is
     }
 
     @GetMapping("/vanphong/{id}")
@@ -31,7 +30,7 @@ public class VanPhongController {
         if (vanPhong.isPresent()) {
             model.addAttribute("vanphong", vanPhong.get());
             model.addAttribute("nhanViens", vanPhong.get().getNhanViens());
-            return "vanphong-details";
+            return "vanphong";
         } else {
             return "error/404"; // or another error handling page
         }
@@ -41,7 +40,7 @@ public class VanPhongController {
     public String getAllVanPhongs(Model model) {
         List<VanPhong> vanPhongs = vanPhongService.getAllVanPhongs();
         model.addAttribute("vanphongs", vanPhongs);
-        return "vanphongs";
+        return "vanphong/list";
     }
 
     @GetMapping("/{id}")
@@ -53,13 +52,13 @@ public class VanPhongController {
         } else {
             model.addAttribute("error", "VanPhong not found");
         }
-        return "vanphong-details";
+        return "vanphong/edit";
     }
 
     @GetMapping("/new")
     public String createVanPhongForm(Model model) {
         model.addAttribute("vanphong", new VanPhong());
-        return "create-vanphong";
+        return "vanphong/add";
     }
 
     @PostMapping
@@ -73,7 +72,7 @@ public class VanPhongController {
         Optional<VanPhong> vanPhong = vanPhongService.getVanPhongById(id);
         if (vanPhong.isPresent()) {
             model.addAttribute("vanphong", vanPhong.get());
-            return "edit-vanphong";
+            return "vanphong/edit";
         } else {
             return "redirect:/vanphongs";
         }

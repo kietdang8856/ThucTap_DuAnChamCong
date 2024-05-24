@@ -33,30 +33,29 @@
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
                 <table class="table table-hover">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>TÊN TÀI KHOẢN</th>
-        <th>QUYỀN</th>
-        <th>TRẠNG THÁI</th>
-        <th>CHỨC NĂNG</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="user : ${users}">
-        <td th:text="${user.id}"></td>
-        <td th:text="${user.username}"></td>
-        <td th:each="userRole : ${user.userRoles}">
-                    <span th:text="${userRole.role.name}"></span>
-        </td>
-        <td th:text="${user.enabled} ? 'Đang hoạt động' : ''">Đang hoạt động</td>
-        <td>
-            <a th:href="@{'/users/edit/'+ ${user.id}}" class="btn btn-sm btn-success">Sửa</a>
-            <a th:href="@{'/users/'+ ${user.id}}" class="btn btn-sm btn-info">Chi tiết</a>
-            <a th:href="@{'/users/delete/'+ ${user.id}}"  class="btn btn-sm btn-danger">Xóa</a>
-        </td>
-    </tr>
-    </tbody>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>TÊN TÀI KHOẢN</th>
+                        <th>QUYỀN</th>
+                        <th>TRẠNG THÁI</th>
+                        <th>CHỨC NĂNG</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:each="userRole : ${user.userRoles}">
+                            <span th:text="${userRole.role.name}"></span>
+                        </td>
+                        <td th:text="${user.enabled} ? 'Đang hoạt động' : ''">Đang hoạt động</td>
+                        <td>
+                            <a th:href="@{'/users/edit/'+ ${user.id}}" class="btn btn-sm btn-success">Sửa</a>
+                            <a th:href="@{'/users/delete/'+ ${user.id}}"  class="btn btn-sm btn-danger">Xóa</a>
+                        </td>
+                    </tr>
+                    </tbody>
                 </table>
             </div>
             <!-- /.box-body -->

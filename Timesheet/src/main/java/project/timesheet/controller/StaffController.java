@@ -77,7 +77,7 @@ public class StaffController {
     public String showRegistrationForm(Model model) {
         List<Role> roles = userService.getAllRoles();
         List<VanPhong> vanPhongs = vanPhongService.getAllVanPhongs();
-        List<ChucVu> chucVus = chucVuService.getALL();
+        List<ChucVu> chucVus = chucVuService.getAll();
         NhanVien nhanVien = new NhanVien();
         model.addAttribute("nhanVien", nhanVien);
         model.addAttribute("vanPhongs", vanPhongs);
@@ -106,7 +106,7 @@ public class StaffController {
     {
         List<Role> roles = userService.getAllRoles();
         List<VanPhong> vanPhongs = vanPhongService.getAllVanPhongs();
-        List<ChucVu> chucVus = chucVuService.getALL();
+        List<ChucVu> chucVus = chucVuService.getAll();
         NhanVien nhanVien = new NhanVien();
         nhanVien.setTenNV(tenNV);
         nhanVien.setSdt(sdt);
@@ -135,7 +135,7 @@ public class StaffController {
         if (model.containsAttribute("usernameError") || model.containsAttribute("emailError")|| model.containsAttribute("roleError") || model.containsAttribute("passwordError")) {
             model.addAttribute("nhanVien", nhanVien); // Đưa thông tin đã nhập vào lại form
             model.addAttribute("roles", userService.getAllRoles());
-            model.addAttribute("chucVus", chucVuService.getALL());
+            model.addAttribute("chucVus", chucVuService.getAll());
             model.addAttribute("vanPhongs", vanPhongService.getAllVanPhongs());
             return "admin/staff/add"; // Trả về lại trang đăng ký nếu có lỗi
         }
@@ -175,7 +175,7 @@ public class StaffController {
                 userRoles.add(userRole);
             }
         }
-        ChucVu chucVu = chucVuService.getChucVuById(chucvuId);
+        ChucVu chucVu = chucVuService.getPositionById(chucvuId);
         Optional<VanPhong> vanPhong = vanPhongService.getVanPhongById(vpId);
         VanPhong vp = vanPhong.get();
         nhanVien.setChucvu(chucVu); // Thiết lập chức vụ cho nhân viên
@@ -192,7 +192,7 @@ public class StaffController {
         List<Role> roles = userService.getAllRoles();
         List<Role> userRoles = user.getUserRoles().stream().map(UserRole::getRole).collect(Collectors.toList());
         List<VanPhong> vanPhongs = vanPhongService.getAllVanPhongs();
-        List<ChucVu> chucVus = chucVuService.getALL();
+        List<ChucVu> chucVus = chucVuService.getAll();
         model.addAttribute("roles", roles);
         model.addAttribute("user", user);
         model.addAttribute("userRoles", userRoles);
@@ -277,7 +277,7 @@ public class StaffController {
                 userRoles.add(userRole);
             }
         }
-        ChucVu chucVu = chucVuService.getChucVuById(chucvuId);
+        ChucVu chucVu = chucVuService.getPositionById(chucvuId);
         Optional<VanPhong> vanPhong = vanPhongService.getVanPhongById(vpId);
         VanPhong vp = vanPhong.get();
         existingNhanVien.setChucvu(chucVu);

@@ -27,6 +27,7 @@ import java.sql.Blob;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -42,14 +43,15 @@ public class UserController {
     private ChucVuService chucVuService;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         List<Role> roles = userService.getAllRoles();
-//        List<VanPhong> vanPhongs = vanPhongService.getALL();
-        List<ChucVu> chucVus = chucVuService.getALL();
+        List<VanPhong> vanPhongs = vanPhongService.getAllVanPhongs();
+        List<ChucVu> chucVus = chucVuService.getAll();
         NhanVien nhanVien = new NhanVien();
         model.addAttribute("nhanVien", nhanVien);
-//        model.addAttribute("vanPhongs", vanPhongs);
+        model.addAttribute("vanPhongs", vanPhongs);
         model.addAttribute("chucVus", chucVus);
         model.addAttribute("roles", roles);
         return "users/register";
@@ -74,8 +76,8 @@ public class UserController {
     )throws IOException
     {
         List<Role> roles = userService.getAllRoles();
-//        List<VanPhong> vanPhongs = vanPhongService.getALL();
-        List<ChucVu> chucVus = chucVuService.getALL();
+        List<VanPhong> vanPhongs = vanPhongService.getAllVanPhongs();
+        List<ChucVu> chucVus = chucVuService.getAll();
         NhanVien nhanVien = new NhanVien();
         nhanVien.setTenNV(tenNV);
         nhanVien.setSdt(sdt);
@@ -104,8 +106,8 @@ public class UserController {
         if (model.containsAttribute("usernameError") || model.containsAttribute("emailError")|| model.containsAttribute("roleError") || model.containsAttribute("passwordError")) {
             model.addAttribute("nhanVien", nhanVien); // Đưa thông tin đã nhập vào lại form
             model.addAttribute("roles", userService.getAllRoles());
-            model.addAttribute("chucVus", chucVuService.getALL());
-//            model.addAttribute("vanPhongs", vanPhongService.getALL());
+            model.addAttribute("chucVus", chucVuService.getAll());
+            model.addAttribute("vanPhongs", vanPhongService.getAllVanPhongs());
             return "users/register"; // Trả về lại trang đăng ký nếu có lỗi
         }
 
@@ -144,10 +146,11 @@ public class UserController {
                 userRoles.add(userRole);
             }
         }
-        ChucVu chucVu = chucVuService.getChucVuById(chucvuId);
-//        VanPhong vanPhong = vanPhongService.getVanPhongById(vpId);
+        ChucVu chucVu = chucVuService.getPositionById(chucvuId);
+        Optional<VanPhong> vanPhong = vanPhongService.getVanPhongById(vpId);
+        VanPhong vp = vanPhong.get();
         nhanVien.setChucvu(chucVu); // Thiết lập chức vụ cho nhân viên
-//        nhanVien.setVpLamViecChinh(vanPhong); // Thiết lập văn phòng chính
+        nhanVien.setVpLamViecChinh(vp); // Thiết lập văn phòng chính
         nhanVien.getUserRoles().clear();
         userRoles.forEach(userRole -> nhanVien.getUserRoles().add(userRole));
         userService.saveUser(nhanVien);
@@ -168,12 +171,12 @@ public class UserController {
         NhanVien user = userService.findById(id);
         List<Role> roles = userService.getAllRoles();
         List<Role> userRoles = user.getUserRoles().stream().map(UserRole::getRole).collect(Collectors.toList());
-//        List<VanPhong> vanPhongs = vanPhongService.getALL();
-        List<ChucVu> chucVus = chucVuService.getALL();
+        List<VanPhong> vanPhongs = vanPhongService.getAllVanPhongs();
+        List<ChucVu> chucVus = chucVuService.getAll();
         model.addAttribute("roles", roles);
         model.addAttribute("user", user);
         model.addAttribute("userRoles", userRoles);
-//        model.addAttribute("vanPhongs", vanPhongs);
+        model.addAttribute("vanPhongs", vanPhongs);
         model.addAttribute("chucVus", chucVus);
         return "users/edituser";
     }
@@ -254,11 +257,12 @@ public class UserController {
                 userRoles.add(userRole);
             }
         }
-        ChucVu chucVu = chucVuService.getChucVuById(chucvuId);
-//        VanPhong vanPhong = vanPhongService.getVanPhongById(vpId);
+        ChucVu chucVu = chucVuService.getPositionById(chucvuId);
+        Optional<VanPhong> vanPhong = vanPhongService.getVanPhongById(vpId);
+        VanPhong vp = vanPhong.get();
 
         existingNhanVien.setChucvu(chucVu);
-//        existingNhanVien.setVpLamViecChinh(vanPhong);
+        existingNhanVien.setVpLamViecChinh(vp);
         existingNhanVien.getUserRoles().clear(); // Xóa các role cũ
         userRoles.forEach(userRole -> existingNhanVien.getUserRoles().add(userRole)); // Thêm role mới
 

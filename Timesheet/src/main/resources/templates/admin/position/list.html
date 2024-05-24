@@ -3,7 +3,7 @@
 >
 <head>
     <meta charset="UTF-8">
-    <title>Danh Sách Nhân Viên</title>
+    <title>User List</title>
 </head>
 <body>
 <section>
@@ -11,11 +11,12 @@
         <div class="box">
 
             <div class="box-header">
-                <a th:href="@{/admin/staff/add}" class="btn btn-success">Thêm Nhân Viên</a>
+                <a th:href="@{/admin/position/add}" class="btn btn-success">Thêm Chức Vụ</a>
                 <div class="box-tools">
-                    <form th:action="@{/admin/staff/search}" method="get">
-                        <div class="input-group input-group-sm" style="width: 200px;">
-                            <input type="text" name="keyword" class="form-control pull-right" placeholder="Tìm kiếm">
+                    <form th:action="@{/admin/position/search}" method="get">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input style="
+    width: 200px;" type="text" name="keyword" class="form-control pull-right" placeholder="Search">
                             <div class="input-group-btn">
                                 <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                             </div>
@@ -30,34 +31,19 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Tên</th>
-                        <th>Giới Tính</th>
-                        <th>Số Điện Thoại</th>
-                        <th>Email</th>
-                        <th>Địa Chỉ</th>
-                        <th>Chức Vụ</th>
-                        <th>Văn Phòng Làm Việc</th>
-                        <th>Ngày Bắt Đầu Làm</th>
-                        <th>Hành Động</th>
+                        <th>TÊN CHỨC VỤ</th>
                     </tr>
                     </thead>
                     <!-- Table body -->
                     <tbody>
                     <!-- Iterate over the list of NhanVien and display their attributes -->
-                    <tr th:each="staff : ${allStaff}">
-                        <td th:text="${staff.id}"></td>
-                        <td th:text="${staff.tenNV}"></td>
-                        <td th:text="${staff.gioiTinh == 1 ? 'Nam' : 'Nữ'}"></td>
-                        <td th:text="${staff.sdt}"></td>
-                        <td th:text="${staff.email}"></td>
-                        <td th:text="${staff.diaChi}"></td>
-                        <td th:text="${staff.chucvu.tenChucVu}"></td>
-                        <td th:text="${staff.vpLamViecChinh.name}"></td>
-                        <td th:text="${staff.ngayBatDauLam}"></td>
+                    <tr th:each="position : ${allSPosition}">
+                        <td th:text="${position.id}"></td>
+                        <td th:text="${position.tenChucVu}"></td>
                         <td>
-                            <a th:href="@{'/admin/staff/edit/'+ ${staff.id}}" class="btn btn-sm btn-success">Sửa</a>
+                            <a th:href="@{'/admin/position/edit/'+ ${position.id}}" class="btn btn-sm btn-success">Sửa</a>
                             <a class="btn btn-sm btn-danger"
-                               th:href="@{/admin/staff/delete/{id}(id=${staff.id})}"
+                               th:href="@{/admin/position/delete/{id}(id=${position.id})}"
                                onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
                         </td>
                     </tr>
@@ -67,7 +53,7 @@
                 <nav aria-label="Page navigation example" style="font-size: 15px; display: flex; justify-content: center;">
                     <ul class="pagination" th:each="i : ${#numbers.sequence(0, totalPages)}">
                         <li class="page-item" th:classappend="${currentPage == i} ? 'active'" style="margin: 0 3px;">
-                            <a class="page-link" th:href="@{/admin/staff(pageNo=${i})}" th:text="${i + 1}"></a>
+                            <a class="page-link" th:href="@{/admin/staff(pageNo=${i})}" th:text="${i+1}"></a>
                         </li>
                     </ul>
                 </nav>
@@ -78,4 +64,26 @@
     </div>
 </section>
 </body>
+<script th:inline="javascript">
+    function deletePosition(positionId) {
+        if (confirm('Bạn có chắc chắn muốn xóa?')) {
+            // Send an AJAX request to delete the position
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/admin/position/delete/' + positionId, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Position deleted successfully, reload the page or update the UI as needed
+                        location.reload(); // Reload the page after deletion
+                    } else {
+                        // Handle error, if any
+                        console.error('Error occurred while deleting position:', xhr.statusText);
+                    }
+                }
+            };
+            xhr.send();
+        }
+    }
+</script>
 </html>

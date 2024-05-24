@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listVanPhong','Danh sách văn phòng')}">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'editVanPhong','Chỉnh Sửa Văn Phòng')}">
 <head>
+    <title>Chỉnh Sửa Văn Phòng</title>
     <meta charset="UTF-8">
-    <title>Tạo Văn Phòng</title>
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <!-- Thay thế layout bằng layout phù hợp -->
 </head>
 <body>
 <section>
@@ -11,15 +13,14 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <!-- Tiêu đề trang -->
-                        <h1><a th:href="@{/}" th:text="${pageTitle}">.</a></h1>
+                        <h1><a th:href="@{/static}" th:text="${pageTitle}">.</a></h1>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
             <hr>
-            <!-- Form tạo văn phòng -->
-            <div class="box-body">
-                <form action="#" th:action="@{/vanphongs}" th:object="${vanphong}" method="post">
+            <!-- Form chỉnh sửa thông tin văn phòng -->
+            <form th:action="@{/vanphongs/update/{id}(id=${vanphong.id})}" th:object="${vanphong}" method="post">
+                <div class="box-body">
                     <div class="form-group">
                         <label for="name">Tên:</label>
                         <input type="text" id="name" th:field="*{name}" class="form-control" />
@@ -28,10 +29,12 @@
                         <label for="officeAddress">Địa chỉ văn phòng:</label>
                         <input type="text" id="officeAddress" th:field="*{officeAddress}" class="form-control" />
                     </div>
-                    <!-- Button tạo văn phòng -->
-                    <button type="submit" class="btn btn-primary">Tạo</button>
-                </form>
-            </div>
+                </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <a th:href="@{/vanphongs}" class="btn btn-secondary">Quay lại Danh sách</a>
+                </div>
+            </form>
         </div>
         <!-- /.box -->
     </div>
