@@ -233,3 +233,10 @@ button:hover{
 .fc-tooltip th {
 	font-weight: bold;
 }
+.chuc-vu-span {
+	display: block; /* Hoặc inline-block để hiển thị trên cùng dòng */
+	font-size: 12px; /* Điều chỉnh kích thước font */
+	color: #FFFFFF;      /* Điều chỉnh màu sắc */
+	margin-top: 5px;  /* Điều chỉnh khoảng cách */
+	/* Các thuộc tính CSS khác */
+}
