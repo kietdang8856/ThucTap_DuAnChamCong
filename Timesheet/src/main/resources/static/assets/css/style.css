@@ -240,3 +240,14 @@ button:hover{
 	margin-top: 5px;  /* Điều chỉnh khoảng cách */
 	/* Các thuộc tính CSS khác */
 }
+.fc-direction-ltr .fc-daygrid-event.fc-event-end,
+.fc-event-main-frame {
+	flex-direction: row;
+	text-align: center;
+}
+
+.fc-event-desc,
+.fc-event-title {
+	white-space: break-spaces;
+	font-size:xx-small;
+}

@@ -118,7 +118,7 @@
             return "lich/todo";
         }
         @PostMapping("/save")
-        public void submitForm(@ModelAttribute("lichlam") LichLamViecModel lichlam) {
+        public String submitForm(@ModelAttribute("lichlam") LichLamViecModel lichlam) {
             LichLamViec lich = new LichLamViec();
             lich.setGioBatDau(lichlam.getGioBatDau());
             lich.setGioKetThuc(lichlam.getGioKetThuc());
@@ -130,6 +130,7 @@
             lich.setTrangThai(trangThaiLamViecService.getOne(lichlam.getTrangThaiLamViec_Id()));
             lich.setVpCongTac(vanPhongService.getVanPhongById(lichlam.getVpCongTac_id()));
             service.create(lich);
+            return "redirect:/";
         }
         @GetMapping("/getbydate")
         public ResponseEntity<List<LichLamViec>> getFromDateToDate(@RequestBody LichLamViecRequest lichlam) {

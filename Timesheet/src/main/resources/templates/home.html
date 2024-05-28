@@ -153,22 +153,41 @@
     </div>
 </section>
 <script th:inline="javascript">
-
-
     document.addEventListener('DOMContentLoaded', function() {
         let listLichLam = [[${listLichLam}]];
         console.log(listLichLam);
         let userList = [[${userList}]];
         var listEvent =[];
 
-
         listLichLam.forEach(function(lich){
+            let fullTitle=lich.tenCongViec+
+                "\n" + lich.gioBatDau + "-" +lich.gioKetThuc +
+                "\n" + "TenNV: " + lich.nhanVien.tenNV +
+                "\n" + "HQ Name: " +  lich.nhanVien.vpLamViecChinh.diaChi+
+                "\n" + "Work Place Name: " + lich.vpCongTac.diaChi+
+                "\n" + "Work type: " + lich.trangThai.tenTrangThai;
+            let color;
+            if(lich.trangThai.id===1){
+                color="#EA4215";
+            }
+            if(lich.trangThai.id===2){
+                color="#15BDEA";
+            }
+            if(lich.trangThai.id===3){
+                color="#AC15EA";
+            }
+            if(lich.trangThai.id===4){
+                color="#53EA15";
+            }
+            console.log(color);
             var event={
-                title:lich.tenCongViec,
+                title:fullTitle ,
                 start: lich.ngayLam + "T" + lich.gioBatDau,
                 //end: endTime.concat(lich.ngayLam,"T",lich.gioKetThuc,":00:00"),
                 end: lich.ngayLam + "T" + lich.gioKetThuc,
                 allDay:false,
+                display: 'block',
+                backgroundColor:color,
                 extendedProps: { // Thêm thông tin người dùng
                     nhanVienId: lich.nhanVien.id,
                     hoTen: lich.nhanVien.tenNV,
@@ -181,7 +200,6 @@
             listEvent.push(event);
         });
 
-        console.log( listEvent);
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
 
@@ -288,7 +306,6 @@
 
             }
         });
-
         calendar.render();
     });
 </script>
