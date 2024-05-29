@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listUser','Danh sách nhân viên')}"
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listUser','List User')}"
 >
 <head>
     <meta charset="UTF-8">
@@ -18,11 +18,11 @@
             </div><!-- /.container-fluid -->
             <hr>
             <div class="box-header">
-                <a th:href="@{/admin/users/register}" class="btn btn-success">+Thêm nhân viên</a>
+                <a th:href="@{/admin/users/register}" class="btn btn-success">+ Add User</a>
 
                 <form th:action="@{/admin/users/search}" method="get">
                     <div class="input-group input-group-sm" style="width: 200px;">
-                        <input type="text" name="keyword" class="form-control pull-right" placeholder="Tìm kiếm">
+                        <input type="text" name="keyword" class="form-control pull-right" placeholder="id ,email, fullname , username">
                         <div class="input-group-btn">
                             <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                         </div>
@@ -35,24 +35,32 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>TÊN TÀI KHOẢN</th>
-                        <th>QUYỀN</th>
-                        <th>TRẠNG THÁI</th>
-                        <th>CHỨC NĂNG</th>
+                        <th>Fullname</th>
+                        <th>Username</th>
+                        <th>Mainoffice</th>
+                        <th>Mail</th>
+                        <th>Work start date</th>
+                        <th>Role</th>
+                        <th>Statement</th>
+                        <th>Adjust</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="user : ${users}">
                         <td th:text="${user.id}"></td>
+                        <td th:text="${user.tenNV}"></td>
                         <td th:text="${user.username}"></td>
+                        <td th:text="${user.vpLamViecChinh.tenVP}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.ngayBatDauLam}"></td>
                         <td th:each="userRole : ${user.userRoles}">
                             <span th:text="${userRole.role.name}"></span>
                         </td>
                         <td th:text="${user.enabled} ? 'Đang hoạt động' : ''">Đang hoạt động</td>
                         <td>
-                            <a th:href="@{'/admin/users/edit/'+ ${user.id}}" class="btn btn-sm btn-success">Sửa</a>
-                            <a th:href="@{'/admin/users/'+ ${user.id}}" class="btn btn-sm btn-info">Chi tiết</a>
-                            <a th:href="@{'/admin/users/delete/'+ ${user.id}}"  class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+                            <a th:href="@{'/admin/users/edit/'+ ${user.id}}" class="btn btn-sm btn-success">Edit</a>
+                            <a th:href="@{'/admin/users/'+ ${user.id}}" class="btn btn-sm btn-info">Details</a>
+                            <a th:href="@{'/admin/users/delete/'+ ${user.id}}"  class="btn btn-sm btn-danger" onclick="return confirm('Do you want to delete?')">Delete</a>
                         </td>
                     </tr>
                     </tbody>

@@ -138,25 +138,28 @@
 
                 <li>
                     <a th:href="@{/}">
-                        <i class="fa fa-dashboard"></i> <span>Trang chủ</span>
-                        <span class="pull-right-container">
-            </span>
+                        <i class="fa fa-dashboard"></i> <span>Home Page</span>
+                        <span class="pull-right-container"></span>
                     </a>
                 </li>
-
                 <li class="treeview">
                     <a href="">
-                        <i class="fa fa-th"></i> <span>Quản lý nhân viên</span>
+                        <i class="fa fa-user"></i> <span>User management</span>
                         <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+                         <i class="fa fa-angle-left pull-right"></i>
+                        </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a th:href="@{/admin/users/list}"><i class="fa fa-circle-o"></i>Nhân viên</a></li>
+                        <li><a th:href="@{/admin/users/list}"><i class="fa fa-circle-o"></i>User</a></li>
                         <li><a th:href="@{/admin/users/list}"><i class="fa fa-circle-o"></i> Tài khoản</a></li>
                     </ul>
                 </li>
-
+                <li>
+                    <a th:href="@{/admin/position/list}">
+                        <i class="fa fa-list"></i> <span>Position</span>
+                        <span class="pull-right-container"></span>
+                    </a>
+                </li>
                 <li>
                     <a href="">
                         <i class="fa fa-th"></i> <span>Widgets</span>

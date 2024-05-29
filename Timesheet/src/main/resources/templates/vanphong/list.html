@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listVanPhong','Danh sách văn phòng')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Văn Phòng</title>
+</head>
+<body>
+<section>
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><a th:href="@{/static}" th:text="${pageTitle}">.</a></h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+            <hr>
+            <div class="box-header">
+                <a th:href="@{/vanphongs/new}" class="btn btn-success">+Thêm văn phòng</a>
+                <div class="box-tools">
+                    <form th:action="@{/vanphongs/search}" method="get">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input type="text" name="searchTerm" class="form-control pull-right" placeholder="Tìm kiếm">
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Office Address</th>
+                        <th>Employee</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="vanphong : ${vanphongs}">
+                        <td th:text="${vanphong.id}"></td>
+                        <td th:text="${vanphong.name}"></td>
+                        <td th:text="${vanphong.officeAddress}"></td>
+                        <td>
+                            <ul>
+                                <li th:each="nhanvien : ${vanphong.nhanViens}" th:text="${nhanvien.tenNV}"></li>
+                            </ul>
+                        </td>
+                        <td>
+                            <a th:href="@{'/vanphongs/edit/'+ ${vanphong.id}}" class="btn btn-sm btn-success">Sửa</a>
+                            <a class="btn btn-sm btn-danger"
+                               th:href="@{'/vanphongs/delete/'+ ${vanphong.id}}"
+                               onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+</section>
+</body>
+</html>

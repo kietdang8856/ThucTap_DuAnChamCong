@@ -22,91 +22,50 @@
                             <div class="sticky-top mb-3">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4 class="card-title">CÔNG VIỆC</h4>
-                                    </div>
-                                    <div class="card-body todo-input" >
-                                        <form th:action="@{/lichlamviec/save}" th:object="${lichlam}" method="post">
-                                            <table>
-                                                <tr>
-                                                    <td>Tên Công Việc</td>
-                                                    <td><input type="text" th:field="*{tenCongViec}" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Ngày Làm:</td>
-                                                    <td><input type="date" th:field="*{ngayLam}" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Giờ bắt đầu</td>:</td>
-                                                    <td>
-                                                        <input type="time" th:field="*{gioBatDau}" min="08:00" max="17:00"/>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Giờ kết thúc</td>
-                                                    <td>
-                                                        <input type="time" th:field="*{gioKetThuc}" min="08:00" max="17:00"/>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Van phong</td>
-                                                    <td>
-                                                        <select class="form-control" th:field="*{vpCongTac_id}">
-                                                            <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}" ></option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Trang Thai Lam Viec</td>
-                                                    <td>
-                                                        <select class="form-control" th:field="*{trangThaiLamViec_Id}">
-                                                            <option th:each="trangthai : ${trangThaiList}" th:value="${trangthai.id}" th:text="${trangthai.tenTrangThai}" ></option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2"><button type="submit">save</button> </td>
-                                                </tr>
-                                            </table>
-                                        </form>
-                                    </div>
-                                    <!-- /.card-body -->
-                                </div>
-                                <!-- /.card -->
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Lịch công việc</h3>
+                                        <h4 class="card-title text-center"><strong>APPOINTMENT</strong></h4>
                                     </div>
                                     <div class="card-body">
-                                        <div class="todoTable-block">
-                                            <div class="itemsPerPage">
-                                                <span>items per page</span>
-                                                <select id="itemsPerPageSelectElem">
-                                                    <option>5</option>
-                                                    <option>10</option>
-                                                    <option>20</option>
+                                        <form th:action="@{/lichlamviec/save}" th:object="${lichlam}" method="post">
+                                            <div class="form-group">
+                                                <label for="tenCongViec">Appointment Name</label>
+                                                <input type="text" class="form-control" id="tenCongViec" th:field="*{tenCongViec}">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="ngayLam">Working Day</label>
+                                                <input type="date" class="form-control" id="ngayLam" th:field="*{ngayLam}">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="gioBatDau">Start Time</label>
+                                                <input type="time" class="form-control" id="gioBatDau" th:field="*{gioBatDau}" min="08:00" max="17:00">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="gioKetThuc">End Time</label>
+                                                <input type="time" class="form-control" id="gioKetThuc" th:field="*{gioKetThuc}" min="08:00" max="17:00">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="vpCongTac_id">Office</label>
+                                                <select class="form-control" id="vpCongTac_id" th:field="*{vpCongTac_id}">
+                                                    <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}"></option>
                                                 </select>
                                             </div>
 
-                                            <table id="todoTable">
-                                                <tr>
-                                                    <td></td>
-                                                    <td>Date</td>
-                                                    <td>Time</td>
-                                                    <td>to-do</td>
-                                                    <td>
-                                                        <select id="categoryFilter">
-                                                        </select>
-                                                    </td>
-                                                    <td></td>
-                                                </tr>
-                                            </table>
-
-                                            <div class="pagination-pages">
-
+                                            <div class="form-group">
+                                                <label for="trangThaiLamViec_Id">Work Status</label>
+                                                <select class="form-control" id="trangThaiLamViec_Id" th:field="*{trangThaiLamViec_Id}">
+                                                    <option th:each="trangthai : ${trangThaiList}" th:value="${trangthai.id}" th:text="${trangthai.tenTrangThai}"></option>
+                                                </select>
                                             </div>
-                                        </div>
+
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </form>
                                     </div>
                                 </div>
+                                <!-- /.card -->
+
                             </div>
                         </div>
                         <!-- /.col -->

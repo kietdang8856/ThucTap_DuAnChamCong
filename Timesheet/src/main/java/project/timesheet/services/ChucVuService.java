@@ -12,6 +12,11 @@ import java.util.Optional;
 public class ChucVuService {
     @Autowired
     private ChucVuRepository repo;
+    public List<ChucVu> getAllPosition(Integer pageNo,
+                                       Integer pageSize,
+                                       String sortBy){
+        return repo.getAllPosition(pageNo, pageSize, sortBy);
+    }
     public List<ChucVu> getALL()
     {
         return repo.findAll();
@@ -35,5 +40,8 @@ public ChucVu getChucVuById(Integer id) {
     public void delete(int id)
     {
         repo.deleteById(id);
+    }
+    public List<ChucVu> searchPosition(String keyword){
+        return repo.searchPosition(keyword);
     }
 }
