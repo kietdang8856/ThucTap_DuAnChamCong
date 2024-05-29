@@ -240,6 +240,25 @@ button:hover{
 	margin-top: 5px;  /* Điều chỉnh khoảng cách */
 	/* Các thuộc tính CSS khác */
 }
+.btn-primary {
+	background-color: #007bff; /* Or your desired primary color */
+	border-color: #007bff;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+	transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition effect */
+}
+
+.btn-primary:hover {
+	background-color: #0069d9; /* Slightly darker on hover */
+	box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+.error{
+	color: red;
+}
+.avatar-section {
+	border: 1px solid #ccc; /* Add a border to each section */
+	padding: 10px;            /* Add some padding for spacing */
+	margin-bottom: 10px;     /* Space between sections */
+}
 .fc-direction-ltr .fc-daygrid-event.fc-event-end,
 .fc-event-main-frame {
 	flex-direction: row;
