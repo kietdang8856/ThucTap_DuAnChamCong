@@ -25,7 +25,7 @@
                                         <h4 class="card-title">CÔNG VIỆC</h4>
                                     </div>
                                     <div class="card-body todo-input" >
-                                        <form th:action="@{/lichlamviec/search}" th:object="${searchFilter}" method="get">
+                                        <form th:action="@{/lichlamviec/search}" th:object="${searchFilter}" method="post">
                                             <table>
 
                                                 <tr>
@@ -149,32 +149,50 @@
     </div>
 </section>
 <script th:inline="javascript">
-
-
     document.addEventListener('DOMContentLoaded', function() {
         let listLichLam = [[${listLichLam}]];
         console.log(listLichLam);
         var listEvent =[];
-
         listLichLam.forEach(function(lich){
+            let fullTitle=lich.tenCongViec+
+                "\n" + lich.gioBatDau + "-" +lich.gioKetThuc +
+                "\n" + "TenNV: " + lich.nhanVien.tenNV +
+                "\n" + "HQ Name: " +  lich.nhanVien.vpLamViecChinh.diaChi+
+                "\n" + "Work Place Name: " + lich.vpCongTac.diaChi+
+                "\n" + "Work type: " + lich.trangThai.tenTrangThai;
+            let color;
+            if(lich.trangThai.id===1){
+                color="#EA4215";
+            }
+            if(lich.trangThai.id===2){
+                color="#15BDEA";
+            }
+            if(lich.trangThai.id===3){
+                color="#AC15EA";
+            }
+            if(lich.trangThai.id===4){
+                color="#53EA15";
+            }
             var event={
-                title:lich.tenCongViec,
+                title:fullTitle ,
                 start: lich.ngayLam + "T" + lich.gioBatDau,
                 //end: endTime.concat(lich.ngayLam,"T",lich.gioKetThuc,":00:00"),
                 end: lich.ngayLam + "T" + lich.gioKetThuc,
                 allDay:false,
+                display: 'block',
+                backgroundColor:color,
                 extendedProps: { // Thêm thông tin người dùng
                     nhanVienId: lich.nhanVien.id,
                     hoTen: lich.nhanVien.tenNV,
                     username: lich.nhanVien.username,
-                    chucVu: lich.nhanVien.chucvuId,
-                    noiLamViec: lich.vpCongTac.tenVP
+                    chucVu: lich.nhanVien.chucvu ? lich.nhanVien.chucvu.tenChucVu : "N/A" ,// Lấy tên chức vụ, kiểm tra null
+                    noiCongTac: lich.vpCongTac.tenVP,
+                    noiLamViec: lich.nhanVien.vpLamViecChinh ? lich.nhanVien.vpLamViecChinh.tenVP : "N/A"
                 }
             };
             listEvent.push(event);
         });
 
-        console.log( listEvent);
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
 
@@ -200,6 +218,17 @@
                 timeGridDay: { // name of view
                     titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit',  hour: 'numeric', minute: '2-digit', }
                     // other view-specific options here
+                },
+                timeGridWeek: {
+                    type: 'timeGridWeek',
+                    slotDuration: '24:00:00', // Đặt khoảng thời gian của mỗi slot là 24h
+
+                    slotLabelFormat: [
+                        {
+                            text: '', // Không hiển thị giờ
+                        },
+                        { weekday: 'short' } // Chỉ hiển thị thứ
+                    ]
                 }
             },
             events: listEvent,
@@ -228,9 +257,13 @@
                                 <th>Chức vụ:</th>
                                 <td>${extendedProps.chucVu || "N/A"}</td>
                             </tr>
-                            <tr>
+                              <tr>
                                 <th>Nơi làm việc:</th>
                                 <td>${extendedProps.noiLamViec || "N/A"}</td>
+                            </tr>
+                            <tr>
+                                <th>Nơi công tác:</th>
+                                <td>${extendedProps.noiCongTac || "N/A"}</td>
                             </tr>
                         </table>
                     </div>
@@ -266,7 +299,6 @@
 
             }
         });
-
         calendar.render();
     });
 </script>
