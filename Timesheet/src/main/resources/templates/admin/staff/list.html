@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listUser','Nhân viên')}"
->
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listUser','Nhân viên')}">
 <head>
     <meta charset="UTF-8">
     <title>Danh Sách Nhân Viên</title>
@@ -9,65 +8,66 @@
 <section>
     <div class="col-xs-12">
         <div class="box">
-
             <div class="box-header">
-                <a th:href="@{/admin/staff/add}" class="btn btn-success">Thêm Nhân Viên</a>
+                <a th:href="@{/admin/staff/add}" class="btn btn-success" style="font-size: 14px;">Thêm Nhân Viên</a>
                 <div class="box-tools">
                     <form th:action="@{/admin/staff/search}" method="get">
                         <div class="input-group input-group-sm" style="width: 200px;">
-                            <input type="text" name="keyword" class="form-control pull-right" placeholder="Tìm kiếm">
+                            <input type="text" name="keyword" class="form-control pull-right" placeholder="Tìm kiếm theo tên" style="font-size: 14px;">
                             <div class="input-group-btn">
-                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                <button type="submit" class="btn btn-default" style="font-size: 14px;"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
             <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-                <table class="table table-hover">
+            <div class="box-body no-padding">
+                <table class="table table-hover" style="font-size: 14px; text-align: center; vertical-align: middle;">
                     <!-- Table header -->
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Tên</th>
-                        <th>Giới Tính</th>
-                        <th>Số Điện Thoại</th>
-                        <th>Email</th>
-                        <th>Địa Chỉ</th>
-                        <th>Chức Vụ</th>
-                        <th>Văn Phòng Làm Việc</th>
-                        <th>Ngày Bắt Đầu Làm</th>
-                        <th>Hành Động</th>
+                        <th style="white-space: nowrap; padding: 4px;">ID</th>
+                        <th style="white-space: nowrap; padding: 4px;">Hình Ảnh</th>
+                        <th style="white-space: nowrap; padding: 4px;">Tên</th>
+                        <th style="white-space: nowrap; padding: 4px;">Giới Tính</th>
+                        <th style="white-space: nowrap; padding: 4px;">Số Điện Thoại</th>
+                        <th style="white-space: nowrap; padding: 4px;">Email</th>
+                        <th style="white-space: nowrap; padding: 4px;">Địa Chỉ</th>
+                        <th style="white-space: nowrap; padding: 4px;">Chức Vụ</th>
+                        <th style="white-space: nowrap; padding: 4px;">Văn Phòng Làm Việc</th>
+                        <th style="white-space: nowrap; padding: 4px;">Ngày Bắt Đầu Làm</th>
+                        <th style="white-space: nowrap; padding: 4px;">Hành Động</th>
                     </tr>
                     </thead>
                     <!-- Table body -->
                     <tbody>
                     <!-- Iterate over the list of NhanVien and display their attributes -->
                     <tr th:each="staff : ${allStaff}">
-                        <td th:text="${staff.id}"></td>
-                        <td th:text="${staff.tenNV}"></td>
-                        <td th:text="${staff.gioiTinh == 1 ? 'Nam' : 'Nữ'}"></td>
-                        <td th:text="${staff.sdt}"></td>
-                        <td th:text="${staff.email}"></td>
-                        <td th:text="${staff.diaChi}"></td>
-                        <td th:text="${staff.chucvu.tenChucVu}"></td>
-                        <td th:text="${staff.vpLamViecChinh.name}"></td>
-                        <td th:text="${staff.ngayBatDauLam}"></td>
-                        <td>
-                            <a th:href="@{'/admin/staff/edit/'+ ${staff.id}}" class="btn btn-sm btn-success">Sửa</a>
-                            <a class="btn btn-sm btn-danger"
-                               th:href="@{/admin/staff/delete/{id}(id=${staff.id})}"
-                               onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+                        <td th:text="${staff.id}" style="white-space: nowrap; padding: 4px;"></td>
+                        <td style="text-align: center; white-space: nowrap; padding: 4px;">
+                            <img th:src="@{'/user/img/' + ${staff.avatarPath}}" alt="Avatar" width="50" height="50" style="display: block; margin: auto;">
+                        </td>
+                        <td th:text="${staff.tenNV}" style="white-space: nowrap; padding: 4px;"></td>
+                        <td th:text="${staff.gioiTinh == 0 ? 'Nam' : (staff.gioiTinh == 1 ? 'Nữ' : 'Khác')}" style="white-space: nowrap; padding: 4px;"></td>
+                        <td th:text="${staff.sdt}" style="white-space: nowrap; padding: 4px;"></td>
+                        <td th:text="${staff.email}" style="white-space: nowrap; padding: 4px;"></td>
+                        <td th:text="${staff.diaChi}" style="white-space: nowrap; padding: 4px;"></td>
+                        <td th:text="${staff.chucvu.tenChucVu}" style="white-space: nowrap; padding: 4px;"></td>
+                        <td th:text="${staff.vpLamViecChinh.name}" style="white-space: nowrap; padding: 4px;"></td>
+                        <td th:text="${staff.ngayBatDauLam}" style="white-space: nowrap; padding: 4px;"></td>
+                        <td style="white-space: nowrap; padding: 4px;">
+                            <a th:href="@{'/admin/staff/edit/'+ ${staff.id}}" class="btn btn-sm btn-success" style="font-size: 14px;">Sửa</a>
+                            <a class="btn btn-sm btn-danger" th:href="@{/admin/staff/delete/{id}(id=${staff.id})}" onclick="return confirm('Bạn có chắc chắn muốn xóa?')" style="font-size: 14px;">Xóa</a>
                         </td>
                     </tr>
                     </tbody>
                 </table>
                 <!-- Pagination -->
-                <nav aria-label="Page navigation example" style="font-size: 15px; display: flex; justify-content: center;">
+                <nav aria-label="Page navigation example" style="font-size: 14px; display: flex; justify-content: center;">
                     <ul class="pagination" th:each="i : ${#numbers.sequence(0, totalPages)}">
                         <li class="page-item" th:classappend="${currentPage == i} ? 'active'" style="margin: 0 3px;">
-                            <a class="page-link" th:href="@{/admin/staff(pageNo=${i})}" th:text="${i + 1}"></a>
+                            <a class="page-link" th:href="@{/admin/staff(pageNo=${i})}" th:text="${i + 1}" style="font-size: 14px;"></a>
                         </li>
                     </ul>
                 </nav>

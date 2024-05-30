@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listUser','Danh sách nhân viên')}"
->
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listUser','Danh sách nhân viên')}">
 <head>
     <meta charset="UTF-8">
     <title>User List</title>
@@ -46,13 +45,11 @@
                     <tr th:each="user : ${users}">
                         <td th:text="${user.id}"></td>
                         <td th:text="${user.username}"></td>
-                        <td th:each="userRole : ${user.userRoles}">
-                            <span th:text="${userRole.role.name}"></span>
-                        </td>
-                        <td th:text="${user.enabled} ? 'Đang hoạt động' : ''">Đang hoạt động</td>
+                        <td th:text="${#lists.isEmpty(user.userRoles) ? '' : user.userRoles[0].role.name}"></td>
+                        <td th:text="${user.enabled} ? 'Đang hoạt động' : 'Không hoạt động'"></td>
                         <td>
                             <a th:href="@{'/users/edit/'+ ${user.id}}" class="btn btn-sm btn-success">Sửa</a>
-                            <a th:href="@{'/users/delete/'+ ${user.id}}"  class="btn btn-sm btn-danger">Xóa</a>
+                            <a th:href="@{'/users/delete/'+ ${user.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
                         </td>
                     </tr>
                     </tbody>
