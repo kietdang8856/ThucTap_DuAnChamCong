@@ -8,6 +8,10 @@ import java.util.List;
 
 
 public interface NhanVienService {
+    public List<NhanVien> getAllStaff(Integer pageNo,
+                                      Integer pageSize,
+                                      String sortBy);
+    public List<NhanVien> searchStaffs(String keyword);
     public NhanVien getOne(int id);
 
     public List<NhanVien> getAllUsers();

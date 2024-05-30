@@ -31,7 +31,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/admin/users")
 
 public class UserController {
     @Autowired
@@ -198,7 +198,7 @@ public class UserController {
 
         if (existingNhanVien == null) {
             model.addAttribute("error", "User not found with ID: " + id);
-            return "redirect:/users/list";
+            return "redirect:/admin/users/list";
         }
 
         existingNhanVien.setTenNV(tenNV);
@@ -214,7 +214,7 @@ public class UserController {
         if (userService.existsOtherAdmin(id) && roleIds.contains(userService.getRoleByName("ADMIN").getId())) {
             redirectAttributes.addFlashAttribute("roleError", "Chỉ có một tài khoản được phép có role ADMIN");
             redirectAttributes.addFlashAttribute("nhanVien", existingNhanVien);
-            return "redirect:/users/edit/" + id;
+            return "redirect:/admin/users/edit/" + id;
         }
         try {
             if (!avatarFile.isEmpty()) {
@@ -265,7 +265,7 @@ public class UserController {
         userService.saveUser(existingNhanVien);
 
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thành công");
-        return "redirect:/users/list";
+        return "redirect:/admin/users/list";
     }
 
     @GetMapping("/delete/{id}")
@@ -273,26 +273,33 @@ public class UserController {
         NhanVien user = userService.findById(id);
         userService.deleteUser(user); // Bây giờ bạn có thể xóa nhân viên
         model.addAttribute("message", "User deleted successfully");
-        return "redirect:/users/list";
+        return "redirect:/admin/users/list";
     }
 
+
     @GetMapping("/list")
-    public String showAll(Model model) {
-        List<NhanVien> users = userService.getAllUsers();
+    public String showAll(Model model,
+                          @RequestParam(defaultValue = "0") Integer pageNo,
+                          @RequestParam(defaultValue = "10") Integer pageSize,
+                          @RequestParam(defaultValue = "Id") String sortBy) {
+        List<NhanVien> users = userService.getAllStaff(pageNo, pageSize, sortBy);
         model.addAttribute("users", users);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", userService.getAllUsers().size() / pageSize);
         return "users/list";
     }
 
-    @GetMapping("/all")
-    public String showUsers() {
-
-        return "users/listusers";
+    @GetMapping("/search")
+    public String searchStaffs(Model model,
+                               @RequestParam String keyword,
+                               @RequestParam(defaultValue = "0") Integer pageNo,
+                               @RequestParam(defaultValue = "10") Integer pageSize,
+                               @RequestParam(defaultValue = "Id") String sortBy) {
+        List<NhanVien> users = userService.searchStaffs(keyword);
+        model.addAttribute("users", users);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", userService.getAllUsers().size() / pageSize);
+        return "users/list";
     }
-    @GetMapping("/edit")
-    public String showUsersDetail() {
-
-        return "users/edituser";
-    }
-
 
 }

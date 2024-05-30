@@ -29,7 +29,15 @@ public class UserServiceImpl implements NhanVienService {
     public NhanVien saveUser(NhanVien user) {
         return userRepository.save(user);
     }
-
+    @Override
+    public List<NhanVien> getAllStaff(Integer pageNo,
+                                      Integer pageSize,
+                                      String sortBy){
+        return userRepository.getAllStaff(pageNo, pageSize, sortBy);
+    }
+    public List<NhanVien> searchStaffs(String keyword){
+        return userRepository.searchStaff(keyword);
+    }
     @Override
     public NhanVien getOne(int id) {
         Optional<NhanVien> optional =userRepository.findById(id);
