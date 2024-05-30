@@ -161,7 +161,7 @@
           model.addAttribute("searchFilter",new LichLamViecSearchFilter());
            return "result";
        }
-        @GetMapping("/search")
+        @PostMapping("/search")
         public String search(@ModelAttribute("searchFilter") LichLamViecSearchFilter filter,Model model) {
 
                 List<LichLamViec> filter1;
