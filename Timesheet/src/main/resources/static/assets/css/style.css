@@ -270,4 +270,36 @@ button:hover{
 	white-space: break-spaces;
 	font-size:xx-small;
 }
+.box-body table {
+	border-collapse: collapse;
+	width: 100%;
+}
 
+.box-body th,
+.box-body td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
+}
+
+.box-body th {
+	background-color: #f2f2f2;
+	font-weight: bold;
+}
+
+.box-body tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+.box-body tr:hover {
+	background-color: #ddd;
+}
+
+.box-body td:last-child {
+	width: 150px;
+	white-space: nowrap;
+}
+
+.box-body a {
+	margin-right: 5px;
+}

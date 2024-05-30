@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'editVanPhong','Chỉnh Sửa Văn Phòng')}">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'editVanPhong','Edit Office')}">
 <head>
     <title>Chỉnh Sửa Văn Phòng</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
     <!-- Thay thế layout bằng layout phù hợp -->
 </head>
 <body>
@@ -19,20 +18,20 @@
             </div><!-- /.container-fluid -->
             <hr>
             <!-- Form chỉnh sửa thông tin văn phòng -->
-            <form th:action="@{/vanphongs/update/{id}(id=${vanphong.id})}" th:object="${vanphong}" method="post">
+            <form th:action="@{/admin/office/update/{id}(id=${vanphong.id})}" th:object="${vanphong}" method="post">
                 <div class="box-body">
                     <div class="form-group">
-                        <label for="name">Tên:</label>
-                        <input type="text" id="name" th:field="*{name}" class="form-control" />
+                        <label for="name">Name Office:</label>
+                        <input type="text" id="name" th:field="*{tenVP}" class="form-control" />
                     </div>
                     <div class="form-group">
-                        <label for="officeAddress">Địa chỉ văn phòng:</label>
-                        <input type="text" id="officeAddress" th:field="*{officeAddress}" class="form-control" />
+                        <label for="officeAddress">Address Office:</label>
+                        <input type="text" id="officeAddress" th:field="*{diaChi}" class="form-control" />
                     </div>
                 </div>
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary">Lưu</button>
-                    <a th:href="@{/vanphongs}" class="btn btn-secondary">Quay lại Danh sách</a>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button a th:href="@{/admin/office/list}" class="btn btn-danger">Back</button>
                 </div>
             </form>
         </div>

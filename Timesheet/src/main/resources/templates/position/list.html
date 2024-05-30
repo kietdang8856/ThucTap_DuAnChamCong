@@ -12,23 +12,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1><a th:text="${pageTitle}">.</a></h1>
+                        <h1><a th:href="@{/admin/position/list}" th:text="${pageTitle}">.</a></h1>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
             <hr>
             <div class="box-header">
-                <a th:href="@{/admin/position/add}" class="btn btn-success">Thêm Chức Vụ</a>
-                <div class="box-tools">
-                    <form th:action="@{/admin/position/search}" method="get">
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <input style="width: 200px;" type="text" name="keyword" class="form-control pull-right" placeholder="Search">
-                            <div class="input-group-btn">
-                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <a th:href="@{/admin/position/add}" class="btn btn-success">Add Positon</a>
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">

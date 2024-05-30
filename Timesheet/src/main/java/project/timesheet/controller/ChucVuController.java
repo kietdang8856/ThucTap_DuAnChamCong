@@ -72,16 +72,4 @@ public class ChucVuController {
         return "redirect:/admin/position/list";
     }
 
-    @GetMapping("/search")
-    public String searchPosition(Model model,
-                                 @RequestParam String keyword,
-                                 @RequestParam(defaultValue = "0") Integer pageNo,
-                                 @RequestParam(defaultValue = "5") Integer pageSize,
-                                 @RequestParam(defaultValue = "Id") String sortBy) {
-        List<ChucVu> searchPosition = chucVuService.searchPosition(keyword);
-        model.addAttribute("allSPosition", searchPosition); // Correct the attribute name
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", searchPosition.size() / pageSize);
-        return "position/list";
-    }
 }

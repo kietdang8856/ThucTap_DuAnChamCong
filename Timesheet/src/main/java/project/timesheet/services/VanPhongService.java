@@ -16,6 +16,7 @@ public class VanPhongService {
     {
         return repo.findAll();
     }
+
 //    public VanPhong getOne(int id)
 //    {
 //        Optional<VanPhong> optional =repo.findById(id);
@@ -24,16 +25,26 @@ public class VanPhongService {
 public VanPhong getVanPhongById(Integer id) {
     return repo.findById(id).orElse(null);
 }
-    public void create(VanPhong vp)
-    {
-        repo.save(vp);
+
+    public List<VanPhong> searchVanPhongByName(String name) {
+        return repo.findByNameContaining(name);
     }
-    public void update(VanPhong vp)
-    {
-        repo.save(vp);
+    public Optional<VanPhong> getVanPhongByid(Integer id) {
+        return repo.findById(id);
     }
-    public void delete(int id)
-    {
+    public VanPhong createVanPhong(VanPhong vanPhong) {
+        return repo.save(vanPhong);
+    }
+
+    public Optional<VanPhong> updateVanPhong(Integer id, VanPhong vanPhongDetails) {
+        return repo.findById(id).map(vanPhong -> {
+            vanPhong.setTenVP(vanPhongDetails.getTenVP());
+            vanPhong.setDiaChi(vanPhongDetails.getDiaChi());
+            return repo.save(vanPhong);
+        });
+    }
+
+    public void deleteVanPhong(Integer id) {
         repo.deleteById(id);
     }
 }

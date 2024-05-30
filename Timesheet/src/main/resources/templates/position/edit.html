@@ -25,7 +25,8 @@
                         <label for="tenChucVu">Tên Chức Vụ:</label>
                         <input type="text" id="tenChucVu" th:field="*{TenChucVu}" class="form-control"/>
                     </div>
-                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button a th:href="@{/admin/position/list}" class="btn btn-danger">Back</button>
                 </form>
             </div>
         </div>

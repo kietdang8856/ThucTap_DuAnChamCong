@@ -25,6 +25,7 @@ public class VanPhong {
     @OneToMany
     @Column(name = "lichlamviec")
     private List<LichLamViec> lichLamViecs ;
+
     public int getId() {
         return id;
     }
@@ -48,4 +49,5 @@ public class VanPhong {
     public void setDiaChi(String diaChi) {
         this.diaChi = diaChi;
     }
+
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listVanPhong','Danh sách văn phòng')}">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listVanPhong','List Office')}">
 <head>
     <meta charset="UTF-8">
     <title>Văn Phòng</title>
@@ -11,17 +11,17 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1><a th:href="@{/static}" th:text="${pageTitle}">.</a></h1>
+                        <h1><a th:href="@{/admin/office/list}" th:text="${pageTitle}">.</a></h1>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
             <hr>
             <div class="box-header">
-                <a th:href="@{/vanphongs/new}" class="btn btn-success">+Thêm văn phòng</a>
+                <a th:href="@{/admin/office/new}" class="btn btn-success">+ Add Office</a>
                 <div class="box-tools">
-                    <form th:action="@{/vanphongs/search}" method="get">
+                    <form th:action="@{/admin/office/search}" method="get">
                         <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="searchTerm" class="form-control pull-right" placeholder="Tìm kiếm">
+                            <input type="text" name="searchTerm" class="form-control pull-right" placeholder="find office">
                             <div class="input-group-btn">
                                 <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                             </div>
@@ -37,25 +37,19 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Office Address</th>
-                        <th>Employee</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="vanphong : ${vanphongs}">
                         <td th:text="${vanphong.id}"></td>
-                        <td th:text="${vanphong.name}"></td>
-                        <td th:text="${vanphong.officeAddress}"></td>
+                        <td th:text="${vanphong.tenVP}"></td>
+                        <td th:text="${vanphong.diaChi}"></td>
                         <td>
-                            <ul>
-                                <li th:each="nhanvien : ${vanphong.nhanViens}" th:text="${nhanvien.tenNV}"></li>
-                            </ul>
-                        </td>
-                        <td>
-                            <a th:href="@{'/vanphongs/edit/'+ ${vanphong.id}}" class="btn btn-sm btn-success">Sửa</a>
+                            <a th:href="@{'/admin/office/edit/'+ ${vanphong.id}}" class="btn btn-sm btn-success">Edit</a>
                             <a class="btn btn-sm btn-danger"
-                               th:href="@{'/vanphongs/delete/'+ ${vanphong.id}}"
-                               onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+                               th:href="@{'/admin/office/delete/'+ ${vanphong.id}}"
+                               onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Delete</a>
                         </td>
                     </tr>
                     </tbody>
