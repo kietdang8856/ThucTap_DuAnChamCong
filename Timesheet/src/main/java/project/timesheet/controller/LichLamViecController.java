@@ -15,6 +15,7 @@
 
     import java.util.ArrayList;
     import java.util.List;
+    import java.util.Objects;
 
     @Controller
     @RequestMapping("/lichlamviec")
@@ -152,6 +153,8 @@
        @RequestMapping("/search")
        public String searchPage(Model model)
        {
+           List<LichLamViec> list = new ArrayList<>();
+           model.addAttribute("listLichLam",list);
           model.addAttribute("vanPhongList",vanPhongService.getALL());
            model.addAttribute("trangThaiList",trangThaiLamViecService.getALL());
            model.addAttribute("listNhanVien",nhanVienService.getAllUsers());
@@ -174,8 +177,8 @@
                     filter1.removeIf(lich -> lich.getTrangThai().getId() != filter.getTrangThaiLamViec_Id());
                 }
 
-                if (filter.getTenNV() != null) {
-                    filter1.removeIf(lich -> !lich.getNhanVien().getTenNV().equalsIgnoreCase(filter.getTenNV()));
+            if (!Objects.equals(filter.getTenNV(), "")) {
+                    filter1.removeIf(lich -> !lich.getNhanVien().getTenNV().contains(filter.getTenNV()));
                 }
 
                 if (filter.getVpCongTac_id() != null) {
@@ -188,5 +191,37 @@
                 model.addAttribute("searchFilter", filter);
                 return "result";
             }
+        @GetMapping("/searchapi")
+        public ResponseEntity<List<LichLamViec>> searchAPI(@RequestBody LichLamViecSearchFilter filter) {
 
+            List<LichLamViec> filter1;
+            if (filter.getTuNgay() != null && filter.getDenNgay() != null) {
+                filter1 = service.getAllBetweenDate(filter.getTuNgay(), filter.getDenNgay());
+            } else filter1 = service.getAll();
+            if (filter.getTenNV() != "" || filter.getTenNV() !=null) {
+               filter1.removeIf(lich -> !lich.getNhanVien().getTenNV().contains(filter.getTenNV()));
+            }
+//            if(filter.getTuNgay()!=null && filter.getDenNgay()!=null)
+//            {
+//                filter1.removeIf(lich -> (lich.getNgayLam().after(filter.getDenNgay())));
+//                filter1.removeIf(lich -> (lich.getNgayLam().before(filter.getTuNgay())));
+//            }
+            if (filter.getTrangThaiLamViec_Id() != null) {
+                filter1.removeIf(lich -> lich.getTrangThai().getId() != filter.getTrangThaiLamViec_Id());
+            }
+
+//            if (filter.getTenNV() != null) {
+//                filter1.removeIf(lich -> !(lich.getNhanVien().getTenNV().equals(filter.getTenNV())));
+//            }
+
+            if (filter.getVpCongTac_id() != null) {
+                filter1.removeIf(lich -> lich.getVpCongTac().getId() != filter.getVpCongTac_id());
+            }
+//            model.addAttribute("listLichLam", filter1);
+//            model.addAttribute("vanPhongList", vanPhongService.getALL());
+//            model.addAttribute("trangThaiList", trangThaiLamViecService.getALL());
+//            model.addAttribute("listNhanVien", nhanVienService.getAllUsers());
+//            model.addAttribute("searchFilter", filter);
+            return ResponseEntity.ok(filter1);
+        }
     }
