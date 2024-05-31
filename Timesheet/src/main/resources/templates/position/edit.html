@@ -22,8 +22,11 @@
                 <form th:action="@{/admin/position/edit}" th:object="${chucVu}" method="post">
                     <input type="hidden" th:field="*{id}"/>
                     <div class="form-group">
-                        <label for="tenChucVu">Tên Chức Vụ:</label>
-                        <input type="text" id="tenChucVu" th:field="*{TenChucVu}" class="form-control"/>
+                        <label for="tenChucVu">Name Position:</label>
+                        <input type="text" id="tenChucVu" th:field="*{tenChucVu}" class="form-control"/>
+                        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                            <span th:text="${errorMessage}"></span>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Update</button>
                     <button a th:href="@{/admin/position/list}" class="btn btn-danger">Back</button>

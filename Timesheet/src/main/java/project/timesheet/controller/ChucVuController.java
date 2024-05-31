@@ -44,7 +44,11 @@ public class ChucVuController {
     }
 
     @PostMapping("/add")
-    public String createPosition(@ModelAttribute("chucVu") ChucVu chucVu) {
+    public String createPosition(@ModelAttribute("chucVu") ChucVu chucVu,Model model) {
+        if (chucVu.getTenChucVu() == null || chucVu.getTenChucVu().trim().isEmpty()) {
+            model.addAttribute("errorMessage", "Position name cannot be empty.");
+            return "position/add"; // Re-render the form with the error message
+        }
         chucVuService.create(chucVu);
         return "redirect:/admin/position/list";
     }
@@ -61,7 +65,11 @@ public class ChucVuController {
     }
 
     @PostMapping("/edit")
-    public String updatePosition(@ModelAttribute("chucVu") ChucVu chucVu) {
+    public String updatePosition(@ModelAttribute("chucVu") ChucVu chucVu, Model model) {
+        if (chucVu.getTenChucVu() == null || chucVu.getTenChucVu().trim().isEmpty()) {
+            model.addAttribute("errorMessage", "Position name cannot be empty.");
+            return "position/edit"; // Re-render the form with the error message
+        }
         chucVuService.create(chucVu);
         return "redirect:/admin/position/list";
     }

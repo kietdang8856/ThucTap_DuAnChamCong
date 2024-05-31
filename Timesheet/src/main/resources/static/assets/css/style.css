@@ -51,10 +51,7 @@
 	text-decoration: line-through;
 }
 
-td{
-	border: 1px solid black;
-	padding: 5px;
-}
+
 
 .todo-input{
 	display: grid;
@@ -303,3 +300,14 @@ button:hover{
 .box-body a {
 	margin-right: 5px;
 }
+.avatar-small {
+	width: 150px; /* Điều chỉnh kích thước ảnh nhỏ */
+	height: 150px;
+	cursor: pointer;
+}
+
+.avatar-large {
+	max-width: 80%; /* Điều chỉnh kích thước tối đa của ảnh lớn */
+	max-height: 80vh; /* Điều chỉnh chiều cao tối đa của ảnh lớn */
+}
+

@@ -162,7 +162,15 @@ public class UserController {
         model.addAttribute("user", user);
         return "users/show";
     }
-
+    @GetMapping("/show/{id}")
+    public String showUserDetails(@PathVariable int id, Model model) {
+        NhanVien user = userService.findById(id);
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found with id: " + id);
+        }
+        model.addAttribute("user", user);
+        return "users/detail"; // Make sure this view name matches your template
+    }
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable int id, Model model) {
         NhanVien user = userService.findById(id);

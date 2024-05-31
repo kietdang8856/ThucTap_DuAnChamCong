@@ -27,7 +27,7 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>TÊN CHỨC VỤ</th>
+                        <th>Name Position</th>
                         <th>Adjust</th>
                     </tr>
                     </thead>
@@ -38,10 +38,10 @@
                         <td th:text="${position.id}"></td>
                         <td th:text="${position.tenChucVu}"></td>
                         <td>
-                            <a th:href="@{'/admin/position/edit/'+ ${position.id}}" class="btn btn-sm btn-success">Sửa</a>
+                            <a th:href="@{'/admin/position/edit/'+ ${position.id}}" class="btn btn-sm btn-success">Edit</a>
                             <a class="btn btn-sm btn-danger"
                                th:href="@{/admin/position/delete/{id}(id=${position.id})}"
-                               onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+                               onclick="return confirm('Do you want to delete?')">Delete</a>
                         </td>
                     </tr>
                     </tbody>
