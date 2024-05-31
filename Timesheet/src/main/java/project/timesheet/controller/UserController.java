@@ -1,5 +1,6 @@
 package project.timesheet.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -200,7 +201,8 @@ public class UserController {
             @RequestParam("password") String password,
             @RequestParam("roles") List<Long> roleIds,
             RedirectAttributes redirectAttributes,
-            Model model
+            Model model,
+            HttpSession session
     ) throws IOException {
         NhanVien existingNhanVien = userService.findById(id);
 
@@ -271,6 +273,8 @@ public class UserController {
         userRoles.forEach(userRole -> existingNhanVien.getUserRoles().add(userRole)); // Thêm role mới
 
         userService.saveUser(existingNhanVien);
+        // Cập nhật session với thông tin người dùng mới
+        session.setAttribute("currentUser", existingNhanVien);
 
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thành công");
         return "redirect:/admin/users/list";

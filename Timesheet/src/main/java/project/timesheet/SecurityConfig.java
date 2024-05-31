@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,8 +25,9 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception{
         http.csrf(csrf-> csrf.disable()).authorizeHttpRequests((auth) -> auth
-//                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/**").permitAll()
+                       .requestMatchers("/login").permitAll()
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/profile/**").authenticated()
                         .requestMatchers("/users/register").hasAuthority("ADMIN")
                                 .anyRequest().authenticated())
                 .formLogin(login->login.loginPage("/login")
@@ -33,9 +35,11 @@ public class SecurityConfig {
                 .usernameParameter("username")
                         .passwordParameter("password")
                                 .defaultSuccessUrl("/",true))
-                .logout(logout->logout.logoutUrl("/logout")
-                        .logoutSuccessUrl("/login"));
 
+                .logout(logout->logout.logoutUrl("/logout")
+                        .logoutSuccessUrl("/login"))
+         .sessionManagement(session -> session // Thêm dòng này
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
         return http.build();
     }
     @Bean
