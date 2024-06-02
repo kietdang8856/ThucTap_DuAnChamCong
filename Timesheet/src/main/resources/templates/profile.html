@@ -1,70 +1,70 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'home','Profile')}"
->
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'home','Profile')}">
 <body>
 <div class="col-xs-12">
-    <div class="box">
-        <div class="box">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1><a th:text="${pageTitle}">.</a></h1>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Profile</h3>
+        </div>
+        <div class="box-body" th:if="${session.currentUser != null}">
+            <form th:action="@{/profile/update/{id}(id=${session.currentUser.id})}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                <input type="hidden" th:name="id" th:value="${session.currentUser.id}">
+
+                <div class="form-group">
+                    <label for="tenNV" class="col-sm-2 control-label">Họ và tên</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="tenNV" name="tenNV" th:value="${session.currentUser.tenNV}" required>
                     </div>
                 </div>
-            </div><!-- /.container-fluid -->
-            <hr>
-<div th:if="${session.currentUser != null}">
-    <form  th:action="@{/profile/update/{id}(id=${session.currentUser.id})}" method="post" enctype="multipart/form-data" class="forms-sample">
-        <div class="form-row">
-            <div class="col-md-6 form-group ">
-                <label for="tenNV">Fullname:</label>
-                <input type="text" class="form-control text-light" id="tenNV" name="tenNV" th:value="${session.currentUser.tenNV}" required />
-            </div>
 
-            <div class="form-group col-md-6">
-                <label for="sdt">Phone:</label>
-                <input class="form-control text-light" type="text" id="sdt" name="sdt" th:value="${session.currentUser.sdt}" />
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                <label for="diaChi">Address:</label>
-                <input type="text" class="form-control text-light" id="diaChi" name="diaChi" th:value="${session.currentUser.diaChi}" />
-            </div>
-            <div class="form-group col-md-3">
-                <label for="gioiTinh">Gender:</label>
-                <select id="gioiTinh" class="form-control text-light" name="gioiTinh">
-                    <option value="0" th:selected="${session.currentUser.gioiTinh == 0}">Male</option>
-                    <option value="1" th:selected="${session.currentUser.gioiTinh == 1}">Female</option>
-                    <option value="2" th:selected="${session.currentUser.gioiTinh == 2}">Other</option>
-                </select>
-            </div>
-            <div class="form-group col-md-6">
-                <label for="avatar">Avatar:</label>
-
-                <div class="avatar-section"> <input type="file" class="form-control text-light" id="avatar" name="avatar" accept="image/*" onchange="previewImage(this);" />
-                    <img id="avatarPreview" src="#" alt="New Avatar Preview" style="display: none; max-width: 200px; max-height: 200px;"/>
+                <div class="form-group">
+                    <label for="sdt" class="col-sm-2 control-label">Số điện thoại</label>
+                    <div class="col-sm-10">
+                        <input type="tel" class="form-control" id="sdt" name="sdt" th:value="${session.currentUser.sdt}">
+                    </div>
                 </div>
 
-                <div class="avatar-section" th:if="${session.currentUser.avatarPath != null}">  <span>Current Avatar:</span>
-                    <img th:if="${session.currentUser.avatarPath != null}" th:src="@{'/user/img/' + ${session.currentUser.avatarPath}}" alt="Current Avatar" style="width: 100px; height: 100px;"/>
+                <div class="form-group">
+                    <label for="diaChi" class="col-sm-2 control-label">Địa chỉ</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="diaChi" name="diaChi" th:value="${session.currentUser.diaChi}">
+                    </div>
                 </div>
 
-                <div th:if="${avatarError}" class="error" th:text="${avatarError}"></div>
-            </div>
+                <div class="form-group">
+                    <label for="gioiTinh" class="col-sm-2 control-label">Giới tính</label>
+                    <div class="col-sm-10">
+                        <select id="gioiTinh" class="form-control" name="gioiTinh">
+                            <option value="0" th:selected="${session.currentUser.gioiTinh == 0}">Nam</option>
+                            <option value="1" th:selected="${session.currentUser.gioiTinh == 1}">Nữ</option>
+                            <option value="2" th:selected="${session.currentUser.gioiTinh == 2}">Khác</option>
+                        </select>
+                    </div>
+                </div>
 
+                <div class="form-group">
+                    <label for="avatar" class="col-sm-2 control-label">Ảnh đại diện</label>
+                    <div class="col-sm-10">
+                        <div class="avatar-section">
+                            <input type="file" class="form-control-file" id="avatar" name="avatar" accept="image/*" onchange="previewImage(this);">
+                            <img id="avatarPreview" src="#" alt="New Avatar Preview" style="display: none; max-width: 200px; max-height: 200px;">
+                        </div>
+                        <div class="avatar-section" th:if="${session.currentUser.avatarPath != null}">
+                            <span>Ảnh hiện tại:</span>
+                            <img th:if="${session.currentUser.avatarPath != null}" th:src="@{'/user/img/' + ${session.currentUser.avatarPath}}" alt="Current Avatar" style="width: 100px; height: 100px;">
+                        </div>
+                        <div th:if="${avatarError}" class="error" th:text="${avatarError}"></div>
+                    </div>
+                </div>
 
-
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary pull-right">Lưu</button>
+                </div>
+            </form>
         </div>
-
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Save</button>
-        <a th:href="@{'/'}" class="btn btn-danger btn-lg btn-block">Back</a>
-    </form>
-
-
-
-</div>
+        <div class="box-body" th:unless="${session.currentUser != null}">
+            <p>Bạn cần đăng nhập để xem trang này.</p>
+        </div>
     </div>
 </div>
 <div th:unless="${session.currentUser != null}">

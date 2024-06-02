@@ -5,14 +5,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.timesheet.models.LichLamViec;
 import project.timesheet.models.LichLamViecModel;
 import project.timesheet.models.NhanVien;
@@ -28,6 +27,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -40,6 +40,8 @@ public class    HomeController {
     private TrangThaiLamViecService trangThaiLamViecService;
     @Autowired
     private NhanVienService nhanVienService;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
     @GetMapping("/")
     public String showHome(Model model, HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -125,6 +127,54 @@ public class    HomeController {
         nhanVienService.saveUser(existingNhanVien);
         session.setAttribute("currentUser", existingNhanVien);
         return "redirect:/";
+    }
+    @GetMapping("/profile/changepass")
+    public String showupdatePassword(Model model, HttpSession session) {
+        NhanVien currentUser = (NhanVien) session.getAttribute("currentUser");
+        model.addAttribute("currentUser", currentUser);
+        return "changepass";
+    }
+    @PostMapping("/profile/changepass/{id}")
+    public String updatePassword(
+            @RequestParam("id") int id,
+            @RequestParam("oldPassword") String oldPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword,
+            RedirectAttributes redirectAttributes,
+            HttpSession session
+    ) {
+        NhanVien existingNhanVien = nhanVienService.findById(id);
+
+        if (existingNhanVien == null) {
+            redirectAttributes.addFlashAttribute("error", "User not found with ID: " + id);
+            return "redirect:/profile/changepass";
+        }
+
+        if (!passwordEncoder.matches(oldPassword, existingNhanVien.getPassword())) {
+            redirectAttributes.addFlashAttribute("error", "Mật khẩu cũ không đúng.");
+            return "redirect:/profile/changepass";
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("error", "Mật khẩu mới và xác nhận mật khẩu không khớp.");
+            return "redirect:/profile/changepass";
+        }
+
+        existingNhanVien.setPassword(passwordEncoder.encode(newPassword));
+        nhanVienService.saveUser(existingNhanVien);
+
+        // Cập nhật session với thông tin người dùng mới
+        session.setAttribute("currentUser", existingNhanVien);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Đổi mật khẩu thành công");
+        return "redirect:/";
+    }
+    @GetMapping("/profile/checkPassword/{id}")
+    @ResponseBody // Trả về JSON
+    public Map<String, Boolean> checkPassword(@PathVariable int id, @RequestParam String oldPassword, HttpSession session) {
+        NhanVien existingNhanVien = (NhanVien) session.getAttribute("currentUser");
+        boolean isValid = passwordEncoder.matches(oldPassword, existingNhanVien.getPassword());
+        return Map.of("valid", isValid);
     }
     @GetMapping("/login")
     public String Login() {

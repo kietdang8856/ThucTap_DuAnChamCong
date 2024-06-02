@@ -43,12 +43,22 @@ public class UserController {
     private ChucVuService chucVuService;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         List<Role> roles = userService.getAllRoles();
         List<VanPhong> vanPhongs = vanPhongService.getALL();
         List<ChucVu> chucVus = chucVuService.getALL();
         NhanVien nhanVien = new NhanVien();
+        // Kiểm tra xem đã có tài khoản admin hay chưa
+        boolean hasAdmin = userService.existsAdmin();
+
+        // Nếu đã có admin, lọc bỏ role ADMIN khỏi danh sách
+        if (hasAdmin) {
+            roles = roles.stream()
+                    .filter(role -> !role.getName().equals("ADMIN"))
+                    .collect(Collectors.toList());
+        }
         model.addAttribute("nhanVien", nhanVien);
         model.addAttribute("vanPhongs", vanPhongs);
         model.addAttribute("chucVus", chucVus);
@@ -101,10 +111,19 @@ public class UserController {
         if (password.isEmpty()) {
             model.addAttribute("passwordError", "Mật khẩu không được để trống.");
         }
+        // Kiểm tra xem đã có tài khoản admin hay chưa
+        boolean hasAdmin = userService.existsAdmin();
+
+        // Nếu đã có admin, lọc bỏ role ADMIN khỏi danh sách
+        if (hasAdmin) {
+            roles = roles.stream()
+                    .filter(role -> !role.getName().equals("ADMIN"))
+                    .collect(Collectors.toList());
+        }
         // Kiểm tra nếu có bất kỳ lỗi nào
         if (model.containsAttribute("usernameError") || model.containsAttribute("emailError")|| model.containsAttribute("roleError") || model.containsAttribute("passwordError")) {
             model.addAttribute("nhanVien", nhanVien); // Đưa thông tin đã nhập vào lại form
-            model.addAttribute("roles", userService.getAllRoles());
+            model.addAttribute("roles", roles);
             model.addAttribute("chucVus", chucVuService.getALL());
             model.addAttribute("vanPhongs", vanPhongService.getALL());
             return "users/register"; // Trả về lại trang đăng ký nếu có lỗi
