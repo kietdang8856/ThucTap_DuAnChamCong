@@ -159,8 +159,9 @@ public class    HomeController {
             redirectAttributes.addFlashAttribute("error", "Mật khẩu mới và xác nhận mật khẩu không khớp.");
             return "redirect:/profile/changepass";
         }
-
-        existingNhanVien.setPassword(passwordEncoder.encode(newPassword));
+        if (StringUtils.hasText(newPassword)) {
+            existingNhanVien.setPassword(passwordEncoder.encode(newPassword));
+        }
         nhanVienService.saveUser(existingNhanVien);
 
         // Cập nhật session với thông tin người dùng mới

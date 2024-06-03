@@ -1,5 +1,7 @@
 package project.timesheet;
 
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,12 +32,32 @@ public class SecurityConfig {
                         .requestMatchers("/profile/**").authenticated()
                         .requestMatchers("/users/register").hasAuthority("ADMIN")
                                 .anyRequest().authenticated())
-                .formLogin(login->login.loginPage("/login")
+                .formLogin(login -> login.loginPage("/login")
                         .loginProcessingUrl("/login")
-                .usernameParameter("username")
-                        .passwordParameter("password")
-                                .defaultSuccessUrl("/",true))
+                        .failureHandler((request, response, exception) -> {
+                            HttpSession session = request.getSession(true); // Tạo session mới nếu chưa có
+                            Integer failedAttempts = (Integer) session.getAttribute("failedAttempts");
+                            failedAttempts = failedAttempts != null ? failedAttempts + 1 : 1;
+                            session.setAttribute("failedAttempts", failedAttempts);
 
+                            if (failedAttempts >= 3) {
+                                response.setStatus(HttpServletResponse.SC_FORBIDDEN); // Trả về status 403 (Forbidden)
+                                response.getWriter().write("Too many failed attempts. Contact administrator.");
+                            } else {
+                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Trả về status 401 (Unauthorized)
+                                response.getWriter().write("Invalid username or password.");
+                            }
+                        })
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .successHandler((request, response, authentication) -> {
+                            HttpSession session = request.getSession(false);
+                            if (session != null) {
+                                session.removeAttribute("failedAttempts"); // Xóa thuộc tính khi đăng nhập thành công
+                            }
+                            response.setStatus(HttpServletResponse.SC_OK);
+                            response.getWriter().write("success");
+                        }))
                 .logout(logout->logout.logoutUrl("/logout")
                         .logoutSuccessUrl("/login"))
          .sessionManagement(session -> session // Thêm dòng này

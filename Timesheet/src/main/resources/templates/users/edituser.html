@@ -11,9 +11,7 @@
             </div>
         </div><!-- /.container-fluid -->
         <hr>
-        <div th:if="${errorMessage}" class="error" th:text="${errorMessage}"></div>
-
-        <form th:action="@{/admin/users/edit/{id}(id=${user.id})}" method="post" enctype="multipart/form-data" class="forms-sample">
+        <form th:action="@{/admin/users/edit/{id}(id=${user.id})}" id="changePasswordForm" method="post" enctype="multipart/form-data" class="forms-sample">
             <div class="form-row">
                 <div class="col-md-6 form-group ">
                     <label for="tenNV">Fullname:</label>
@@ -127,6 +125,42 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    changePasswordForm.addEventListener('submit', (event) => {
+        const tenNV = document.getElementById('tenNV').value;
+        const sdt = document.getElementById('sdt').value;
+        const diaChi = document.getElementById('diaChi').value;
+        const ngayBatDauLam = document.getElementById('ngayBatDauLam').value;
+        const chucvuId = document.getElementById('chucvuId').value;
+        const vpchinhId = document.getElementById('vpchinhId').value;
+        const errors = [];
+        if(tenNV ===""){
+            errors.push('-Please enter your name.')
+        }
+        if(sdt ===""){
+            errors.push('-Please enter your phone number.')
+        }
+        if(diaChi ===""){
+            errors.push('-Please enter your address.')
+        }
+        if(ngayBatDauLam ===""){
+            errors.push('-Please select your start date.')
+        }
+        if(chucvuId ===""){
+            errors.push('-Please select your job title.')
+        }
+        if(vpchinhId ===""){
+            errors.push('-Please select your main office.')
+        }
+        if (errors.length > 0) {
+            event.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'ERROR!',
+                html: errors.join('<br>'),
+            });
+        }
+    });
 </script>
 </body>
 </html>

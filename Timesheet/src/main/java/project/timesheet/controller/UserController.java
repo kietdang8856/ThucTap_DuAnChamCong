@@ -283,6 +283,11 @@ public class UserController {
                 userRoles.add(userRole);
             }
         }
+        if (StringUtils.isEmpty(tenNV) || StringUtils.isEmpty(sdt) || StringUtils.isEmpty(diaChi) || ngayBatDauLam == null || chucvuId == null || vpId == null) {
+            model.addAttribute("errorMessage", "Vui lòng điền đầy đủ thông tin.");
+            return showEditForm(id, model);
+        }
+
         ChucVu chucVu = chucVuService.getChucVuById(chucvuId);
         VanPhong vanPhong = vanPhongService.getVanPhongById(vpId);
 

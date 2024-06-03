@@ -310,4 +310,17 @@ button:hover{
 	max-width: 80%; /* Điều chỉnh kích thước tối đa của ảnh lớn */
 	max-height: 80vh; /* Điều chỉnh chiều cao tối đa của ảnh lớn */
 }
+.swal2-popup {
+	width: 350px !important;
+	border-radius: 10px !important;
+	font-size: 12px !important; /* Đặt kích thước chữ là 12px */
+
+}
+
+.swal2-title {
+	text-align: center; /* Căn giữa tiêu đề */
+	display: flex; /* Sử dụng Flexbox */
+	align-items: center; /* Căn giữa theo chiều dọc */
+	justify-content: center; /* Căn giữa theo chiều ngang */
+}
 
