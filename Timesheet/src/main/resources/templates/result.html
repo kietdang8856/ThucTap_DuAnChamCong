@@ -111,6 +111,61 @@
                                 <div class="card-body p-0">
                                     <!-- THE CALENDAR -->
                                     <div id="calendar"></div>
+                                    <!-- Modal -->
+                                    <div id="calendarModal" class="modal fade">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title">Event Details</h4>
+
+                                                </div>
+                                                <div id="modalBody" class="modal-body">
+                                                    <form th:action="@{/lichlamviec/save}" th:object="${lichlam}" method="post" id="updateForm">
+                                                        <div class="form-group">
+                                                            <label for="tenCongViec">Appointment Name</label>
+                                                            <input type="text" class="form-control" id="tenCongViec" value="" >
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="ngayLam">Working Day</label>
+                                                            <input type="date" class="form-control" id="ngayLam">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="gioBatDau">Start Time</label>
+                                                            <input type="time" class="form-control" id="gioBatDau" min="08:00" max="17:00">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="gioKetThuc">End Time</label>
+                                                            <input type="time" class="form-control" id="gioKetThuc" min="08:00" max="17:00">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="vpCT_id">Office</label>
+                                                            <select class="form-control" id="vpCT_id">
+                                                                <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}"></option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="trangThaiLV_Id">Work Status</label>
+                                                            <select class="form-control" id="trangThaiLV_Id" >
+                                                                <option th:each="trangthai : ${trangThaiList}"  th:value="${trangthai.id}"th:text="${trangthai.tenTrangThai}"></option>
+                                                            </select>
+                                                        </div>
+
+                                                        <button type="submit" class="btn btn-primary">Save</button>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                                    <button type="submit" class="btn btn-danger" id="deleteButton">Delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /.card-body -->
                             </div>
@@ -148,6 +203,7 @@
         <div class="todo-modal-close-btn" id="todo-modal-close-btn">X</div>
     </div>
 </section>
+
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function() {
         let listLichLam = [[${listLichLam}]];
@@ -174,6 +230,8 @@
                 color="#53EA15";
             }
             var event={
+                id:lich.id,
+                tenCV:lich.tenCongViec.toString(),
                 title:fullTitle ,
                 start: lich.ngayLam + "T" + lich.gioBatDau,
                 //end: endTime.concat(lich.ngayLam,"T",lich.gioKetThuc,":00:00"),
@@ -187,7 +245,14 @@
                     username: lich.nhanVien.username,
                     chucVu: lich.nhanVien.chucvu ? lich.nhanVien.chucvu.tenChucVu : "N/A" ,// Lấy tên chức vụ, kiểm tra null
                     noiCongTac: lich.vpCongTac.tenVP,
-                    noiLamViec: lich.nhanVien.vpLamViecChinh ? lich.nhanVien.vpLamViecChinh.tenVP : "N/A"
+                    noiLamViec: lich.nhanVien.vpLamViecChinh ? lich.nhanVien.vpLamViecChinh.tenVP : "N/A",
+                    //thêm thông tin ngày tháng
+                    ngayLam:lich.ngayLam,
+                    gioBatDau:lich.gioBatDau,
+                    gioKetThuc:lich.gioKetThuc,
+                    vpCongTacId:lich.vpCongTac.id,
+                    trangThaiId:lich.trangThai.id,
+
                 }
             };
             listEvent.push(event);
@@ -232,72 +297,28 @@
                 }
             },
             events: listEvent,
-
-            eventDidMount: function (info) {
-                const event = info.event;
-                const extendedProps = event.extendedProps;
-
-                if (extendedProps) {
-                    const tooltipContent = `
-                    <div class="tooltip-content">
-                        <table>
-                            <tr>
-                                <th>ID:</th>
-                                <td>${extendedProps.nhanVienId || "N/A"}</td>
-                            </tr>
-                            <tr>
-                                <th>Họ tên:</th>
-                                <td>${extendedProps.hoTen || "N/A"}</td>
-                            </tr>
-                            <tr>
-                                <th>Username:</th>
-                                <td>${extendedProps.username || "N/A"}</td>
-                            </tr>
-                            <tr>
-                                <th>Chức vụ:</th>
-                                <td>${extendedProps.chucVu || "N/A"}</td>
-                            </tr>
-                              <tr>
-                                <th>Nơi làm việc:</th>
-                                <td>${extendedProps.noiLamViec || "N/A"}</td>
-                            </tr>
-                            <tr>
-                                <th>Nơi công tác:</th>
-                                <td>${extendedProps.noiCongTac || "N/A"}</td>
-                            </tr>
-                        </table>
-                    </div>
-                `;
-
-
-                    // Tạo phần tử tooltip
-                    const tooltip = document.createElement('div');
-                    tooltip.classList.add('fc-tooltip');
-                    tooltip.innerHTML = tooltipContent;
-
-                    // Gắn tooltip vào phần tử sự kiện
-                    info.el.appendChild(tooltip);
-
-                    // Xử lý ẩn/hiện tooltip
-                    info.el.addEventListener('mouseenter', () => {
-                        tooltip.style.display = 'block';
-                    });
-
-                    info.el.addEventListener('mouseleave', () => {
-                        tooltip.style.display = 'none';
-                    });
-                    info.el.addEventListener('mouseenter', function () {
-                        // ... (Giữ nguyên phần lấy tọa độ rect)
-                        const scrollY = window.scrollY || document.documentElement.scrollTop; // Lấy vị trí scroll của trang
-                        const scrollX = window.scrollX || document.documentElement.scrollLeft;
-                        tooltip.style.top = `${rect.top + rect.height + scrollY}px`; // Điều chỉnh vị trí tooltip
-                        tooltip.style.left = `${rect.left + scrollX}px`;
-                        tooltip.style.display = 'block';
-                    });
-
-                }
-
-            }
+            eventClick:  function(arg) {
+                console.log(arg);
+                var title=arg.event._def.extendedProps.tenCV;
+                var ngay=arg.event._def.extendedProps.ngayLam;
+                var giobd=arg.event._def.extendedProps.gioBatDau;
+                var giokt=arg.event._def.extendedProps.gioKetThuc;
+                var vanPhongCTId=arg.event._def.extendedProps.vpCongTacId;
+                var trangThaiId=arg.event._def.extendedProps.trangThaiId;
+                console.log(vanPhongCTId);
+                console.log(trangThaiId);
+                // endtime = $.fullCalendar.moment(event.end).format('h:mm');
+                // starttime = $.fullCalendar.moment(event.start).format('dddd, MMMM Do YYYY, h:mm');
+                // var mywhen = starttime + ' - ' + endtime;
+                $('#tenCongViec').val(title);
+                $('#ngayLam').val(ngay);
+                $('#gioBatDau').val(giobd);
+                $('#gioKetThuc').val(giokt);
+                $('#vpCT_id').val(vanPhongCTId.toString());
+                $('#trangThaiLV_Id').val(trangThaiId.toString());
+                //$('#ngayLam').val(title);
+                $('#calendarModal').modal();
+            },
         });
         calendar.render();
     });
