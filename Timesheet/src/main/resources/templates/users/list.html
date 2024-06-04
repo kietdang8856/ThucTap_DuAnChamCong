@@ -61,7 +61,8 @@
                         <td>
                             <a th:href="@{'/admin/users/edit/'+ ${user.id}}" class="btn btn-sm btn-success">Edit</a>
                             <a th:href="@{'/admin/users/show/'+ ${user.id}}" class="btn btn-sm btn-info">Details</a>
-                            <a th:href="@{'/admin/users/delete/'+ ${user.id}}"  class="btn btn-sm btn-danger" onclick="return confirm('Do you want to delete?')">Delete</a>
+                            <button class="btn btn-sm btn-danger" th:data-user-id="${user.id}"
+                                    th:data-user-name="${user.tenNV}" onclick="confirmDelete(this)">Delete</button>
                         </td>
                     </tr>
                     </tbody>
@@ -90,6 +91,38 @@
         </div>
         <!-- /.box -->
     </div>
+    <script th:inline="javascript">
+        function confirmDelete(button) {
+            const userId = button.getAttribute('data-user-id');
+            const userName = button.getAttribute('data-user-name');
+            Swal.fire({
+                title: 'Are you sure?',
+                html: `Do you want to delete user: <b>${userName}</b>?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Gửi yêu cầu AJAX để xóa
+                    $.ajax({
+                        url: `/admin/users/delete/${userId}`,
+                        type: 'GET', // Hoặc POST nếu bạn đã định nghĩa endpoint xóa bằng POST
+                        success: function() {
+                            // Xóa thành công, bạn có thể cập nhật giao diện hoặc tải lại trang
+                            Swal.fire('Deleted!', 'User has been deleted.', 'success').then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function() {
+                            Swal.fire('Error!', 'Something went wrong.', 'error');
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 </section>
 </body>
 </html>
