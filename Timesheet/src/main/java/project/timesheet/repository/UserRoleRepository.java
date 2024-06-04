@@ -2,6 +2,7 @@ package project.timesheet.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import project.timesheet.models.NhanVien;
 import project.timesheet.models.UserRole;
 
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {

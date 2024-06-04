@@ -86,7 +86,10 @@
         @Getter
         @OneToMany(mappedBy = "NhanVien", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
         private Set<UserRole> userRoles = new HashSet<>();
-
+        @PreRemove // Thêm annotation này để thực hiện hành động trước khi xóa
+        private void preRemove() {
+            this.getUserRoles().clear(); // Xóa tất cả UserRole liên quan
+        }
         public ChucVu getChucvu() {
             return chucvu;
         }

@@ -1,6 +1,7 @@
 package project.timesheet.controller;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -28,6 +29,7 @@ import java.sql.Blob;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -41,6 +43,9 @@ public class UserController {
     private VanPhongService vanPhongService;
     @Autowired
     private ChucVuService chucVuService;
+    @Autowired
+    private LichLamViecService lichLamViecService;
+
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -304,11 +309,20 @@ public class UserController {
         return "redirect:/admin/users/list";
     }
 
+    @GetMapping("/checkSchedule/{id}")
+    @ResponseBody
+    public Map<String, Boolean> checkSchedule(@PathVariable int id) {
+        NhanVien user = userService.findById(id);
+        boolean hasSchedule = lichLamViecService.existsByNhanVien(user);
+        return Map.of("hasSchedule", hasSchedule);
+    }
+
     @GetMapping("/delete/{id}")
+    @Transactional
     public String deleteUser(@PathVariable int id, Model model) {
         NhanVien user = userService.findById(id);
+
         userService.deleteUser(user); // Bây giờ bạn có thể xóa nhân viên
-        model.addAttribute("message", "User deleted successfully");
         return "redirect:/admin/users/list";
     }
 

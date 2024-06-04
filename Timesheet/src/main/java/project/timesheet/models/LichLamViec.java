@@ -24,8 +24,9 @@
         private VanPhong vpCongTac;
         @ManyToOne
         private TrangThaiLamViec trangThai;
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) // hoặc CascadeType.ALL
         private NhanVien nhanVien;
+
 
         private Date ngayLam;
         @DateTimeFormat(pattern = "HH:mm:ss")
