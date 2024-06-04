@@ -121,37 +121,37 @@
 
                                                 </div>
                                                 <div id="modalBody" class="modal-body">
-                                                    <form th:action="@{/lichlamviec/save}" th:object="${lichlam}" method="post" id="updateForm">
+                                                    <form th:action="" th:object="${lichlam}" method="put" id="updateForm">
                                                         <div class="form-group">
                                                             <label for="tenCongViec">Appointment Name</label>
-                                                            <input type="text" class="form-control" id="tenCongViec" value="" >
+                                                            <input type="text" class="form-control" id="tenCongViec" value="" th:field="*{tenCongViec}">
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="ngayLam">Working Day</label>
-                                                            <input type="date" class="form-control" id="ngayLam">
+                                                            <input type="date" class="form-control" id="ngayLam" th:field="*{ngayLam}">
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="gioBatDau">Start Time</label>
-                                                            <input type="time" class="form-control" id="gioBatDau" min="08:00" max="17:00">
+                                                            <input type="time" class="form-control" id="gioBatDau" th:field="*{gioBatDau}" min="08:00" max="17:00">
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="gioKetThuc">End Time</label>
-                                                            <input type="time" class="form-control" id="gioKetThuc" min="08:00" max="17:00">
+                                                            <input type="time" class="form-control" id="gioKetThuc" th:field="*{gioKetThuc}" min="08:00" max="17:00">
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="vpCT_id">Office</label>
-                                                            <select class="form-control" id="vpCT_id">
+                                                            <select class="form-control" id="vpCT_id" th:field="*{vpCongTac_id}">
                                                                 <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}"></option>
                                                             </select>
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="trangThaiLV_Id">Work Status</label>
-                                                            <select class="form-control" id="trangThaiLV_Id" >
+                                                            <select class="form-control" id="trangThaiLV_Id" th:field="*{trangThaiLamViec_Id}">
                                                                 <option th:each="trangthai : ${trangThaiList}"  th:value="${trangthai.id}"th:text="${trangthai.tenTrangThai}"></option>
                                                             </select>
                                                         </div>
