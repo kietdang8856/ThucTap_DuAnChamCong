@@ -20,89 +20,94 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="sticky-top mb-3">
-                                <div class="card">
                                     <div class="card-header">
-                                        <h4 class="card-title">CÔNG VIỆC</h4>
+                                        <h4 class="card-title text-center"><strong>APPOINTMENT</strong></h4>
                                     </div>
-                                    <div class="card-body todo-input" >
-                                        <form th:action="@{/lichlamviec/search}" th:object="${searchFilter}" method="post">
-                                            <table>
-
-                                                <tr>
-                                                    <td>Tu Ngay:</td>
-                                                    <td><input type="date" th:field="*{tuNgay}" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Den Ngay:</td>
-                                                    <td><input type="date" th:field="*{denNgay}" /></td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>Van phong</td>
-                                                    <td>
-                                                        <select class="form-control" th:field="*{vpCongTac_id}">
-                                                            <option  th:value="NULL" >All</option>
-                                                            <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}" ></option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Trang Thai Lam Viec</td>
-                                                    <td>
-                                                        <select class="form-control" th:field="*{trangThaiLamViec_Id}">
-                                                            <option  th:value="NULL" >All</option>
-                                                            <option th:each="trangthai : ${trangThaiList}" th:value="${trangthai.id}" th:text="${trangthai.tenTrangThai}" ></option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Nhan Vien</td>
-                                                    <td><input type="text" th:field="*{tenNV}" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2"><button type="submit">Search</button> </td>
-                                                </tr>
-                                            </table>
-                                        </form>
-                                    </div>
-                                    <!-- /.card-body -->
+                                <div class="card-body">
+                                    <form th:action="@{/lichlamviec/search}" th:object="${searchFilter}" method="post">
+                                        <div class="form-group row">
+                                            <label for="fromDate" class="col-sm-3 col-form-label">From Date:</label>
+                                            <div class="col-sm-9">
+                                                <input type="date" class="form-control" id="fromDate" th:field="*{tuNgay}" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="toDate" class="col-sm-3 col-form-label">To Date:</label>
+                                            <div class="col-sm-9">
+                                                <input type="date" class="form-control" id="toDate" th:field="*{denNgay}" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="office" class="col-sm-3 col-form-label">Office</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" id="office" th:field="*{vpCongTac_id}">
+                                                    <option th:value="NULL">All</option>
+                                                    <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="workStatus" class="col-sm-3 col-form-label">Work Status</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" id="workStatus" th:field="*{trangThaiLamViec_Id}">
+                                                    <option th:value="NULL">All</option>
+                                                    <option th:each="trangthai : ${trangThaiList}" th:value="${trangthai.id}" th:text="${trangthai.tenTrangThai}">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="staffName" class="col-sm-3 col-form-label">Staff's Name</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="staffName" th:field="*{tenNV}" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-9 offset-sm-3">
+                                                <button type="submit" class="btn btn-primary">Search</button>
+                                                <button type="button" class="btn btn-secondary" id="clear-button">Clear</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <a href="/" type="button" class="btn btn-primary">Back</a>
                                 </div>
                                 <!-- /.card -->
-<!--                                <div class="card">-->
-<!--                                    <div class="card-header">-->
-<!--                                        <h3 class="card-title">Lịch công việc</h3>-->
-<!--                                    </div>-->
-<!--                                    <div class="card-body">-->
-<!--                                        <div class="todoTable-block">-->
-<!--                                            <div class="itemsPerPage">-->
-<!--                                                <span>items per page</span>-->
-<!--                                                <select id="itemsPerPageSelectElem">-->
-<!--                                                    <option>5</option>-->
-<!--                                                    <option>10</option>-->
-<!--                                                    <option>20</option>-->
-<!--                                                </select>-->
-<!--                                            </div>-->
+                                <!--                                <div class="card">-->
+                                <!--                                    <div class="card-header">-->
+                                <!--                                        <h3 class="card-title">Lịch công việc</h3>-->
+                                <!--                                    </div>-->
+                                <!--                                    <div class="card-body">-->
+                                <!--                                        <div class="todoTable-block">-->
+                                <!--                                            <div class="itemsPerPage">-->
+                                <!--                                                <span>items per page</span>-->
+                                <!--                                                <select id="itemsPerPageSelectElem">-->
+                                <!--                                                    <option>5</option>-->
+                                <!--                                                    <option>10</option>-->
+                                <!--                                                    <option>20</option>-->
+                                <!--                                                </select>-->
+                                <!--                                            </div>-->
 
-<!--                                            <table id="todoTable">-->
-<!--                                                <tr>-->
-<!--                                                    <td></td>-->
-<!--                                                    <td>Date</td>-->
-<!--                                                    <td>Time</td>-->
-<!--                                                    <td>to-do</td>-->
-<!--                                                    <td>-->
-<!--                                                        <select id="categoryFilter">-->
-<!--                                                        </select>-->
-<!--                                                    </td>-->
-<!--                                                    <td></td>-->
-<!--                                                </tr>-->
-<!--                                            </table>-->
+                                <!--                                            <table id="todoTable">-->
+                                <!--                                                <tr>-->
+                                <!--                                                    <td></td>-->
+                                <!--                                                    <td>Date</td>-->
+                                <!--                                                    <td>Time</td>-->
+                                <!--                                                    <td>to-do</td>-->
+                                <!--                                                    <td>-->
+                                <!--                                                        <select id="categoryFilter">-->
+                                <!--                                                        </select>-->
+                                <!--                                                    </td>-->
+                                <!--                                                    <td></td>-->
+                                <!--                                                </tr>-->
+                                <!--                                            </table>-->
 
-<!--                                            <div class="pagination-pages">-->
+                                <!--                                            <div class="pagination-pages">-->
 
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
+                                <!--                                            </div>-->
+                                <!--                                        </div>-->
+                                <!--                                    </div>-->
+                                <!--                                </div>-->
                             </div>
                         </div>
                         <!-- /.col -->
@@ -111,6 +116,61 @@
                                 <div class="card-body p-0">
                                     <!-- THE CALENDAR -->
                                     <div id="calendar"></div>
+                                    <!-- Modal -->
+                                    <div id="calendarModal" class="modal fade">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title">Event Details</h4>
+
+                                                </div>
+                                                <div id="modalBody" class="modal-body">
+                                                    <form th:action="@{/lichlamviec/save}" th:object="${lichlam}" method="post" id="updateForm">
+                                                        <div class="form-group">
+                                                            <label for="tenCongViec">Appointment Name</label>
+                                                            <input type="text" class="form-control" id="tenCongViec" value="" >
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="ngayLam">Working Day</label>
+                                                            <input type="date" class="form-control" id="ngayLam">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="gioBatDau">Start Time</label>
+                                                            <input type="time" class="form-control" id="gioBatDau" min="08:00" max="17:00">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="gioKetThuc">End Time</label>
+                                                            <input type="time" class="form-control" id="gioKetThuc" min="08:00" max="17:00">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="vpCT_id">Office</label>
+                                                            <select class="form-control" id="vpCT_id">
+                                                                <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}"></option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="trangThaiLV_Id">Work Status</label>
+                                                            <select class="form-control" id="trangThaiLV_Id" >
+                                                                <option th:each="trangthai : ${trangThaiList}"  th:value="${trangthai.id}"th:text="${trangthai.tenTrangThai}"></option>
+                                                            </select>
+                                                        </div>
+
+                                                        <button type="submit" class="btn btn-primary">Save</button>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                                    <button type="submit" class="btn btn-danger" id="deleteButton">Delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /.card-body -->
                             </div>
@@ -148,6 +208,7 @@
         <div class="todo-modal-close-btn" id="todo-modal-close-btn">X</div>
     </div>
 </section>
+
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function() {
         let listLichLam = [[${listLichLam}]];
@@ -174,6 +235,8 @@
                 color="#53EA15";
             }
             var event={
+                id:lich.id,
+                tenCV:lich.tenCongViec.toString(),
                 title:fullTitle ,
                 start: lich.ngayLam + "T" + lich.gioBatDau,
                 //end: endTime.concat(lich.ngayLam,"T",lich.gioKetThuc,":00:00"),
@@ -187,7 +250,14 @@
                     username: lich.nhanVien.username,
                     chucVu: lich.nhanVien.chucvu ? lich.nhanVien.chucvu.tenChucVu : "N/A" ,// Lấy tên chức vụ, kiểm tra null
                     noiCongTac: lich.vpCongTac.tenVP,
-                    noiLamViec: lich.nhanVien.vpLamViecChinh ? lich.nhanVien.vpLamViecChinh.tenVP : "N/A"
+                    noiLamViec: lich.nhanVien.vpLamViecChinh ? lich.nhanVien.vpLamViecChinh.tenVP : "N/A",
+                    //thêm thông tin ngày tháng
+                    ngayLam:lich.ngayLam,
+                    gioBatDau:lich.gioBatDau,
+                    gioKetThuc:lich.gioKetThuc,
+                    vpCongTacId:lich.vpCongTac.id,
+                    trangThaiId:lich.trangThai.id,
+
                 }
             };
             listEvent.push(event);
@@ -232,76 +302,51 @@
                 }
             },
             events: listEvent,
-
-            eventDidMount: function (info) {
-                const event = info.event;
-                const extendedProps = event.extendedProps;
-
-                if (extendedProps) {
-                    const tooltipContent = `
-                    <div class="tooltip-content">
-                        <table>
-                            <tr>
-                                <th>ID:</th>
-                                <td>${extendedProps.nhanVienId || "N/A"}</td>
-                            </tr>
-                            <tr>
-                                <th>Họ tên:</th>
-                                <td>${extendedProps.hoTen || "N/A"}</td>
-                            </tr>
-                            <tr>
-                                <th>Username:</th>
-                                <td>${extendedProps.username || "N/A"}</td>
-                            </tr>
-                            <tr>
-                                <th>Chức vụ:</th>
-                                <td>${extendedProps.chucVu || "N/A"}</td>
-                            </tr>
-                              <tr>
-                                <th>Nơi làm việc:</th>
-                                <td>${extendedProps.noiLamViec || "N/A"}</td>
-                            </tr>
-                            <tr>
-                                <th>Nơi công tác:</th>
-                                <td>${extendedProps.noiCongTac || "N/A"}</td>
-                            </tr>
-                        </table>
-                    </div>
-                `;
-
-
-                    // Tạo phần tử tooltip
-                    const tooltip = document.createElement('div');
-                    tooltip.classList.add('fc-tooltip');
-                    tooltip.innerHTML = tooltipContent;
-
-                    // Gắn tooltip vào phần tử sự kiện
-                    info.el.appendChild(tooltip);
-
-                    // Xử lý ẩn/hiện tooltip
-                    info.el.addEventListener('mouseenter', () => {
-                        tooltip.style.display = 'block';
-                    });
-
-                    info.el.addEventListener('mouseleave', () => {
-                        tooltip.style.display = 'none';
-                    });
-                    info.el.addEventListener('mouseenter', function () {
-                        // ... (Giữ nguyên phần lấy tọa độ rect)
-                        const scrollY = window.scrollY || document.documentElement.scrollTop; // Lấy vị trí scroll của trang
-                        const scrollX = window.scrollX || document.documentElement.scrollLeft;
-                        tooltip.style.top = `${rect.top + rect.height + scrollY}px`; // Điều chỉnh vị trí tooltip
-                        tooltip.style.left = `${rect.left + scrollX}px`;
-                        tooltip.style.display = 'block';
-                    });
-
-                }
-
-            }
+            eventClick:  function(arg) {
+                console.log(arg);
+                var title=arg.event._def.extendedProps.tenCV;
+                var ngay=arg.event._def.extendedProps.ngayLam;
+                var giobd=arg.event._def.extendedProps.gioBatDau;
+                var giokt=arg.event._def.extendedProps.gioKetThuc;
+                var vanPhongCTId=arg.event._def.extendedProps.vpCongTacId;
+                var trangThaiId=arg.event._def.extendedProps.trangThaiId;
+                console.log(vanPhongCTId);
+                console.log(trangThaiId);
+                // endtime = $.fullCalendar.moment(event.end).format('h:mm');
+                // starttime = $.fullCalendar.moment(event.start).format('dddd, MMMM Do YYYY, h:mm');
+                // var mywhen = starttime + ' - ' + endtime;
+                $('#tenCongViec').val(title);
+                $('#ngayLam').val(ngay);
+                $('#gioBatDau').val(giobd);
+                $('#gioKetThuc').val(giokt);
+                $('#vpCT_id').val(vanPhongCTId.toString());
+                $('#trangThaiLV_Id').val(trangThaiId.toString());
+                //$('#ngayLam').val(title);
+                $('#calendarModal').modal();
+            },
         });
         calendar.render();
     });
 </script>
+
+<script>
+    document.getElementById('clear-button').addEventListener('click', function() {
+        // Get all input and select elements within the form
+        const inputs = document.querySelectorAll('.card-body form input, .card-body form select');
+
+        // Iterate through each input element and reset its value
+        inputs.forEach(input => {
+            if (input.type === 'date') {
+                input.valueAsNumber = "dd/mm/yyyy";
+            } else if (input.type === 'select-one') {
+                input.selectedIndex = 0;
+            } else {
+                input.value = '';
+            }
+        });
+    });
+</script>
+
 </body>
 
 </html>

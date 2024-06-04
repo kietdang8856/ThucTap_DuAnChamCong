@@ -1,71 +1,50 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'home','Home')}"
->
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'home','Home')}">
+<head>
+    <!-- Add necessary CSS and JS links here -->
 
+    <!-- Bootstrap CSS link -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JS and jQuery links -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
 <body>
 <section class="content-header">
     <div class="col-xs-12">
-    <div class="box">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1><a th:href="@{/}" th:text="${pageTitle}">.</a></h1>
-                </div>
-            </div>
-        </div><!-- /.container-fluid -->
-        <hr>
-        <!-- Main content -->
-        <section class="content">
+        <div class="box">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-3">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><a th:href="@{/}" th:text="${pageTitle}">.</a></h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+            <hr>
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3">
                             <div class="sticky-top mb-3">
                                 <div class="card">
                                     <div class="card-header">
                                         <h4 class="card-title text-center"><strong>APPOINTMENT</strong></h4>
                                     </div>
                                     <div class="card-body">
-                                        <form th:action="@{/lichlamviec/save}" th:object="${lichlam}" method="post">
-                                            <div class="form-group">
-                                                <label for="tenCongViec">Appointment Name</label>
-                                                <input type="text" class="form-control" id="tenCongViec" th:field="*{tenCongViec}">
-                                            </div>
+                                        <!-- Button to trigger modal -->
+                                        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#appointmentModal">
+                                            New Appointment
+                                        </button>
 
-                                            <div class="form-group">
-                                                <label for="ngayLam">Working Day</label>
-                                                <input type="date" class="form-control" id="ngayLam" th:field="*{ngayLam}">
-                                            </div>
+                                        <a href="/lichlamviec/search" type="button" class="btn btn-primary btn-block">
+                                            Search
+                                        </a>
 
-                                            <div class="form-group">
-                                                <label for="gioBatDau">Start Time</label>
-                                                <input type="time" class="form-control" id="gioBatDau" th:field="*{gioBatDau}" min="08:00" max="17:00">
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="gioKetThuc">End Time</label>
-                                                <input type="time" class="form-control" id="gioKetThuc" th:field="*{gioKetThuc}" min="08:00" max="17:00">
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="vpCongTac_id">Office</label>
-                                                <select class="form-control" id="vpCongTac_id" th:field="*{vpCongTac_id}">
-                                                    <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}"></option>
-                                                </select>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="trangThaiLamViec_Id">Work Status</label>
-                                                <select class="form-control" id="trangThaiLamViec_Id" th:field="*{trangThaiLamViec_Id}">
-                                                    <option th:each="trangthai : ${trangThaiList}" th:value="${trangthai.id}" th:text="${trangthai.tenTrangThai}"></option>
-                                                </select>
-                                            </div>
-
-                                            <button type="submit" class="btn btn-primary">Save</button>
-                                        </form>
                                     </div>
                                 </div>
-                                <!-- /.card -->
-
                             </div>
                         </div>
                         <!-- /.col -->
@@ -80,37 +59,75 @@
                             <!-- /.card -->
                         </div>
                         <!-- /.col -->
-                </div>
-                <!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </section>
-        <!-- /.content -->
-    </div>
+                    </div>
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
     </div>
     <div class="todo-overlay" id="todo-overlay">
-        <div class="todo-modal" id="todo-modal">
-            <div class="todo-input todo-block">
-                <span>To-do: </span>
-                <input type="text" placeholder="Enter new to-do" id="todo-edit-todo">
-                <span>Category: </span>
-                <input type="text" placeholder="Enter category" list="categoryList" id="todo-edit-category">
-                <datalist id="categoryList">
-                    <option value="Personal"></option>
-                    <option value="Work"></option>
-                </datalist>
-                <span>Date:</span>
-                <input type="date" id="todo-edit-date">
-                <span>Time:</span>
-                <input type="time" id="todo-edit-time">
-                <span>Link:</span>
-                <input type="text" id="todo-edit-url">
-                <span></span>
-                <button id="changeBtn">Save Change</button>
-            </div>
-        </div>
-        <div class="todo-modal-close-btn" id="todo-modal-close-btn">X</div>
+        <!-- Your existing code for todo overlay -->
     </div>
 </section>
+
+<!-- Modal for Appointment Form -->
+<div class="modal fade" id="appointmentModal" tabindex="-1" role="dialog" aria-labelledby="appointmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="appointmentModalLabel">New Appointment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/lichlamviec/save}" th:object="${lichlam}" method="post">
+                    <div class="form-group">
+                        <label for="tenCongViec">Appointment Name</label>
+                        <input type="text" class="form-control" id="tenCongViec" th:field="*{tenCongViec}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ngayLam">Working Day</label>
+                        <input type="date" class="form-control" id="ngayLam" th:field="*{ngayLam}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gioBatDau">Start Time</label>
+                        <input type="time" class="form-control" id="gioBatDau" th:field="*{gioBatDau}" min="08:00" max="17:00">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gioKetThuc">End Time</label>
+                        <input type="time" class="form-control" id="gioKetThuc" th:field="*{gioKetThuc}" min="08:00" max="17:00">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="vpCongTac_id">Office</label>
+                        <select class="form-control" id="vpCongTac_id" th:field="*{vpCongTac_id}">
+                            <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="trangThaiLamViec_Id">Work Status</label>
+                        <select class="form-control" id="trangThaiLamViec_Id" th:field="*{trangThaiLamViec_Id}">
+                            <option th:each="trangthai : ${trangThaiList}" th:value="${trangthai.id}" th:text="${trangthai.tenTrangThai}"></option>
+                        </select>
+                    </div>
+
+                    <!-- Move the button inside the form -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function() {
         let listLichLam = [[${listLichLam}]];
@@ -136,7 +153,7 @@
                 color="#AC15EA";
             }
             if(lich.trangThai.id===4){
-                color="#53EA15";
+                color="#66c700";
             }
             console.log(color);
             var event={
