@@ -14,6 +14,7 @@
     import project.timesheet.services.VanPhongService;
 
     import java.util.ArrayList;
+    import java.util.Date;
     import java.util.List;
     import java.util.Objects;
 
@@ -197,6 +198,8 @@
         @RequestMapping("/update/{id}")
         public String update(@ModelAttribute("lichlam") LichLamViecModel update,@PathVariable("id") int id) {
             LichLamViec lich=service.getOne(id);
+            if (lich.getNgayLam().after(new Date()))//th ngay lam cua lich > ngay hien tai
+            {
             lich.setGioBatDau(update.getGioBatDau());
             lich.setGioKetThuc(update.getGioKetThuc());
             lich.setNgayLam(update.getNgayLam());
@@ -206,7 +209,18 @@
             lich.setTrangThai(trangThaiLamViecService.getOne(update.getTrangThaiLamViec_Id()));
             lich.setVpCongTac(vanPhongService.getVanPhongById(update.getVpCongTac_id()));
             service.update(lich);
-            return "result";
+            }
+            return "redirect:/result";
+        }
+        @RequestMapping("/delete/{id}")
+        public String delete(@PathVariable("id") int id) {
+            LichLamViec lich = service.getOne(id);
+            if (lich.getNgayLam().after(new Date()))//th ngay lam cua lich > ngay hien tai
+            {
+                if (lich != null)
+                    service.delete(id);
+            }
+            return "redirect:/result";
         }
 //        @GetMapping("/searchapi")
 //        public ResponseEntity<List<LichLamViec>> searchAPI(@RequestBody LichLamViecSearchFilter filter) {
