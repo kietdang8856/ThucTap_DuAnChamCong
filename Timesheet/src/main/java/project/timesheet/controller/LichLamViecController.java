@@ -121,7 +121,7 @@
 //        }
         @PostMapping("/save")
         public String submitForm(@ModelAttribute("lichlam") LichLamViecModel lichlam) {
-            if(lichlam.getNgayLam().before(new Date()))//neu tao lich lam co ngay lam truoc ngay hien tai
+            if(lichlam.getNgayLam().after(new Date()))//neu tao lich lam co ngay lam truoc ngay hien tai
             {
             LichLamViec lich = new LichLamViec();
             lich.setGioBatDau(lichlam.getGioBatDau());
