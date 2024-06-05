@@ -121,7 +121,7 @@
 
                                                 </div>
                                                 <div id="modalBody" class="modal-body">
-                                                    <form th:action="" th:object="${lichlam}" method="put" id="updateForm">
+                                                    <form th:action="@{/lichlamviec/update/}" th:object="${lichlam}" method="post" id="updateForm">
                                                         <div class="form-group">
                                                             <label for="tenCongViec">Appointment Name</label>
                                                             <input type="text" class="form-control" id="tenCongViec" value="" th:field="*{tenCongViec}">
@@ -305,8 +305,11 @@
                 var giokt=arg.event._def.extendedProps.gioKetThuc;
                 var vanPhongCTId=arg.event._def.extendedProps.vpCongTacId;
                 var trangThaiId=arg.event._def.extendedProps.trangThaiId;
-                console.log(vanPhongCTId);
-                console.log(trangThaiId);
+                var lichId=arg.event._def.publicId;
+                console.log(lichId);
+                var actionLink=$('#updateForm').attr('action') + lichId;
+                console.log(actionLink);
+                $('#updateForm').attr('action',actionLink);
                 // endtime = $.fullCalendar.moment(event.end).format('h:mm');
                 // starttime = $.fullCalendar.moment(event.start).format('dddd, MMMM Do YYYY, h:mm');
                 // var mywhen = starttime + ' - ' + endtime;

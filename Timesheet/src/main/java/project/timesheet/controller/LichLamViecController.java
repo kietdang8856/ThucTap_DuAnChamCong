@@ -194,21 +194,20 @@
                 model.addAttribute("searchFilter", filter);
                 return "result";
             }
-//        @PutMapping("/update/{id}")
-//        public String update(@ModelAttribute("lichlam") LichLamViecModel update,@PathVariable("id")int id) {
-//            LichLamViec lich=service.getOne(id);
-//            lich.setGioBatDau(update.getGioBatDau());
-//            lich.setGioKetThuc(update.getGioKetThuc());
-//            lich.setNgayLam(update.getNgayLam());
-//            lich.setTenCongViec(update.getTenCongViec());
-//            //setter cho nhanvien, van phong va trang thai lam viec
-//            lich.setNhanVien(nhanVienService.findByUsername(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
-//            lich.setTrangThai(trangThaiLamViecService.getOne(update.getTrangThaiLamViec_Id()));
-//            lich.setVpCongTac(vanPhongService.getVanPhongById(update.getVpCongTac_id()));
-//            service.update(lich);
-//            return "result";
-//
-//        }
+        @RequestMapping("/update/{id}")
+        public String update(@ModelAttribute("lichlam") LichLamViecModel update,@PathVariable("id") int id) {
+            LichLamViec lich=service.getOne(id);
+            lich.setGioBatDau(update.getGioBatDau());
+            lich.setGioKetThuc(update.getGioKetThuc());
+            lich.setNgayLam(update.getNgayLam());
+            lich.setTenCongViec(update.getTenCongViec());
+            //setter cho nhanvien, van phong va trang thai lam viec
+            lich.setNhanVien(nhanVienService.findByUsername(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
+            lich.setTrangThai(trangThaiLamViecService.getOne(update.getTrangThaiLamViec_Id()));
+            lich.setVpCongTac(vanPhongService.getVanPhongById(update.getVpCongTac_id()));
+            service.update(lich);
+            return "result";
+        }
 //        @GetMapping("/searchapi")
 //        public ResponseEntity<List<LichLamViec>> searchAPI(@RequestBody LichLamViecSearchFilter filter) {
 //
