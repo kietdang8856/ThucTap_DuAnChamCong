@@ -23,6 +23,7 @@
                     <div class="form-group">
                         <label for="tenChucVu">Name position:</label>
                         <input type="text" id="tenChucVu" th:field="*{TenChucVu}" class="form-control"/>
+                        <div th:if="${#fields.hasErrors('tenChucVu')}" th:errors="*{tenChucVu}" class="text-danger"></div>
                     </div>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </form>

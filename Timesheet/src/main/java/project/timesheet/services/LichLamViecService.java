@@ -1,8 +1,10 @@
 package project.timesheet.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.timesheet.models.LichLamViec;
+import project.timesheet.models.NhanVien;
 import project.timesheet.repository.LichLamViecRepository;
 
 import java.sql.Date;
@@ -49,5 +51,12 @@ public class LichLamViecService {
     public void delete(int id)
     {
         repo.deleteById(id);
+    }
+    public boolean existsByNhanVien(NhanVien nhanVien) {
+        return repo.existsByNhanVien(nhanVien);
+    }
+    @Transactional
+    public void deleteByNhanVien(NhanVien nhanVien) {
+        repo.deleteByNhanVien(nhanVien);
     }
 }

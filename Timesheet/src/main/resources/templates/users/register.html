@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><a th:text="${pageTitle}">.</a></h1>
+                    <h1><a th:href="@{/admin/users/list}" th:text="${pageTitle}">.</a></h1>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -71,9 +71,9 @@
                     <div class="form-group">
                         <label for="gioiTinh">Gender:</label>
                         <select id="gioiTinh" class="form-control text-light"  name="gioiTinh">
-                            <option value="0" th:selected="${nhanVien?.gioiTinh == 0}">Nam</option>
-                            <option value="1" th:selected="${nhanVien?.gioiTinh == 1}">Nữ</option>
-                            <option value="2" th:selected="${nhanVien?.gioiTinh == 2}">Khác</option>
+                            <option value="0" th:selected="${nhanVien?.gioiTinh == 0}">Male</option>
+                            <option value="1" th:selected="${nhanVien?.gioiTinh == 1}">Female</option>
+                            <option value="2" th:selected="${nhanVien?.gioiTinh == 2}">Other</option>
                         </select>
                     </div>
                 </div>

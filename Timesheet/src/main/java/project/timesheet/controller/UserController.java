@@ -1,5 +1,7 @@
 package project.timesheet.controller;
 
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -27,6 +29,7 @@ import java.sql.Blob;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -41,13 +44,26 @@ public class UserController {
     @Autowired
     private ChucVuService chucVuService;
     @Autowired
+    private LichLamViecService lichLamViecService;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         List<Role> roles = userService.getAllRoles();
         List<VanPhong> vanPhongs = vanPhongService.getALL();
         List<ChucVu> chucVus = chucVuService.getALL();
         NhanVien nhanVien = new NhanVien();
+        // Kiểm tra xem đã có tài khoản admin hay chưa
+        boolean hasAdmin = userService.existsAdmin();
+
+        // Nếu đã có admin, lọc bỏ role ADMIN khỏi danh sách
+        if (hasAdmin) {
+            roles = roles.stream()
+                    .filter(role -> !role.getName().equals("ADMIN"))
+                    .collect(Collectors.toList());
+        }
         model.addAttribute("nhanVien", nhanVien);
         model.addAttribute("vanPhongs", vanPhongs);
         model.addAttribute("chucVus", chucVus);
@@ -100,10 +116,19 @@ public class UserController {
         if (password.isEmpty()) {
             model.addAttribute("passwordError", "Mật khẩu không được để trống.");
         }
+        // Kiểm tra xem đã có tài khoản admin hay chưa
+        boolean hasAdmin = userService.existsAdmin();
+
+        // Nếu đã có admin, lọc bỏ role ADMIN khỏi danh sách
+        if (hasAdmin) {
+            roles = roles.stream()
+                    .filter(role -> !role.getName().equals("ADMIN"))
+                    .collect(Collectors.toList());
+        }
         // Kiểm tra nếu có bất kỳ lỗi nào
         if (model.containsAttribute("usernameError") || model.containsAttribute("emailError")|| model.containsAttribute("roleError") || model.containsAttribute("passwordError")) {
             model.addAttribute("nhanVien", nhanVien); // Đưa thông tin đã nhập vào lại form
-            model.addAttribute("roles", userService.getAllRoles());
+            model.addAttribute("roles", roles);
             model.addAttribute("chucVus", chucVuService.getALL());
             model.addAttribute("vanPhongs", vanPhongService.getALL());
             return "users/register"; // Trả về lại trang đăng ký nếu có lỗi
@@ -162,7 +187,15 @@ public class UserController {
         model.addAttribute("user", user);
         return "users/show";
     }
-
+    @GetMapping("/show/{id}")
+    public String showUserDetails(@PathVariable int id, Model model) {
+        NhanVien user = userService.findById(id);
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found with id: " + id);
+        }
+        model.addAttribute("user", user);
+        return "users/detail"; // Make sure this view name matches your template
+    }
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable int id, Model model) {
         NhanVien user = userService.findById(id);
@@ -192,7 +225,8 @@ public class UserController {
             @RequestParam("password") String password,
             @RequestParam("roles") List<Long> roleIds,
             RedirectAttributes redirectAttributes,
-            Model model
+            Model model,
+            HttpSession session
     ) throws IOException {
         NhanVien existingNhanVien = userService.findById(id);
 
@@ -254,6 +288,11 @@ public class UserController {
                 userRoles.add(userRole);
             }
         }
+        if (StringUtils.isEmpty(tenNV) || StringUtils.isEmpty(sdt) || StringUtils.isEmpty(diaChi) || ngayBatDauLam == null || chucvuId == null || vpId == null) {
+            model.addAttribute("errorMessage", "Vui lòng điền đầy đủ thông tin.");
+            return showEditForm(id, model);
+        }
+
         ChucVu chucVu = chucVuService.getChucVuById(chucvuId);
         VanPhong vanPhong = vanPhongService.getVanPhongById(vpId);
 
@@ -263,16 +302,27 @@ public class UserController {
         userRoles.forEach(userRole -> existingNhanVien.getUserRoles().add(userRole)); // Thêm role mới
 
         userService.saveUser(existingNhanVien);
+        // Cập nhật session với thông tin người dùng mới
+        session.setAttribute("currentUser", existingNhanVien);
 
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thành công");
         return "redirect:/admin/users/list";
     }
 
+    @GetMapping("/checkSchedule/{id}")
+    @ResponseBody
+    public Map<String, Boolean> checkSchedule(@PathVariable int id) {
+        NhanVien user = userService.findById(id);
+        boolean hasSchedule = lichLamViecService.existsByNhanVien(user);
+        return Map.of("hasSchedule", hasSchedule);
+    }
+
     @GetMapping("/delete/{id}")
+    @Transactional
     public String deleteUser(@PathVariable int id, Model model) {
         NhanVien user = userService.findById(id);
+
         userService.deleteUser(user); // Bây giờ bạn có thể xóa nhân viên
-        model.addAttribute("message", "User deleted successfully");
         return "redirect:/admin/users/list";
     }
 

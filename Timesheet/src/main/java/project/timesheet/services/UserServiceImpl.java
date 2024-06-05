@@ -80,6 +80,7 @@ public class UserServiceImpl implements NhanVienService {
 
     //kiểm tra
     //user tồn tại hay không ?
+
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
