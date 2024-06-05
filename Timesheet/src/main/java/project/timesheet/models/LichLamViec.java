@@ -16,6 +16,7 @@
     @AllArgsConstructor
     @Table(name = "LichLamViec")
     public class LichLamViec {
+
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int id;
@@ -34,6 +35,7 @@
         @DateTimeFormat(pattern = "HH:mm:ss")
         private LocalTime gioKetThuc;
         private String tenCongViec;
+
 
         public int getId() {
             return id;
@@ -99,6 +101,7 @@
         public void setTenCongViec(String tenCongViec) {
             this.tenCongViec = tenCongViec;
         }
+
 
 
     }

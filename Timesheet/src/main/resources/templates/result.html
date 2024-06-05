@@ -134,7 +134,7 @@
 
                                                         <div class="form-group">
                                                             <label for="ngayLam">Working Day</label>
-                                                            <input type="date" class="form-control" id="ngayLam" th:field="*{ngayLam}">
+                                                            <input type="date" class="form-control" id="ngayLam" th:field="*{ngayLam}" required>
                                                         </div>
 
                                                         <div class="form-group">
@@ -349,7 +349,13 @@
         });
     });
 </script>
+<script>
+    // Lấy ngày hiện tại
+    var currentDate = new Date().toISOString().split('T')[0];
 
+    // Thiết lập giá trị min của input type date
+    document.getElementById("ngayLam").setAttribute("min", currentDate);
+</script>
 </body>
 
 </html>
