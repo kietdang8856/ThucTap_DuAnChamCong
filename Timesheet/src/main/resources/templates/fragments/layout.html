@@ -59,11 +59,16 @@
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img th:if="${session.currentUser.avatarPath != null}"
+                                 th:src="@{'/user/img/' + ${session.currentUser.avatarPath}}"
+                                 class="user-image" alt="User Avatar">
+                            <img th:unless="${session.currentUser.avatarPath != null}"
+                                 th:src="@{/user/img/default_avatar.jpg}"
+                                 class="user-image" alt="User Image">
+
                             <span th:text="${session.currentUser.tenNV}"></span>
-                            <span sec:authentication="principal.authorities"></span>
-
-
                         </a>
+
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header" th:if="${session.currentUser != null}">
@@ -71,24 +76,12 @@
                                 <i th:unless="${session.currentUser.avatarPath != null}" class="fas fa-user fa-3x"></i>
                                 <p>
                                     <span th:text="${session.currentUser.tenNV}"></span>
-                                    <small th:text="'Member since ' + ${#dates.format(session.currentUser.ngayBatDauLam, 'dd/MM/yyyy')}"></small>
+                                    <small th:text="'Member role : ' +${#strings.listJoin(session.currentUser.userRoles.![role.name], ', ')}" class="user-roles"></small>
+                                    <small th:text="'Member since:' + ${#dates.format(session.currentUser.ngayBatDauLam, 'dd/MM/yyyy')}"></small>
+                                </p>
                                 </p>
                             </li>
                             <!-- Menu Body -->
-                            <li class="user-body">
-                                <div class="row">
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Followers</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Sales</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Friends</a>
-                                    </div>
-                                </div>
-                                <!-- /.row -->
-                            </li>
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
@@ -124,7 +117,7 @@
                 </div>
             </div>
             <!-- search form -->
-            <form action="#" method="get" class="sidebar-form">
+            <form action="#" method="get" class="sidebar-form" >
                 <div class="input-group">
                     <input type="text" name="q" class="form-control" placeholder="Search...">
                     <span class="input-group-btn">
@@ -136,20 +129,20 @@
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
 
-            <ul class="sidebar-menu" data-widget="tree">
+            <ul class="sidebar-menu" data-widget="tree"z>
 
                 <li>
                     <a th:href="@{/}">
                         <i class="fa fa-dashboard"></i> <span>Home Page</span>
-                        <span class="pull-right-container"></span>
                     </a>
                 </li>
+
                 <li class="treeview">
-                    <a href="">
+                    <a href="#">
                         <i class="fa fa-user"></i> <span>Account</span>
                         <span class="pull-right-container">
-                         <i class="fa fa-angle-left pull-right"></i>
-                        </span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a th:href="@{/profile}"><i class="fa-regular fa-id-card"></i> Profile</a></li>
@@ -158,23 +151,19 @@
                 </li>
                 <li>
                     <a th:href="@{/admin/users/list}">
-                        <i class="fa-solid fa-users"></i> <span>User managemen</span>
-                        <span class="pull-right-container"></span>
+                        <i class="fa-solid fa-users"></i> <span>User management</span>
                     </a>
                 </li>
                 <li>
                     <a th:href="@{/admin/position/list}">
                         <i class="fa fa-list"></i> <span>Position</span>
-                        <span class="pull-right-container"></span>
                     </a>
                 </li>
                 <li>
                     <a th:href="@{/admin/office/list}">
                         <i class="fa fa-building"></i> <span>Office</span>
-                        <span class="pull-right-container"></span>
                     </a>
                 </li>
-
             </ul>
         </section>
         <!-- /.sidebar -->

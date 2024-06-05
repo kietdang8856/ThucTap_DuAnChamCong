@@ -323,4 +323,20 @@ button:hover{
 	align-items: center; /* Căn giữa theo chiều dọc */
 	justify-content: center; /* Căn giữa theo chiều ngang */
 }
+/* Style mặc định cho sidebar toggle */
+.sidebar-toggle {
+	transition: transform 0.3s ease; /* Thêm chuyển động mượt mà */
+}
+
+/* Hiệu ứng khi hover */
+.sidebar-toggle:hover {
+	transform: scale(1.1); /* Phóng to 110% */
+	/* Thêm các hiệu ứng khác tùy thích (ví dụ: thay đổi màu sắc) */
+}
+.user-image {
+	width: 25px; /* Điều chỉnh kích thước ảnh */
+	height: 25px;
+	border-radius: 50%; /* Tạo hình tròn */
+	margin-right: 10px; /* Tạo khoảng cách giữa ảnh và tên */
+}
 
