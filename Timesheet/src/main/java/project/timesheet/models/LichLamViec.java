@@ -24,7 +24,7 @@
         private VanPhong vpCongTac;
         @ManyToOne
         private TrangThaiLamViec trangThai;
-        @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) // hoặc CascadeType.ALL
+        @ManyToOne // hoặc CascadeType.ALL
         private NhanVien nhanVien;
 
 

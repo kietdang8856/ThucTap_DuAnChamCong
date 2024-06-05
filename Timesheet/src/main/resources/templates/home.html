@@ -53,6 +53,60 @@
                                 <div class="card-body p-0">
                                     <!-- THE CALENDAR -->
                                     <div id="calendar"></div>
+                                    <div id="calendarModal" class="modal fade">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title">Event Details</h4>
+
+                                                </div>
+                                                <div id="modalBody" class="modal-body">
+                                                    <form action="#" th:action="@{/lichlamviec/update/}" th:object="${lichlam}" method="post" id="updateForm">
+                                                        <div class="form-group">
+                                                            <label for="tenCongViec">Appointment Name</label>
+                                                            <input type="text" class="form-control" id="tenCongViec_update" value="" th:field="*{tenCongViec}">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="ngayLam">Working Day</label>
+                                                            <input type="date" class="form-control" id="ngayLam_update" th:field="*{ngayLam}">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="gioBatDau">Start Time</label>
+                                                            <input type="time" class="form-control" id="gioBatDau_update" th:field="*{gioBatDau}" min="08:00" max="17:00">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="gioKetThuc">End Time</label>
+                                                            <input type="time" class="form-control" id="gioKetThuc_update" th:field="*{gioKetThuc}" min="08:00" max="17:00">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="vpCT_id_update">Office</label>
+                                                            <select class="form-control" id="vpCT_id_update" th:field="*{vpCongTac_id}">
+                                                                <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}"></option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="trangThaiLV_Id_update">Work Status</label>
+                                                            <select class="form-control" id="trangThaiLV_Id_update" th:field="*{trangThaiLamViec_Id}">
+                                                                <option th:each="trangthai : ${trangThaiList}"  th:value="${trangthai.id}"th:text="${trangthai.tenTrangThai}"></option>
+                                                            </select>
+                                                        </div>
+
+                                                        <button type="submit" class="btn btn-primary">Save</button>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                                    <a th:href="@{/lichlamviec/delete/}" class="btn btn-danger" id="deleteButton">Delete</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /.card-body -->
                             </div>
@@ -132,9 +186,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         let listLichLam = [[${listLichLam}]];
         console.log(listLichLam);
-        let userList = [[${userList}]];
         var listEvent =[];
-
         listLichLam.forEach(function(lich){
             let fullTitle=lich.tenCongViec+
                 "\n" + lich.gioBatDau + "-" +lich.gioKetThuc +
@@ -153,10 +205,11 @@
                 color="#AC15EA";
             }
             if(lich.trangThai.id===4){
-                color="#66c700";
+                color="#53EA15";
             }
-            console.log(color);
             var event={
+                id:lich.id,
+                tenCV:lich.tenCongViec.toString(),
                 title:fullTitle ,
                 start: lich.ngayLam + "T" + lich.gioBatDau,
                 //end: endTime.concat(lich.ngayLam,"T",lich.gioKetThuc,":00:00"),
@@ -170,7 +223,14 @@
                     username: lich.nhanVien.username,
                     chucVu: lich.nhanVien.chucvu ? lich.nhanVien.chucvu.tenChucVu : "N/A" ,// Lấy tên chức vụ, kiểm tra null
                     noiCongTac: lich.vpCongTac.tenVP,
-                    noiLamViec: lich.nhanVien.vpLamViecChinh ? lich.nhanVien.vpLamViecChinh.tenVP : "N/A"
+                    noiLamViec: lich.nhanVien.vpLamViecChinh ? lich.nhanVien.vpLamViecChinh.tenVP : "N/A",
+                    //thêm thông tin ngày tháng
+                    ngayLam:lich.ngayLam,
+                    gioBatDau:lich.gioBatDau,
+                    gioKetThuc:lich.gioKetThuc,
+                    vpCongTacId:lich.vpCongTac.id,
+                    trangThaiId:lich.trangThai.id,
+
                 }
             };
             listEvent.push(event);
@@ -215,72 +275,33 @@
                 }
             },
             events: listEvent,
+            eventClick:  function(arg) {
+                console.log(arg);
+                var title=arg.event._def.extendedProps.tenCV;
+                var ngay=arg.event._def.extendedProps.ngayLam;
+                var giobd=arg.event._def.extendedProps.gioBatDau;
+                var giokt=arg.event._def.extendedProps.gioKetThuc;
+                var vanPhongCTId=arg.event._def.extendedProps.vpCongTacId;
+                var trangThaiId=arg.event._def.extendedProps.trangThaiId;
 
-            eventDidMount: function (info) {
-                const event = info.event;
-                const extendedProps = event.extendedProps;
+                var lichId=arg.event._def.publicId;
+                var updateLink=$('#updateForm').attr('action') + lichId;
+                $('#updateForm').attr('action',updateLink);
 
-                if (extendedProps) {
-                    const tooltipContent = `
-                    <div class="tooltip-content">
-                        <table>
-                            <tr>
-                                <th>ID:</th>
-                                <td>${extendedProps.nhanVienId || "N/A"}</td>
-                            </tr>
-                            <tr>
-                                <th>Họ tên:</th>
-                                <td>${extendedProps.hoTen || "N/A"}</td>
-                            </tr>
-                            <tr>
-                                <th>Username:</th>
-                                <td>${extendedProps.username || "N/A"}</td>
-                            </tr>
-                            <tr>
-                                <th>Chức vụ:</th>
-                                <td>${extendedProps.chucVu || "N/A"}</td>
-                            </tr>
-                              <tr>
-                                <th>Nơi làm việc:</th>
-                                <td>${extendedProps.noiLamViec || "N/A"}</td>
-                            </tr>
-                            <tr>
-                                <th>Nơi công tác:</th>
-                                <td>${extendedProps.noiCongTac || "N/A"}</td>
-                            </tr>
-                        </table>
-                    </div>
-                `;
-
-
-                    // Tạo phần tử tooltip
-                    const tooltip = document.createElement('div');
-                    tooltip.classList.add('fc-tooltip');
-                    tooltip.innerHTML = tooltipContent;
-
-                    // Gắn tooltip vào phần tử sự kiện
-                    info.el.appendChild(tooltip);
-
-                    // Xử lý ẩn/hiện tooltip
-                    info.el.addEventListener('mouseenter', () => {
-                        tooltip.style.display = 'block';
-                    });
-
-                    info.el.addEventListener('mouseleave', () => {
-                        tooltip.style.display = 'none';
-                    });
-                    info.el.addEventListener('mouseenter', function () {
-                        // ... (Giữ nguyên phần lấy tọa độ rect)
-                        const scrollY = window.scrollY || document.documentElement.scrollTop; // Lấy vị trí scroll của trang
-                        const scrollX = window.scrollX || document.documentElement.scrollLeft;
-                        tooltip.style.top = `${rect.top + rect.height + scrollY}px`; // Điều chỉnh vị trí tooltip
-                        tooltip.style.left = `${rect.left + scrollX}px`;
-                        tooltip.style.display = 'block';
-                    });
-
-                }
-
-            }
+                var deleteLink=$('#deleteButton').attr('href')+ lichId;
+                $('#deleteButton').attr('href',deleteLink);
+                // endtime = $.fullCalendar.moment(event.end).format('h:mm');
+                // starttime = $.fullCalendar.moment(event.start).format('dddd, MMMM Do YYYY, h:mm');
+                // var mywhen = starttime + ' - ' + endtime;
+                $('#tenCongViec_update').val(title);
+                $('#ngayLam_update').val(ngay);
+                $('#gioBatDau_update').val(giobd);
+                $('#gioKetThuc_update').val(giokt);
+                $('#vpCT_id_update').val(vanPhongCTId.toString());
+                $('#trangThaiLV_Id_update').val(trangThaiId.toString());
+                //$('#ngayLam').val(title);
+                $('#calendarModal').modal();
+            },
         });
         calendar.render();
     });

@@ -210,7 +210,7 @@
                 lich.setVpCongTac(vanPhongService.getVanPhongById(update.getVpCongTac_id()));
                 service.update(lich);
             }
-            return "redirect:/result";
+            return "redirect:/";
         }
         @RequestMapping("/delete/{id}")
         public String delete(@PathVariable("id") int id) {
@@ -220,7 +220,7 @@
                 if (lich != null)
                     service.delete(id);
             }
-            return "redirect:/result";
+            return "redirect:/";
         }
 //        @PutMapping("/update/{id}")
 //        public String update(@ModelAttribute("lichlam") LichLamViecModel update,@PathVariable("id")int id) {
