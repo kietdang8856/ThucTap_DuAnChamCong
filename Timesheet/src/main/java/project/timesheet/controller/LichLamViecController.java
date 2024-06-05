@@ -14,6 +14,7 @@
     import project.timesheet.services.VanPhongService;
 
     import java.util.ArrayList;
+    import java.util.Date;
     import java.util.List;
     import java.util.Objects;
 
@@ -44,63 +45,63 @@
     //        return ResponseEntity.ok().build();
     //    }
 
-        @GetMapping("/index")
-        public ResponseEntity<List<LichLamViec>> getAll() {
-            return ResponseEntity.ok(service.getAll());
-        }
-
-        @GetMapping("/{id}")
-        public ResponseEntity<LichLamViec> getOne(@PathVariable int id) {
-            return ResponseEntity.ok(service.getOne(id));
-        }
-
-        @PutMapping("/{id}")
-        public ResponseEntity<LichLamViec> update(@PathVariable int id, @RequestBody LichLamViecModel update)
-        {
-            LichLamViec lich = service.getOne(id);
-            if(lich!=null)
-            {
-                lich.setGioBatDau(update.getGioBatDau());
-                lich.setGioKetThuc(update.getGioKetThuc());
-                lich.setTenCongViec(update.getTenCongViec());
-                //setter cho nhanvien, van phong va trang thai lam viec
-                lich.setNhanVien(nhanVienService.getOne(update.getNhanVien_id()));
-                lich.setTrangThai(trangThaiLamViecService.getOne(update.getTrangThaiLamViec_Id()));
-                lich.setVpCongTac(vanPhongService.getVanPhongById(update.getVpCongTac_id()));
-                service.create(lich);
-                return ResponseEntity.ok().build();
-            }
-            else
-                return ResponseEntity.notFound().build();
-        }
-        @DeleteMapping("/{id}")
-        public ResponseEntity<?> delete(@PathVariable int id)
-        {
-            LichLamViec delete= service.getOne(id);
-            System.out.println(java.time.LocalDate.now());
-
-            //kiem tra ngay thuc hien delete lich lam viec say ra truoc ngay thuc hien cong viec
-            //th dung
-            if(java.time.LocalDate.now().isBefore(delete.getNgayLam().toLocalDate()))
-            {
-                service.delete(id);
-                return ResponseEntity.ok().build();
-            }
-            //th bang
-            if(java.time.LocalDate.now().isEqual(delete.getNgayLam().toLocalDate()))
-            {
-                //kiem tra gio thuc hien delele lich lam viec say ra truoc gio thuc hien cong viec
-//                if(java.time.LocalTime.now().getHour()< delete.getGioBatDau())
-//                {
-//                    service.delete(id);
-//                    return ResponseEntity.ok().build();
-//                }
-//                else
-//                    return ResponseEntity.badRequest().build();
-            }
-            //th ngay thuc hien delete say ra sau ngay thuc hien cong viec
-            return ResponseEntity.badRequest().build();
-        }
+//        @GetMapping("/index")
+//        public ResponseEntity<List<LichLamViec>> getAll() {
+//            return ResponseEntity.ok(service.getAll());
+//        }
+//
+//        @GetMapping("/{id}")
+//        public ResponseEntity<LichLamViec> getOne(@PathVariable int id) {
+//            return ResponseEntity.ok(service.getOne(id));
+//        }
+//
+//        @PutMapping("/{id}")
+//        public ResponseEntity<LichLamViec> update(@PathVariable int id, @RequestBody LichLamViecModel update)
+//        {
+//            LichLamViec lich = service.getOne(id);
+//            if(lich!=null)
+//            {
+//                lich.setGioBatDau(update.getGioBatDau());
+//                lich.setGioKetThuc(update.getGioKetThuc());
+//                lich.setTenCongViec(update.getTenCongViec());
+//                //setter cho nhanvien, van phong va trang thai lam viec
+//                lich.setNhanVien(nhanVienService.getOne(update.getNhanVien_id()));
+//                lich.setTrangThai(trangThaiLamViecService.getOne(update.getTrangThaiLamViec_Id()));
+//                lich.setVpCongTac(vanPhongService.getVanPhongById(update.getVpCongTac_id()));
+//                service.create(lich);
+//                return ResponseEntity.ok().build();
+//            }
+//            else
+//                return ResponseEntity.notFound().build();
+//        }
+//        @DeleteMapping("/{id}")
+//        public ResponseEntity<?> delete(@PathVariable int id)
+//        {
+//            LichLamViec delete= service.getOne(id);
+//            System.out.println(java.time.LocalDate.now());
+//
+//            //kiem tra ngay thuc hien delete lich lam viec say ra truoc ngay thuc hien cong viec
+//            //th dung
+//            if(java.time.LocalDate.now().isBefore(delete.getNgayLam().toLocalDate()))
+//            {
+//                service.delete(id);
+//                return ResponseEntity.ok().build();
+//            }
+//            //th bang
+//            if(java.time.LocalDate.now().isEqual(delete.getNgayLam().toLocalDate()))
+//            {
+//                //kiem tra gio thuc hien delele lich lam viec say ra truoc gio thuc hien cong viec
+////                if(java.time.LocalTime.now().getHour()< delete.getGioBatDau())
+////                {
+////                    service.delete(id);
+////                    return ResponseEntity.ok().build();
+////                }
+////                else
+////                    return ResponseEntity.badRequest().build();
+//            }
+//            //th ngay thuc hien delete say ra sau ngay thuc hien cong viec
+//            return ResponseEntity.badRequest().build();
+//        }
         //-----------------------------------------------------------------------------------------------
 //        @RequestMapping("/getAll")
 //        public String getAll(Model model)
@@ -194,6 +195,33 @@
                 model.addAttribute("searchFilter", filter);
                 return "result";
             }
+        @RequestMapping("/update/{id}")
+        public String update(@ModelAttribute("lichlam") LichLamViecModel update,@PathVariable("id") int id) {
+            LichLamViec lich=service.getOne(id);
+            if (lich.getNgayLam().after(new Date()))//th ngay lam cua lich > ngay hien tai
+            {
+                lich.setGioBatDau(update.getGioBatDau());
+                lich.setGioKetThuc(update.getGioKetThuc());
+                lich.setNgayLam(update.getNgayLam());
+                lich.setTenCongViec(update.getTenCongViec());
+                //setter cho nhanvien, van phong va trang thai lam viec
+                lich.setNhanVien(nhanVienService.findByUsername(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
+                lich.setTrangThai(trangThaiLamViecService.getOne(update.getTrangThaiLamViec_Id()));
+                lich.setVpCongTac(vanPhongService.getVanPhongById(update.getVpCongTac_id()));
+                service.update(lich);
+            }
+            return "redirect:/result";
+        }
+        @RequestMapping("/delete/{id}")
+        public String delete(@PathVariable("id") int id) {
+            LichLamViec lich = service.getOne(id);
+            if (lich.getNgayLam().after(new Date()))//th ngay lam cua lich > ngay hien tai
+            {
+                if (lich != null)
+                    service.delete(id);
+            }
+            return "redirect:/result";
+        }
 //        @PutMapping("/update/{id}")
 //        public String update(@ModelAttribute("lichlam") LichLamViecModel update,@PathVariable("id")int id) {
 //            LichLamViec lich=service.getOne(id);
