@@ -121,6 +121,8 @@
 //        }
         @PostMapping("/save")
         public String submitForm(@ModelAttribute("lichlam") LichLamViecModel lichlam) {
+            if(lichlam.getNgayLam().before(new Date()))//neu tao lich lam co ngay lam truoc ngay hien tai
+            {
             LichLamViec lich = new LichLamViec();
             lich.setGioBatDau(lichlam.getGioBatDau());
             lich.setGioKetThuc(lichlam.getGioKetThuc());
@@ -131,6 +133,7 @@
             lich.setTrangThai(trangThaiLamViecService.getOne(lichlam.getTrangThaiLamViec_Id()));
             lich.setVpCongTac(vanPhongService.getVanPhongById(lichlam.getVpCongTac_id()));
             service.create(lich);
+            }
             return "redirect:/";
         }
 //        @GetMapping("/getbydate")
