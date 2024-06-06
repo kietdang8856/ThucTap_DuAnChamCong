@@ -13,6 +13,8 @@
     import project.timesheet.services.TrangThaiLamViecService;
     import project.timesheet.services.VanPhongService;
 
+    import java.time.LocalDateTime;
+    import java.time.ZoneId;
     import java.util.ArrayList;
     import java.util.Date;
     import java.util.List;
@@ -198,7 +200,11 @@
         @RequestMapping("/update/{id}")
         public String update(@ModelAttribute("lichlam") LichLamViecModel update,@PathVariable("id") int id) {
             LichLamViec lich=service.getOne(id);
-            if (lich.getNgayLam().after(new Date()))//th ngay lam cua lich > ngay hien tai
+            LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")).plusMinutes(1);
+
+            // Chuyển đổi ngày và giờ bắt đầu của lịch làm việc thành LocalDateTime
+            LocalDateTime lichDateTime = LocalDateTime.of(lich.getNgayLam().toLocalDate(), lich.getGioBatDau());
+            if (lichDateTime.isAfter(now))//th ngay lam cua lich > ngay hien tai
             {
                 lich.setGioBatDau(update.getGioBatDau());
                 lich.setGioKetThuc(update.getGioKetThuc());
@@ -215,7 +221,11 @@
         @RequestMapping("/delete/{id}")
         public String delete(@PathVariable("id") int id) {
             LichLamViec lich = service.getOne(id);
-            if (lich.getNgayLam().after(new Date()))//th ngay lam cua lich > ngay hien tai
+            LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")).plusMinutes(1);
+
+            // Chuyển đổi ngày và giờ bắt đầu của lịch làm việc thành LocalDateTime
+            LocalDateTime lichDateTime = LocalDateTime.of(lich.getNgayLam().toLocalDate(), lich.getGioBatDau());
+            if (lichDateTime.isAfter(now))//th ngay lam cua lich > ngay hien tai
             {
                 if (lich != null)
                     service.delete(id);

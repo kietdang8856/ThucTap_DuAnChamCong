@@ -275,7 +275,7 @@
                 }
             },
             events: listEvent,
-            eventClick:  function(arg) {
+            eventClick: function(arg) {
                 console.log(arg);
                 var title=arg.event._def.extendedProps.tenCV;
                 var ngay=arg.event._def.extendedProps.ngayLam;
@@ -285,21 +285,21 @@
                 var trangThaiId=arg.event._def.extendedProps.trangThaiId;
 
                 var lichId=arg.event._def.publicId;
-                var updateLink=$('#updateForm').attr('action') + lichId;
-                $('#updateForm').attr('action',updateLink);
 
-                var deleteLink=$('#deleteButton').attr('href')+ lichId;
-                $('#deleteButton').attr('href',deleteLink);
-                // endtime = $.fullCalendar.moment(event.end).format('h:mm');
-                // starttime = $.fullCalendar.moment(event.start).format('dddd, MMMM Do YYYY, h:mm');
-                // var mywhen = starttime + ' - ' + endtime;
+                // Cập nhật đường dẫn action và href
+                var updateLink = '/lichlamviec/update/' + lichId;
+                $('#updateForm').attr('action', updateLink);
+
+                var deleteLink = '/lichlamviec/delete/' + lichId;
+                $('#deleteButton').attr('href', deleteLink);
+
+
                 $('#tenCongViec_update').val(title);
                 $('#ngayLam_update').val(ngay);
                 $('#gioBatDau_update').val(giobd);
                 $('#gioKetThuc_update').val(giokt);
                 $('#vpCT_id_update').val(vanPhongCTId.toString());
                 $('#trangThaiLV_Id_update').val(trangThaiId.toString());
-                //$('#ngayLam').val(title);
                 $('#calendarModal').modal();
             },
         });
