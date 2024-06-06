@@ -75,12 +75,12 @@
 
                                                         <div class="form-group">
                                                             <label for="gioBatDau">Start Time</label>
-                                                            <input type="time" class="form-control" id="gioBatDau_update" th:field="*{gioBatDau}" min="08:00" max="17:00">
+                                                            <input type="time" class="form-control" id="gioBatDau_update" th:field="*{gioBatDau}" min="08:00">
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="gioKetThuc">End Time</label>
-                                                            <input type="time" class="form-control" id="gioKetThuc_update" th:field="*{gioKetThuc}" min="08:00" max="17:00">
+                                                            <input type="time" class="form-control" id="gioKetThuc_update" th:field="*{gioKetThuc}" min="08:00">
                                                         </div>
 
                                                         <div class="form-group">
@@ -305,6 +305,20 @@
         });
         calendar.render();
     });
+</script>
+<script>
+    // Lấy ngày hiện tại
+    var currentDate = new Date().toISOString().split('T')[0];
+
+    // Thiết lập giá trị min của input type date
+    document.getElementById("ngayLam").setAttribute("min", currentDate);
+</script>
+<script>
+    // Lấy ngày hiện tại
+    var currentDate = new Date().toISOString().split('T')[0];
+
+    // Thiết lập giá trị min của input type date
+    document.getElementById("ngayLam_update").setAttribute("min", currentDate);
 </script>
 </body>
 
