@@ -211,7 +211,7 @@
                 lich.setNgayLam(update.getNgayLam());
                 lich.setTenCongViec(update.getTenCongViec());
                 //setter cho nhanvien, van phong va trang thai lam viec
-                lich.setNhanVien(nhanVienService.findByUsername(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
+
                 lich.setTrangThai(trangThaiLamViecService.getOne(update.getTrangThaiLamViec_Id()));
                 lich.setVpCongTac(vanPhongService.getVanPhongById(update.getVpCongTac_id()));
                 service.update(lich);

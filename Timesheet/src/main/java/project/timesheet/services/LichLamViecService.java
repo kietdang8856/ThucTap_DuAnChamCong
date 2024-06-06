@@ -59,4 +59,7 @@ public class LichLamViecService {
     public void deleteByNhanVien(NhanVien nhanVien) {
         repo.deleteByNhanVien(nhanVien);
     }
+    public List<LichLamViec> getEventsByUserId(int userId) {
+        return repo.findAllByNhanVienId(userId);
+    }
 }

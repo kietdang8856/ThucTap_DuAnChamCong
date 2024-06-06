@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import project.timesheet.models.CustomUserDetails;
 import project.timesheet.models.LichLamViec;
 import project.timesheet.models.LichLamViecModel;
 import project.timesheet.models.NhanVien;
@@ -42,23 +43,40 @@ public class    HomeController {
     private NhanVienService nhanVienService;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @GetMapping("/events/{userId}")
+    @ResponseBody // Trả về JSON
+    public List<LichLamViec> getEventsForUser(@PathVariable("userId") int userId) {
+        return service.getEventsByUserId(userId);
+    }
     @GetMapping("/")
     public String showHome(Model model, HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            String username = authentication.getName();
-            NhanVien currentUser = nhanVienService.findByUsername(username);
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            NhanVien currentUser = userDetails.getNV();
 
             if (currentUser != null) {
-                session.setAttribute("currentUser", currentUser); // Truyền thông tin người dùng
+                session.setAttribute("currentUser", currentUser);
+
+                // Lấy lịch làm việc cho người dùng hiện tại
+                List<LichLamViec> listLich;
+                if (userDetails.hasRole("ADMIN")) {
+                    listLich = service.getAll();
+                } else {
+                    listLich = service.getEventsByUserId(currentUser.getId());
+                }
+                model.addAttribute("listLichLam", listLich);
+
+                // Truyền thông tin về vai trò của người dùng vào model
+                model.addAttribute("isAdmin", userDetails.hasRole("ADMIN"));
             }
         }
+
         LichLamViecModel lich = new LichLamViecModel();
-        List<LichLamViec> listLich = service.getAll();
-        model.addAttribute("listLichLam",listLich);
-        model.addAttribute("lichlam",lich);
-        model.addAttribute("vanPhongList",vanPhongService.getALL());
-        model.addAttribute("trangThaiList",trangThaiLamViecService.getALL());
+        model.addAttribute("lichlam", lich);
+        model.addAttribute("vanPhongList", vanPhongService.getALL());
+        model.addAttribute("trangThaiList", trangThaiLamViecService.getALL());
+
         return "home";
     }
     @GetMapping("/{id}")

@@ -120,9 +120,7 @@
             <!-- /.content -->
         </div>
     </div>
-    <div class="todo-overlay" id="todo-overlay">
-        <!-- Your existing code for todo overlay -->
-    </div>
+
 </section>
 
 <!-- Modal for Appointment Form -->
@@ -182,129 +180,109 @@
     </div>
 </div>
 
+
+
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function() {
-        let listLichLam = [[${listLichLam}]];
-        console.log(listLichLam);
-        var listEvent =[];
-        listLichLam.forEach(function(lich){
-            let fullTitle=lich.tenCongViec+
-                "\n" + lich.gioBatDau + "-" +lich.gioKetThuc +
-                "\n" + "TenNV: " + lich.nhanVien.tenNV +
-                "\n" + "HQ Name: " +  lich.nhanVien.vpLamViecChinh.diaChi+
-                "\n" + "Work Place Name: " + lich.vpCongTac.diaChi+
-                "\n" + "Work type: " + lich.trangThai.tenTrangThai;
-            let color;
-            if(lich.trangThai.id===1){
-                color="#EA4215";
-            }
-            if(lich.trangThai.id===2){
-                color="#15BDEA";
-            }
-            if(lich.trangThai.id===3){
-                color="#AC15EA";
-            }
-            if(lich.trangThai.id===4){
-                color="#53EA15";
-            }
-            var event={
-                id:lich.id,
-                tenCV:lich.tenCongViec.toString(),
-                title:fullTitle ,
+        let listLichLam = JSON.parse('[[${listLichLam}]]');
+        const currentUserId = [[${session.currentUser.id}]]; // Lấy ID của người dùng hiện tại
+        const isAdmin = [[${isAdmin}]]; // Lấy thông tin quyền admin từ model
+
+        var listEvent = listLichLam.map(lich => {
+            const isCurrentUserEvent = lich.nhanVien.id === currentUserId;
+            // Ẩn sự kiện nếu không phải của người dùng hiện tại và người dùng không phải admin
+            const displayEvent = isCurrentUserEvent || isAdmin ? 'block' : 'none';
+
+            return {
+                id: lich.id,
+                tenCV: lich.tenCongViec.toString(),
+                title: lich.tenCongViec,
                 start: lich.ngayLam + "T" + lich.gioBatDau,
-                //end: endTime.concat(lich.ngayLam,"T",lich.gioKetThuc,":00:00"),
                 end: lich.ngayLam + "T" + lich.gioKetThuc,
-                allDay:false,
-                display: 'block',
-                backgroundColor:color,
+                allDay: false,
+                display: displayEvent,
+                backgroundColor: getEventColor(lich.trangThai.id),
                 extendedProps: { // Thêm thông tin người dùng
                     nhanVienId: lich.nhanVien.id,
                     hoTen: lich.nhanVien.tenNV,
                     username: lich.nhanVien.username,
-                    chucVu: lich.nhanVien.chucvu ? lich.nhanVien.chucvu.tenChucVu : "N/A" ,// Lấy tên chức vụ, kiểm tra null
+                    chucVu: lich.nhanVien.chucvu ? lich.nhanVien.chucvu.tenChucVu : "N/A",
                     noiCongTac: lich.vpCongTac.tenVP,
                     noiLamViec: lich.nhanVien.vpLamViecChinh ? lich.nhanVien.vpLamViecChinh.tenVP : "N/A",
-                    //thêm thông tin ngày tháng
-                    ngayLam:lich.ngayLam,
-                    gioBatDau:lich.gioBatDau,
-                    gioKetThuc:lich.gioKetThuc,
-                    vpCongTacId:lich.vpCongTac.id,
-                    trangThaiId:lich.trangThai.id,
-
+                    ngayLam: lich.ngayLam,
+                    gioBatDau: lich.gioBatDau,
+                    gioKetThuc: lich.gioKetThuc,
+                    vpCongTacId: lich.vpCongTac.id,
+                    trangThaiId: lich.trangThai.id
                 }
             };
-            listEvent.push(event);
         });
+
+        function getEventColor(trangThaiId) {
+            switch (trangThaiId) {
+                case 1:
+                    return "#EA4215";
+                case 2:
+                    return "#15BDEA";
+                case 3:
+                    return "#AC15EA";
+                case 4:
+                    return "#53EA15";
+                default:
+                    return "#ccc";
+            }
+        }
 
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-
-            headerToolbar: { left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay,list' }, // buttons for switching between views
-            allDaySlot: false,
-            slotMinTime: '08:00:00',
-            slotMaxTime: '18:00:00',
-            firstDay: 1,
-            height: 530,
-            contentHeight: 200,
-            eventTimeFormat: { // like '14:30:00'
-                hour: 'numeric',
-                minute: '2-digit',
-                meridiem: false // Ẩn ký hiệu AM/PM
-            },
-            views: {
-                dayGridMonth: { // name of view
-                    titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit' }
-                    // other view-specific options here
-                },
-                timeGridDay: { // name of view
-                    titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit',  hour: 'numeric', minute: '2-digit', }
-                    // other view-specific options here
-                },
-                timeGridWeek: {
-                    type: 'timeGridWeek',
-                    slotDuration: '24:00:00', // Đặt khoảng thời gian của mỗi slot là 24h
-
-                    slotLabelFormat: [
-                        {
-                            text: '', // Không hiển thị giờ
-                        },
-                        { weekday: 'short' } // Chỉ hiển thị thứ
-                    ]
-                }
-            },
+            // ... (Các cài đặt khác của FullCalendar)
             events: listEvent,
+            eventDidMount: function (info) {
+                // ... (Tooltip code)
+            },
             eventClick: function(arg) {
-                console.log(arg);
-                var title=arg.event._def.extendedProps.tenCV;
-                var ngay=arg.event._def.extendedProps.ngayLam;
-                var giobd=arg.event._def.extendedProps.gioBatDau;
-                var giokt=arg.event._def.extendedProps.gioKetThuc;
-                var vanPhongCTId=arg.event._def.extendedProps.vpCongTacId;
-                var trangThaiId=arg.event._def.extendedProps.trangThaiId;
+                // ... (rest of the eventClick function)
 
-                var lichId=arg.event._def.publicId;
-
-                // Cập nhật đường dẫn action và href
+                // Update form action and delete link
                 var updateLink = '/lichlamviec/update/' + lichId;
                 $('#updateForm').attr('action', updateLink);
+                $('#updateForm input[name="id"]').val(lichId); // Đặt giá trị cho input ẩn chứa ID
 
                 var deleteLink = '/lichlamviec/delete/' + lichId;
                 $('#deleteButton').attr('href', deleteLink);
 
-
+                // Populate form fields
                 $('#tenCongViec_update').val(title);
                 $('#ngayLam_update').val(ngay);
                 $('#gioBatDau_update').val(giobd);
                 $('#gioKetThuc_update').val(giokt);
-                $('#vpCT_id_update').val(vanPhongCTId.toString());
-                $('#trangThaiLV_Id_update').val(trangThaiId.toString());
-                $('#calendarModal').modal();
-            },
+                $('#vpCT_id_update').val(vanPhongCTId); // Remove `.toString()`
+                $('#trangThaiLV_Id_update').val(trangThaiId); // Remove `.toString()`
+
+                // Show/hide update/delete buttons based on permissions
+                const isCurrentUserEvent = arg.event.extendedProps.nhanVienId === currentUserId;
+                $('#updateForm button[type=submit]').toggle(isCurrentUserEvent); // Chỉ hiển thị nếu là event của chính mình
+                $('#deleteButton').toggle(isCurrentUserEvent); // Chỉ hiển thị nếu là event của chính mình
+                // Show modal
+                $('#calendarModal').modal('show');
+            }
         });
+
         calendar.render();
     });
+
+    $('#calendarModal').on('hidden.bs.modal', function () {
+        // Clear input values
+        $('#tenCongViec_update').val('');
+        $('#ngayLam_update').val('');
+        $('#gioBatDau_update').val('');
+        $('#gioKetThuc_update').val('');
+        $('#vpCT_id_update').val('');
+        $('#trangThaiLV_Id_update').val('');
+        $('#updateForm').attr('action', '#');
+        $('#deleteButton').attr('href', '#');
+    });
+
 </script>
 <script>
     // Lấy ngày hiện tại

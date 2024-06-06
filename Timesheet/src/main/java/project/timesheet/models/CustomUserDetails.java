@@ -58,4 +58,8 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+    public boolean hasRole(String roleName) {
+        return getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(roleName));
+    }
 }
