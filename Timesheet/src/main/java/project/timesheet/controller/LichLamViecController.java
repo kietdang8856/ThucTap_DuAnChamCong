@@ -128,12 +128,25 @@
             lich.setGioKetThuc(lichlam.getGioKetThuc());
             lich.setNgayLam(lichlam.getNgayLam());
             lich.setTenCongViec(lichlam.getTenCongViec());
-            //setter cho nhanvien, van phong va trang thai lam viec
-            lich.setNhanVien(nhanVienService.findByUsername(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
-            lich.setTrangThai(trangThaiLamViecService.getOne(lichlam.getTrangThaiLamViec_Id()));
-            lich.setVpCongTac(vanPhongService.getVanPhongById(lichlam.getVpCongTac_id()));
-            service.create(lich);
-            return "redirect:/";
+
+            // Lấy thời gian hiện tại từ server
+            LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+
+            // Chuyển đổi ngày và giờ bắt đầu từ lichlam thành LocalDateTime
+            LocalDateTime lichDateTime = LocalDateTime.of(lichlam.getNgayLam().toLocalDate(), lichlam.getGioBatDau());
+
+            if (lichDateTime.isBefore(now)) {
+                // Nếu thời gian tạo lịch sớm hơn thời gian hiện tại, thông báo lỗi
+                // (Sử dụng flash attribute hoặc cách khác để hiển thị thông báo lỗi trên trang)
+                return "dont do that";
+            } else {
+                //setter cho nhanvien, van phong va trang thai lam viec
+                lich.setNhanVien(nhanVienService.findByUsername(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
+                lich.setTrangThai(trangThaiLamViecService.getOne(lichlam.getTrangThaiLamViec_Id()));
+                lich.setVpCongTac(vanPhongService.getVanPhongById(lichlam.getVpCongTac_id()));
+                service.create(lich);
+                return "redirect:/";
+            }
         }
 //        @GetMapping("/getbydate")
 //        public ResponseEntity<List<LichLamViec>> getFromDateToDate(@RequestBody LichLamViecRequest lichlam) {

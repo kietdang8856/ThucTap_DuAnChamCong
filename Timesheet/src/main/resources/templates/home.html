@@ -182,6 +182,8 @@
 
 
 <script th:inline="javascript">
+    var isAdmin = /*[[${isAdmin}]]*/ false;
+    var currentUserId = /*[[${currentUserId}]]*/ -1;
     document.addEventListener('DOMContentLoaded', function() {
         let listLichLam = [[${listLichLam}]];
         console.log(listLichLam);
@@ -312,14 +314,122 @@
     var currentDate = new Date().toISOString().split('T')[0];
 
     // Thiết lập giá trị min của input type date
-    document.getElementById("ngayLam").setAttribute("min", currentDate);
+    document.getElementById("ngayLam_update").setAttribute("min", currentDate);
+    document.addEventListener('DOMContentLoaded', function () {
+        // ... (code của bạn)
+
+        // Lấy các phần tử input
+        const ngayLamInput = document.getElementById("ngayLam_update");
+        const gioBatDauInput = document.getElementById("gioBatDau_update");
+        const gioKetThucInput = document.getElementById("gioKetThuc");
+        const submitButton = document.querySelector("#appointmentModal form button[type=submit]");
+        // Hàm kiểm tra thời gian kết thúc
+        function checkEndTime() {
+            const ngayLam = ngayLamInput.value;
+            const gioBatDau = gioBatDauInput.value;
+            const gioKetThuc = gioKetThucInput.value;
+
+            if (ngayLam && gioBatDau && gioKetThuc) {
+                const startDateTime = new Date(ngayLam + "T" + gioBatDau);
+                const endDateTime = new Date(ngayLam + "T" + gioKetThuc);
+
+                if (endDateTime <= startDateTime) {
+                    submitButton.disabled = true; // Vô hiệu hóa nút Save
+
+                    // Hiển thị SweetAlert2
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'End time must be after start time!',
+                    });
+
+                    return false;
+                }
+            }
+            if (ngayLam && gioBatDau) {
+                const now = new Date(); // Lấy thời gian hiện tại của client (trình duyệt)
+                const inputDateTime = new Date(ngayLam + "T" + gioBatDau);
+                if (inputDateTime < now) {
+                    submitButton.disabled = true;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Start time must be after the current time!'
+                    });
+                    return false;
+                }
+            }
+
+            submitButton.disabled = false; // Kích hoạt lại nút Save
+            return true;
+        }
+
+        // Gắn sự kiện input cho các trường thời gian
+        ngayLamInput.addEventListener("input", checkEndTime);
+        gioBatDauInput.addEventListener("input", checkEndTime);
+        gioKetThucInput.addEventListener("input", checkEndTime);
+    });
 </script>
 <script>
     // Lấy ngày hiện tại
     var currentDate = new Date().toISOString().split('T')[0];
 
     // Thiết lập giá trị min của input type date
-    document.getElementById("ngayLam_update").setAttribute("min", currentDate);
+    document.getElementById("ngayLam").setAttribute("min", currentDate);
+    document.addEventListener('DOMContentLoaded', function () {
+        // ... (code của bạn)
+
+        // Lấy các phần tử input
+        const ngayLamInput = document.getElementById("ngayLam");
+        const gioBatDauInput = document.getElementById("gioBatDau");
+        const gioKetThucInput = document.getElementById("gioKetThuc");
+        const submitButton = document.querySelector("#appointmentModal form button[type=submit]");
+        // Hàm kiểm tra thời gian kết thúc
+        function checkEndTime() {
+            const ngayLam = ngayLamInput.value;
+            const gioBatDau = gioBatDauInput.value;
+            const gioKetThuc = gioKetThucInput.value;
+
+            if (ngayLam && gioBatDau && gioKetThuc) {
+                const startDateTime = new Date(ngayLam + "T" + gioBatDau);
+                const endDateTime = new Date(ngayLam + "T" + gioKetThuc);
+
+                if (endDateTime <= startDateTime) {
+                    submitButton.disabled = true; // Vô hiệu hóa nút Save
+
+                    // Hiển thị SweetAlert2
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'End time must be after start time!',
+                    });
+
+                    return false;
+                }
+            }
+            if (ngayLam && gioBatDau) {
+                const now = new Date(); // Lấy thời gian hiện tại của client (trình duyệt)
+                const inputDateTime = new Date(ngayLam + "T" + gioBatDau);
+                if (inputDateTime < now) {
+                    submitButton.disabled = true;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Start time must be after the current time!'
+                    });
+                    return false;
+                }
+            }
+
+            submitButton.disabled = false; // Kích hoạt lại nút Save
+            return true;
+        }
+
+        // Gắn sự kiện input cho các trường thời gian
+        ngayLamInput.addEventListener("input", checkEndTime);
+        gioBatDauInput.addEventListener("input", checkEndTime);
+        gioKetThucInput.addEventListener("input", checkEndTime);
+    });
 </script>
 </body>
 
