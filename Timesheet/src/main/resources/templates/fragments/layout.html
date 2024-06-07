@@ -205,5 +205,12 @@
 <script th:src="@{/assets/js/function.js}"></script>
 
 
+<script>
+    // Lấy ngày hiện tại
+    var currentDate = new Date().toISOString().split('T')[0];
+
+    // Thiết lập giá trị min của input type date
+    document.getElementById("ngayLam").setAttribute("min", currentDate);
+</script>
 </body>
 </html>
