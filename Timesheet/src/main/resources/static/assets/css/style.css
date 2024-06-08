@@ -339,32 +339,26 @@ button:hover{
 	margin-right: 10px; /* Tạo khoảng cách giữa ảnh và tên */
 }
 
-.fc-daygrid-event .fc-event-time {
-	/* Tùy chỉnh giao diện của phần hiển thị thời gian */
-	display: block;
-	font-size: 12px;
-}
+
 .fc-daygrid-event .fc-event-name {
 	font-weight: bold;
 	font-size: 14px;
 	color: #212529; /* Màu đen */
-	margin-bottom: 5px; /* Khoảng cách dưới tên */
 }
-/* Các styles khác */
-.fc-event {
-	margin: 10px 15px;
+
+.fc-daygrid-event .fc-event-main > div {
+	text-align: left; /* Căn lề trái */
+	padding: 2px 5px; /* Điều chỉnh padding */
 }
-.fc-h-event .fc-event-title{
-	font-size: 12px;
-}
+
 .fc-daygrid-event {
 	/* ... các styles khác ... */
+	overflow: hidden;
 	white-space: normal; /* Cho phép xuống dòng */
-	line-height: 1.2; /* Khoảng cách giữa các dòng */
-	overflow: auto;
-	height: auto;
+	line-height: 1.4;    /* Tăng khoảng cách giữa các dòng */
+	height: auto;  /* Cho phép sự kiện tự động điều chỉnh chiều cao */
 	min-height: 35px;
-	box-sizing: border-box; /* Đảm bảo padding và border không làm tăng kích thước */
+	box-sizing: border-box;
 }
 
 .fc-event-main {
@@ -372,31 +366,17 @@ button:hover{
 	flex-direction: column;
 	align-items: flex-start;
 	width: 100%;
-	overflow: hidden;
-}
-
-.fc-event-name {
-	font-weight: bold;
-	/* Cho phép xuống dòng và thêm padding để tránh nội dung bị cắt */
-	word-wrap: break-word;
-	padding: 5px;
-	width: 100%; /* Đảm bảo tên chiếm toàn bộ chiều rộng */
 
 }
-.fc-dayGridMonth-view .fc-event-time {
-	display: none;
-}
-.fc-event-title {
-	/* Cho phép xuống dòng và thêm padding để tránh nội dung bị cắt */
-	word-wrap: break-word;
-	padding: 5px;
-	width: 100%; /* Đảm bảo tiêu đề chiếm toàn bộ chiều rộng */
-	box-sizing: border-box; /* Bao gồm padding vào width */
+
+.fc-event-name, .fc-event-tcv, .fc-event-time, .fc-event-nlv, .fc-event-nct, .fc-event-tt {
+	width: 100%; /* Đảm bảo các phần tử con chiếm toàn bộ chiều rộng */
 }
 
-.fc-daygrid-event .fc-event-main > div {
-	text-align: left; /* Căn lề trái */
-	padding-left: 5px; /* Thêm padding trái */
-	margin-bottom: 2px; /* Thêm khoảng cách giữa các dòng */
+.fc-timegrid-body {
+	overflow-x: auto;
 }
 
+.fc-h-event .fc-event-title {
+	font-size: 12px;
+}

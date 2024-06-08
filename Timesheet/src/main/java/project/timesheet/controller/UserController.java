@@ -305,7 +305,7 @@ public class UserController {
         userService.saveUser(existingNhanVien);
         // Cập nhật session với thông tin người dùng mới
         session.setAttribute("currentUser", existingNhanVien);
-
+        model.addAttribute("updateSuccess", true); // Thêm thuộc tính này vào model
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thành công");
         return "redirect:/";
     }

@@ -66,6 +66,11 @@
                                                 <div id="modalBody" class="modal-body">
                                                     <form action="#" th:action="@{/lichlamviec/update/}" th:object="${lichlam}" method="post" id="updateForm">
                                                         <div class="form-group">
+                                                            <label for="hoTen">Appointment creator</label>
+                                                            <input  class="form-control" id="hoTen" value=""  readonly>
+                                                        </div>
+
+                                                        <div class="form-group">
                                                             <label for="tenCongViec">Appointment Name</label>
                                                             <input type="text" class="form-control" id="tenCongViec_update" value="" th:field="*{tenCongViec}">
                                                         </div>
@@ -220,12 +225,13 @@
                 id:lich.id,
                 tenCV:lich.tenCongViec.toString(),
                 title:fullTitle ,
-                start: lich.ngayLam + "T" + lich.gioBatDau,
+                start: lich.ngayLam + "T" + lich.gioBatDau.slice(0, -3),
                 //end: endTime.concat(lich.ngayLam,"T",lich.gioKetThuc,":00:00"),
-                end: lich.ngayLam + "T" + lich.gioKetThuc,
+                end: lich.ngayLam + "T" + lich.gioKetThuc.slice(0, -3),
                 allDay:false,
                 display: 'block',
                 backgroundColor:color,
+                trangthai:lich.trangThai.tenTrangThai,
                 extendedProps: { // Thêm thông tin người dùng
                     nhanVienId: lich.nhanVien.id,
                     hoTen: lich.nhanVien.tenNV,
@@ -235,8 +241,8 @@
                     noiLamViec: lich.nhanVien.vpLamViecChinh ? lich.nhanVien.vpLamViecChinh.tenVP : "N/A",
                     //thêm thông tin ngày tháng
                     ngayLam:lich.ngayLam,
-                    gioBatDau:lich.gioBatDau,
-                    gioKetThuc:lich.gioKetThuc,
+                    gioBatDau:lich.gioBatDau.slice(0, -3),
+                    gioKetThuc:lich.gioKetThuc.slice(0, -3),
                     vpCongTacId:lich.vpCongTac.id,
                     trangThaiId:lich.trangThai.id,
 
@@ -247,7 +253,7 @@
 
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-
+            height: 1000,
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
@@ -257,8 +263,8 @@
             slotMinTime: '08:00:00',
             slotMaxTime: '24:00:00',
             firstDay: 1,
-            height: 530,
-            contentHeight: 200,
+            height: 700,
+            contentHeight: 800,
             eventTimeFormat: { // like '14:30:00'
                 hour: 'numeric',
                 minute: '2-digit',
@@ -317,21 +323,223 @@
                     //
                     //     return { domNodes: [eventElement] };
                     // },
+                    eventContent: function (arg) {
+                        const { event } = arg;
+                        const { gioBatDau, gioKetThuc, hoTen, noiLamViec, noiCongTac, tenCV, trangthai } = event.extendedProps; // Lấy thêm hoTen
 
+                        // Tạo event element
+                        const eventElement = document.createElement('div');
+                        eventElement.classList.add('fc-event', 'fc-event-main');
+                        eventElement.style.backgroundColor = event.backgroundColor;
+
+                        // Tạo div chứa nội dung sự kiện
+                        const eventContentDiv = document.createElement('div');
+                        eventContentDiv.classList.add('fc-event-content');
+
+                        // Thêm các phần tử con vào eventContentDiv
+                        const nameDiv = document.createElement('div');
+                        nameDiv.classList.add('fc-event-name');
+                        nameDiv.textContent = 'Name:' + " " + hoTen;
+                        eventContentDiv.appendChild(nameDiv);
+
+                        const tcv = document.createElement('div');
+                        tcv.classList.add('fc-event-tcv');
+                        tcv.textContent = 'Title:' + " " + tenCV;
+                        eventContentDiv.appendChild(tcv);
+
+                        const timeDiv = document.createElement('div');
+                        timeDiv.classList.add('fc-event-time');
+                        timeDiv.textContent = "Time:" + " " + `${gioBatDau} - ${gioKetThuc}`;
+                        eventContentDiv.appendChild(timeDiv);
+
+                        const nlv = document.createElement('div');
+                        nlv.classList.add('fc-event-nlv');
+                        nlv.textContent = "Head Quarter name:" + " " + noiLamViec;
+                        eventContentDiv.appendChild(nlv);
+
+                        const nct = document.createElement('div');
+                        nct.classList.add('fc-event-nct');
+                        nct.textContent = "Work Place Name:" + " " + noiCongTac;
+                        eventContentDiv.appendChild(nct);
+
+                        const tt = document.createElement('div');
+                        tt.classList.add('fc-event-tt');
+                        tt.textContent = "Work type:" + " " + trangthai;
+                        eventContentDiv.appendChild(tt);
+
+                        // Thêm eventContentDiv vào eventElement
+                        eventElement.appendChild(eventContentDiv);
+
+                        // Tạo một lớp phủ trong suốt và gán sự kiện click
+                        const overlayDiv = document.createElement('div');
+                        overlayDiv.classList.add('fc-event-overlay');
+                        overlayDiv.style.position = 'absolute';
+                        overlayDiv.style.top = 0;
+                        overlayDiv.style.left = 0;
+                        overlayDiv.style.right = 0;
+                        overlayDiv.style.bottom = 0;
+                        overlayDiv.style.zIndex = 10; // Đặt z-index cao hơn để lớp phủ nằm trên cùng
+                        overlayDiv.style.cursor = 'pointer';
+                        overlayDiv.addEventListener('click', () => {
+                            // ... (code xử lý sự kiện click của bạn ở đây) ...
+                            // Ví dụ: mở modal
+                            $('#calendarModal').modal('show');
+                        });
+                        eventElement.appendChild(overlayDiv); // Thêm lớp phủ vào eventElement
+
+                        return { domNodes: [eventContentDiv] };
+                    }
                 },
                 timeGridDay: { // name of view
-                    titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit',  hour: 'numeric', minute: '2-digit', }
+                    titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit',  hour: 'numeric', minute: '2-digit', },
+                    slotEventOverlap : false,
+                    eventShortHeight : 500,
+                    eventContent: function (arg) {
+                        const { event } = arg;
+                        const { gioBatDau, gioKetThuc, hoTen, noiLamViec, noiCongTac, tenCV, trangthai } = event.extendedProps; // Lấy thêm hoTen
+
+                        // Tạo event element
+                        const eventElement = document.createElement('div');
+                        eventElement.classList.add('fc-event', 'fc-event-main');
+                        eventElement.style.backgroundColor = event.backgroundColor;
+
+                        // Tạo div chứa nội dung sự kiện
+                        const eventContentDiv = document.createElement('div');
+                        eventContentDiv.classList.add('fc-event-content');
+
+                        // Thêm các phần tử con vào eventContentDiv
+                        const nameDiv = document.createElement('div');
+                        nameDiv.classList.add('fc-event-name');
+                        nameDiv.textContent = 'Name:' + " " + hoTen;
+                        eventContentDiv.appendChild(nameDiv);
+
+                        const tcv = document.createElement('div');
+                        tcv.classList.add('fc-event-tcv');
+                        tcv.textContent = 'Title:' + " " + tenCV;
+                        eventContentDiv.appendChild(tcv);
+
+                        const timeDiv = document.createElement('div');
+                        timeDiv.classList.add('fc-event-time');
+                        timeDiv.textContent = "Time:" + " " + `${gioBatDau} - ${gioKetThuc}`;
+                        eventContentDiv.appendChild(timeDiv);
+
+                        const nlv = document.createElement('div');
+                        nlv.classList.add('fc-event-nlv');
+                        nlv.textContent = "Head Quarter name:" + " " + noiLamViec;
+                        eventContentDiv.appendChild(nlv);
+
+                        const nct = document.createElement('div');
+                        nct.classList.add('fc-event-nct');
+                        nct.textContent = "Work Place Name:" + " " + noiCongTac;
+                        eventContentDiv.appendChild(nct);
+
+                        const tt = document.createElement('div');
+                        tt.classList.add('fc-event-tt');
+                        tt.textContent = "Work type:" + " " + trangthai;
+                        eventContentDiv.appendChild(tt);
+
+                        // Thêm eventContentDiv vào eventElement
+                        eventElement.appendChild(eventContentDiv);
+
+                        // Tạo một lớp phủ trong suốt và gán sự kiện click
+                        const overlayDiv = document.createElement('div');
+                        overlayDiv.classList.add('fc-event-overlay');
+                        overlayDiv.style.position = 'absolute';
+                        overlayDiv.style.top = 0;
+                        overlayDiv.style.left = 0;
+                        overlayDiv.style.right = 0;
+                        overlayDiv.style.bottom = 0;
+                        overlayDiv.style.zIndex = 10; // Đặt z-index cao hơn để lớp phủ nằm trên cùng
+                        overlayDiv.style.cursor = 'pointer';
+                        overlayDiv.addEventListener('click', () => {
+                            // ... (code xử lý sự kiện click của bạn ở đây) ...
+                            // Ví dụ: mở modal
+                            $('#calendarModal').modal('show');
+                        });
+                        eventElement.appendChild(overlayDiv); // Thêm lớp phủ vào eventElement
+
+                        return { domNodes: [eventContentDiv] };
+                    }
                     // other view-specific options here
                 },
                 timeGridWeek:{
+                    slotEventOverlap : false,
+                    eventShortHeight: 50,
+                    eventMaxStack : 1,
+                    expandRows : true,
+                    eventContent: function (arg) {
+                        const { event } = arg;
+                        const { gioBatDau, gioKetThuc, hoTen, noiLamViec, noiCongTac, tenCV, trangthai } = event.extendedProps; // Lấy thêm hoTen
 
+                        // Tạo event element
+                        const eventElement = document.createElement('div');
+                        eventElement.classList.add('fc-event', 'fc-event-main');
+                        eventElement.style.backgroundColor = event.backgroundColor;
+
+                        // Tạo div chứa nội dung sự kiện
+                        const eventContentDiv = document.createElement('div');
+                        eventContentDiv.classList.add('fc-event-content');
+
+                        // Thêm các phần tử con vào eventContentDiv
+                        const nameDiv = document.createElement('div');
+                        nameDiv.classList.add('fc-event-name');
+                        nameDiv.textContent = 'Name:' + " " + hoTen;
+                        eventContentDiv.appendChild(nameDiv);
+
+                        const tcv = document.createElement('div');
+                        tcv.classList.add('fc-event-tcv');
+                        tcv.textContent = 'Title:' + " " + tenCV;
+                        eventContentDiv.appendChild(tcv);
+
+                        const timeDiv = document.createElement('div');
+                        timeDiv.classList.add('fc-event-time');
+                        timeDiv.textContent = "Time:" + " " + `${gioBatDau} - ${gioKetThuc}`;
+                        eventContentDiv.appendChild(timeDiv);
+
+                        const nlv = document.createElement('div');
+                        nlv.classList.add('fc-event-nlv');
+                        nlv.textContent = "Head Quarter name:" + " " + noiLamViec;
+                        eventContentDiv.appendChild(nlv);
+
+                        const nct = document.createElement('div');
+                        nct.classList.add('fc-event-nct');
+                        nct.textContent = "Work Place Name:" + " " + noiCongTac;
+                        eventContentDiv.appendChild(nct);
+
+                        const tt = document.createElement('div');
+                        tt.classList.add('fc-event-tt');
+                        tt.textContent = "Work type:" + " " + trangthai;
+                        eventContentDiv.appendChild(tt);
+
+                        // Thêm eventContentDiv vào eventElement
+                        eventElement.appendChild(eventContentDiv);
+
+                        // Tạo một lớp phủ trong suốt và gán sự kiện click
+                        const overlayDiv = document.createElement('div');
+                        overlayDiv.classList.add('fc-event-overlay');
+                        overlayDiv.style.position = 'absolute';
+                        overlayDiv.style.top = 0;
+                        overlayDiv.style.left = 0;
+                        overlayDiv.style.right = 0;
+                        overlayDiv.style.bottom = 0;
+                        overlayDiv.style.zIndex = 10; // Đặt z-index cao hơn để lớp phủ nằm trên cùng
+                        overlayDiv.style.cursor = 'pointer';
+                        overlayDiv.addEventListener('click', () => {
+                            // ... (code xử lý sự kiện click của bạn ở đây) ...
+                            // Ví dụ: mở modal
+                            $('#calendarModal').modal('show');
+                        });
+                        eventElement.appendChild(overlayDiv); // Thêm lớp phủ vào eventElement
+
+                        return { domNodes: [eventContentDiv] };
+                    }
                 }
             },
 
             events: listEvent,
             eventClick: function(arg) {
                 console.log(arg);
-
+                var hoTen=arg.event._def.extendedProps.hoTen;
                 var title=arg.event._def.extendedProps.tenCV;
                 var ngay=arg.event._def.extendedProps.ngayLam;
                 var giobd=arg.event._def.extendedProps.gioBatDau;
@@ -446,46 +654,14 @@
                     confirmDelete(this); // Gọi hàm confirmDelete khi nút được click
                 };
                 // $('#deleteButton input[name="id"]').val(lichId); // Đặt giá trị cho input ẩn chứa ID
-                if(userId !== arg.event._def.extendedProps.nhanVienId)
-                {
-                    document.getElementById("deleteButton").disabled = true;
-                    document.getElementById("updateButton").disabled = true;
-                }
-                else{
-                    let date=new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString().split('.')[0].slice(0,10);
-                    let time=new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString().split('.')[0].slice(11,19);
-                    if(arg.event._def.extendedProps.ngayLam> date)
-                    {
-                    document.getElementById("deleteButton").disabled = false;
-                    document.getElementById("updateButton").disabled = false;
-                    }
-                    if (arg.event._def.extendedProps.ngayLam===date
-                        && arg.event._def.extendedProps.gioBatDau<time)
-                    {
-                        document.getElementById("deleteButton").disabled =true;
-                        document.getElementById("updateButton").disabled = true;
-                    }
-                    else
-                    {
-                        document.getElementById("deleteButton").disabled =false;
-                        document.getElementById("updateButton").disabled =false;
-                    }
 
-                }
-
-                    var updateLink = '/lichlamviec/update/' + lichId;
-                    $('#updateForm').attr('action', updateLink);
-                    $('#updateForm input[name="id"]').val(lichId); // Đặt giá trị cho input ẩn chứa ID
-
-                    var deleteLink = '/lichlamviec/delete/' + lichId;
-                    $('#deleteButton').attr('href', deleteLink);
-                    $('#tenCongViec_update').val(title);
-                    $('#ngayLam_update').val(ngay);
-                    $('#gioBatDau_update').val(giobd);
-                    $('#gioKetThuc_update').val(giokt);
-                    $('#vpCT_id_update').val(vanPhongCTId.toString());
-                    $('#trangThaiLV_Id_update').val(trangThaiId.toString());
-
+                $('#hoTen').val(hoTen);
+                $('#tenCongViec_update').val(title);
+                $('#ngayLam_update').val(ngay);
+                $('#gioBatDau_update').val(giobd);
+                $('#gioKetThuc_update').val(giokt);
+                $('#vpCT_id_update').val(vanPhongCTId.toString());
+                $('#trangThaiLV_Id_update').val(trangThaiId.toString());
                 $('#calendarModal').modal();
 
             },
@@ -512,7 +688,7 @@
         const timeDiv = document.createElement('div');
         timeDiv.classList.add('fc-event-time');
         timeDiv.style.fontSize = 'smaller';
-        eventDiv.appendChild(timeDiv);
+        // eventDiv.appendChild(timeDiv);
 
         let isFormInvalid = false;
         // Hàm kiểm tra thời gian kết thúc
@@ -595,67 +771,6 @@
     });
 </script>
 
-<script>
-    // Lấy ngày hiện tại
-    var currentDate = new Date().toISOString().split('T')[0];
-
-    // Thiết lập giá trị min của input type date
-    document.getElementById("ngayLam").setAttribute("min", currentDate);
-    document.addEventListener('DOMContentLoaded', function () {
-        // ... (code của bạn)
-
-        // Lấy các phần tử input
-        const ngayLamInput = document.getElementById("ngayLam");
-        const gioBatDauInput = document.getElementById("gioBatDau");
-        const gioKetThucInput = document.getElementById("gioKetThuc");
-        const submitButton = document.querySelector("#appointmentModal form button[type=submit]");
-        // Hàm kiểm tra thời gian kết thúc
-        function checkEndTime() {
-            const ngayLam = ngayLamInput.value;
-            const gioBatDau = gioBatDauInput.value;
-            const gioKetThuc = gioKetThucInput.value;
-
-            if (ngayLam && gioBatDau && gioKetThuc) {
-                const startDateTime = new Date(ngayLam + "T" + gioBatDau);
-                const endDateTime = new Date(ngayLam + "T" + gioKetThuc);
-
-                if (endDateTime <= startDateTime) {
-                    submitButton.disabled = true; // Vô hiệu hóa nút Save
-
-                    // Hiển thị SweetAlert2
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'End time must be after start time!',
-                    });
-
-                    return false;
-                }
-            }
-            if (ngayLam && gioBatDau) {
-                const now = new Date(); // Lấy thời gian hiện tại của client (trình duyệt)
-                const inputDateTime = new Date(ngayLam + "T" + gioBatDau);
-                if (inputDateTime < now) {
-                    submitButton.disabled = true;
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'Start time must be after the current time!'
-                    });
-                    return false;
-                }
-            }
-
-            submitButton.disabled = false; // Kích hoạt lại nút Save
-            return true;
-        }
-
-        // Gắn sự kiện input cho các trường thời gian
-        ngayLamInput.addEventListener("input", checkEndTime);
-        gioBatDauInput.addEventListener("input", checkEndTime);
-        gioKetThucInput.addEventListener("input", checkEndTime);
-    });
-</script>
 <script>
     var currentDate = new Date().toISOString().split('T')[0];
 
@@ -670,7 +785,7 @@
         const submitButton = document.querySelector("#appointmentModal form button[type=submit]");
         let isFormInvalid = false;
         // Hàm kiểm tra thời gian kết thúc
-        function checkEndTime() {
+        function checkEndTimeForCreate() {
             const ngayLam = ngayLamInput.value;
             const gioBatDau = gioBatDauInput.value;
             const gioKetThuc = gioKetThucInput.value;
@@ -742,15 +857,15 @@
         }
 
         // Gắn sự kiện input cho các trường thời gian
-        ngayLamInput.addEventListener("input", checkEndTime);
-        gioBatDauInput.addEventListener("input", checkEndTime);
-        gioKetThucInput.addEventListener("input", checkEndTime);
-        tenCongViecInput.addEventListener("input", checkEndTime);
+        ngayLamInput.addEventListener("input", checkEndTimeForCreate);
+        gioBatDauInput.addEventListener("input", checkEndTimeForCreate);
+        gioKetThucInput.addEventListener("input", checkEndTimeForCreate);
+        tenCongViecInput.addEventListener("input", checkEndTimeForCreate);
         // Gửi form khi nút "Save" được click
         submitButton.addEventListener('click', function(event) {
             event.preventDefault(); // Ngăn chặn submit mặc định
 
-            if (checkEndTime()) { // Kiểm tra tính hợp lệ của form
+            if (checkEndTimeForCreate()) { // Kiểm tra tính hợp lệ của form
                 $.ajax({
                     url: '/lichlamviec/save',
                     type: 'POST',
