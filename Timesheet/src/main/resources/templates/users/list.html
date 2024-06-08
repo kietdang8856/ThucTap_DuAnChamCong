@@ -57,7 +57,7 @@
                         <td th:each="userRole : ${user.userRoles}">
                             <span th:text="${userRole.role.name}"></span>
                         </td>
-                        <td th:text="${user.enabled} ? 'Đang hoạt động' : ''">Đang hoạt động</td>
+                        <td th:text="${user.enabled} ? 'Active' : ''">Active</td>
                         <td>
                             <a th:href="@{'/admin/users/edit/'+ ${user.id}}" class="btn btn-sm btn-success">Edit</a>
                             <a th:href="@{'/admin/users/show/'+ ${user.id}}" class="btn btn-sm btn-info">Details</a>

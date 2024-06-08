@@ -70,6 +70,7 @@ public class    HomeController {
 
                 // Truyền thông tin về vai trò của người dùng vào model
                 model.addAttribute("isAdmin", userDetails.hasRole("ADMIN"));
+                model.addAttribute("currentUserId", currentUser.getId());
             }
         }
 

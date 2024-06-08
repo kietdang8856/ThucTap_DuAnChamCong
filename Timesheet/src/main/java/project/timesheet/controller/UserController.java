@@ -27,6 +27,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Blob;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +80,6 @@ public class UserController {
             @RequestParam("sdt") String sdt,
             @RequestParam("diaChi") String diaChi,
             @RequestParam("avatar") MultipartFile avatarFile,
-            @RequestParam("ngayBatDauLam") Date ngayBatDauLam,
             @RequestParam("gioiTinh") int gioiTinh,
             @RequestParam("email") String email,
             @RequestParam("chucvuId") Integer chucvuId,
@@ -96,7 +97,7 @@ public class UserController {
         nhanVien.setTenNV(tenNV);
         nhanVien.setSdt(sdt);
         nhanVien.setDiaChi(diaChi);
-        nhanVien.setNgayBatDauLam(ngayBatDauLam);
+        nhanVien.setNgayBatDauLam(Date.valueOf(LocalDate.now()));
         nhanVien.setGioiTinh(gioiTinh);
         nhanVien.setEmail(email);
         nhanVien.setUsername(username);
@@ -177,7 +178,7 @@ public class UserController {
         userRoles.forEach(userRole -> nhanVien.getUserRoles().add(userRole));
         userService.saveUser(nhanVien);
 
-        return "redirect:/";
+        return "redirect:/admin/users/list";
     }
 
 
@@ -306,7 +307,7 @@ public class UserController {
         session.setAttribute("currentUser", existingNhanVien);
 
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thành công");
-        return "redirect:/admin/users/list";
+        return "redirect:/";
     }
 
     @GetMapping("/checkSchedule/{id}")

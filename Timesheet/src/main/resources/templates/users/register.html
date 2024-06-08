@@ -63,12 +63,6 @@
             <div class="form-row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="ngayBatDauLam">Work Start Date:</label>
-                        <input type="date" class="form-control text-light"  id="ngayBatDauLam" name="ngayBatDauLam" th:value="${#dates.format(nhanVien?.ngayBatDauLam, 'yyyy-MM-dd')}" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
                         <label for="gioiTinh">Gender:</label>
                         <select id="gioiTinh" class="form-control text-light"  name="gioiTinh">
                             <option value="0" th:selected="${nhanVien?.gioiTinh == 0}">Male</option>
