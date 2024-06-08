@@ -50,11 +50,13 @@ public class    HomeController {
     }
     @GetMapping("/")
     public String showHome(Model model, HttpSession session) {
+        NhanVien nv = new NhanVien();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            NhanVien currentUser = userDetails.getNV();
 
+            NhanVien currentUser = userDetails.getNV();
+            nv=currentUser;
             if (currentUser != null) {
                 session.setAttribute("currentUser", currentUser);
 
@@ -74,6 +76,7 @@ public class    HomeController {
         }
 
         LichLamViecModel lich = new LichLamViecModel();
+        model.addAttribute("currentUserId", nv.getId());
         model.addAttribute("lichlam", lich);
         model.addAttribute("vanPhongList", vanPhongService.getALL());
         model.addAttribute("trangThaiList", trangThaiLamViecService.getALL());

@@ -97,12 +97,12 @@
                                                             </select>
                                                         </div>
 
-                                                        <button type="submit" class="btn btn-primary">Save</button>
+                                                        <button type="submit" id="updateButton" class="btn btn-primary">Save</button>
                                                     </form>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                                                    <a th:href="@{/lichlamviec/delete/}" class="btn btn-danger" id="deleteButton">Delete</a>
+                                                    <button class="btn btn-danger" id="deleteButton">Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -135,6 +135,10 @@
             </div>
             <div class="modal-body">
                 <form th:action="@{/lichlamviec/save}" th:object="${lichlam}" method="post">
+<!--                    <div class="form-group">-->
+<!--                        <label for="tenCongViec">Appointment Name</label>-->
+<!--                        <input type="text" class="form-control" id="nhanVien_id" th:field="*{nhanVien_id}">-->
+<!--                    </div>-->
                     <div class="form-group">
                         <label for="tenCongViec">Appointment Name</label>
                         <input type="text" class="form-control" id="tenCongViec" th:field="*{tenCongViec}">
@@ -147,12 +151,12 @@
 
                     <div class="form-group">
                         <label for="gioBatDau">Start Time</label>
-                        <input type="time" class="form-control" id="gioBatDau" th:field="*{gioBatDau}" min="08:00" max="17:00">
+                        <input type="time" class="form-control" id="gioBatDau" th:field="*{gioBatDau}" min="08:00" max="24:00">
                     </div>
 
                     <div class="form-group">
                         <label for="gioKetThuc">End Time</label>
-                        <input type="time" class="form-control" id="gioKetThuc" th:field="*{gioKetThuc}" min="08:00" max="17:00">
+                        <input type="time" class="form-control" id="gioKetThuc" th:field="*{gioKetThuc}" min="08:00" max="24:00">
                     </div>
 
                     <div class="form-group">
@@ -186,15 +190,17 @@
     var currentUserId = /*[[${currentUserId}]]*/ -1;
     document.addEventListener('DOMContentLoaded', function() {
         let listLichLam = [[${listLichLam}]];
+        let userId=[[${currentUserId}]]
         console.log(listLichLam);
         var listEvent =[];
+
         listLichLam.forEach(function(lich){
-            let fullTitle=lich.tenCongViec+
-                "\n" + lich.gioBatDau + "-" +lich.gioKetThuc +
-                "\n" + "TenNV: " + lich.nhanVien.tenNV +
-                "\n" + "HQ Name: " +  lich.nhanVien.vpLamViecChinh.diaChi+
-                "\n" + "Work Place Name: " + lich.vpCongTac.diaChi+
-                "\n" + "Work type: " + lich.trangThai.tenTrangThai;
+                let fullTitle= "Title:"+" " +lich.tenCongViec+
+                "\n" +"Time"+" "+lich.gioBatDau + "-" +lich.gioKetThuc +
+                "\n" + "Name: "+" "+ lich.nhanVien.tenNV +
+                "\n" + "Head Quater name:"+" "+  lich.nhanVien.vpLamViecChinh.tenVP+
+                "\n" + "Work Place Name:"+" "+ lich.vpCongTac.tenVP +
+                "\n" + "Work type:"+" " + lich.trangThai.tenTrangThai;
             let color;
             if(lich.trangThai.id===1){
                 color="#EA4215";
@@ -240,12 +246,14 @@
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
 
-            headerToolbar: { left: 'prev,next today',
+            headerToolbar: {
+                left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay,list' }, // buttons for switching between views
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,list' // Thêm chế độ xem tùy chỉnh
+            }, // buttons for switching between views
             allDaySlot: false,
             slotMinTime: '08:00:00',
-            slotMaxTime: '18:00:00',
+            slotMaxTime: '24:00:00',
             firstDay: 1,
             height: 530,
             contentHeight: 200,
@@ -255,26 +263,69 @@
                 meridiem: false // Ẩn ký hiệu AM/PM
             },
             views: {
-                dayGridMonth: { // name of view
-                    titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit' }
-                    // other view-specific options here
+                dayGridMonth: {
+                    // eventContent: function (arg) {
+                    //     const { event } = arg;
+                    //     const { gioBatDau, gioKetThuc, hoTen, noiLamViec, noiCongTac, tenCV, trangthai } = event.extendedProps; // Lấy thêm hoTen
+                    //
+                    //     // Tạo event element
+                    //     const eventElement = document.createElement('div');
+                    //     eventElement.classList.add('fc-event', 'fc-event-main');
+                    //     eventElement.style.backgroundColor = event.backgroundColor;
+                    //     eventElement.dataset.bsToggle = "modal";
+                    //     eventElement.dataset.bsTarget = "#calendarModal";
+                    //
+                    //     // Tạo div chứa nội dung sự kiện
+                    //     const eventContentDiv = document.createElement('div');
+                    //     eventContentDiv.classList.add('fc-event-content');
+                    //
+                    //     // Thêm các phần tử con vào eventContentDiv
+                    //     const nameDiv = document.createElement('div');
+                    //     nameDiv.classList.add('fc-event-name');
+                    //     nameDiv.textContent = 'Name:' + " " + hoTen;
+                    //     eventContentDiv.appendChild(nameDiv);
+                    //
+                    //     const tcv = document.createElement('div');
+                    //     tcv.classList.add('fc-event-tcv');
+                    //     tcv.textContent = 'Title:' + " " + tenCV;
+                    //     eventContentDiv.appendChild(tcv);
+                    //
+                    //     const timeDiv = document.createElement('div');
+                    //     timeDiv.classList.add('fc-event-time');
+                    //     timeDiv.textContent = "Time:" + " " + `${gioBatDau} - ${gioKetThuc}`;
+                    //     eventContentDiv.appendChild(timeDiv);
+                    //
+                    //     const nlv = document.createElement('div');
+                    //     nlv.classList.add('fc-event-nlv');
+                    //     nlv.textContent = "Head Quarter name:" + " " + noiLamViec;
+                    //     eventContentDiv.appendChild(nlv);
+                    //
+                    //     const nct = document.createElement('div');
+                    //     nct.classList.add('fc-event-nct');
+                    //     nct.textContent = "Work Place Name:" + " " + noiCongTac;
+                    //     eventContentDiv.appendChild(nct);
+                    //
+                    //     const tt = document.createElement('div');
+                    //     tt.classList.add('fc-event-tt');
+                    //     tt.textContent = "Work type:" + " " + trangthai;
+                    //     eventContentDiv.appendChild(tt);
+                    //
+                    //     // Thêm eventContentDiv vào eventElement
+                    //     eventElement.appendChild(eventContentDiv);
+                    //
+                    //     return { domNodes: [eventElement] };
+                    // },
+
                 },
                 timeGridDay: { // name of view
                     titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit',  hour: 'numeric', minute: '2-digit', }
                     // other view-specific options here
                 },
-                timeGridWeek: {
-                    type: 'timeGridWeek',
-                    slotDuration: '24:00:00', // Đặt khoảng thời gian của mỗi slot là 24h
+                timeGridWeek:{
 
-                    slotLabelFormat: [
-                        {
-                            text: '', // Không hiển thị giờ
-                        },
-                        { weekday: 'short' } // Chỉ hiển thị thứ
-                    ]
                 }
             },
+
             events: listEvent,
             eventClick: function(arg) {
                 console.log(arg);
@@ -284,16 +335,114 @@
                 var giokt=arg.event._def.extendedProps.gioKetThuc;
                 var vanPhongCTId=arg.event._def.extendedProps.vpCongTacId;
                 var trangThaiId=arg.event._def.extendedProps.trangThaiId;
-
                 var lichId=arg.event._def.publicId;
+                let timeOneMinuteLater;
+                const deleteButton = document.getElementById("deleteButton"); // Lấy nút Delete
+                if(userId !== arg.event._def.extendedProps.nhanVienId)
+                {
+                    document.getElementById("deleteButton").disabled = true;
+                    document.getElementById("updateButton").disabled = true;
+                }
+                else {
+                    let date = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại (YYYY-MM-DD)
+                    let time = new Date().toISOString().split('T')[1].slice(0, 5); // Lấy giờ hiện tại (HH:mm)
 
-                var updateLink = '/lichlamviec/update/' + lichId;
-                $('#updateForm').attr('action', updateLink);
-                $('#updateForm input[name="id"]').val(lichId); // Đặt giá trị cho input ẩn chứa ID
+                    let oneMinuteLater = new Date();
+                    oneMinuteLater.setMinutes(oneMinuteLater.getMinutes() + 1); // Cộng thêm 1 phút
+                    timeOneMinuteLater = oneMinuteLater.toISOString().split('T')[1].slice(0, 5);
 
-                var deleteLink = '/lichlamviec/delete/' + lichId;
-                $('#deleteButton').attr('href', deleteLink);
+                    // So sánh ngày và thời gian của sự kiện với ngày và giờ hiện tại + 1 phút
+                    if (ngay < date || (ngay === date && giobd < timeOneMinuteLater)) {
+                        document.getElementById("deleteButton").disabled = true;
+                        document.getElementById("updateButton").disabled = true;
+                    } else {
+                        document.getElementById("deleteButton").disabled = false;
+                        document.getElementById("updateButton").disabled = false;
+                    }
 
+                }
+
+                // var updateLink = '/lichlamviec/update/' + lichId;
+                // $('#updateForm').attr('action', updateLink);
+                // $('#updateForm input[name="id"]').val(lichId); // Đặt giá trị cho input ẩn chứa ID
+                //phần update
+                $('#updateButton').click(function(event) {
+                    event.preventDefault(); // Ngăn chặn hành vi submit mặc định của form
+
+                    confirmUpdate(lichId);
+                });
+                function confirmUpdate(lichId) {
+                    Swal.fire({
+                        title: 'Are you sure you want to update?',
+                        text: "Your work schedule information will be updated!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Update',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Gửi request AJAX để cập nhật lịch làm việc
+                            $.ajax({
+                                url: '/lichlamviec/update/' + lichId,
+                                type: 'POST',
+                                data: $('#updateForm').serialize(), // Lấy dữ liệu từ form
+                                success: function (response) {
+                                    // Xử lý kết quả trả về từ server (nếu cần)
+                                    Swal.fire({
+                                        title: 'Success!',
+                                        text: 'Work schedule has been updated.',
+                                        icon: 'success'
+                                    });
+                                    $('#calendarModal').modal('hide'); // Đóng modal
+                                    setTimeout(function() {
+                                        location.reload(); // Reload trang sau 1 giây
+                                    }, 1000); // 1000 milliseconds = 1 giây
+                                },
+                                error: function (xhr, status, error) {
+                                    // Xử lý lỗi (nếu cần)
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: 'An error has occurred!',
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+                //phần delete
+                function confirmDelete(button) {
+                    Swal.fire({
+                        title: 'Are you sure you want to delete?',
+                        text: "You will not be able to restore this schedule!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Delete',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Thực hiện xóa lịch làm việc tại đây
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Work schedule has been updated.',
+                                icon: 'success'
+                            });
+                            setTimeout(function() {
+                                window.location.href = '/lichlamviec/delete/' + lichId;
+                            }, 1000); // 1000 milliseconds = 1 giây
+
+                        }
+                    });
+                }
+                // var deleteLink = '/lichlamviec/delete/' + lichId;
+                deleteButton.onclick = function() {
+                    confirmDelete(this); // Gọi hàm confirmDelete khi nút được click
+                };
+                // $('#deleteButton input[name="id"]').val(lichId); // Đặt giá trị cho input ẩn chứa ID
 
                 $('#tenCongViec_update').val(title);
                 $('#ngayLam_update').val(ngay);
@@ -321,14 +470,52 @@
         // Lấy các phần tử input
         const ngayLamInput = document.getElementById("ngayLam_update");
         const gioBatDauInput = document.getElementById("gioBatDau_update");
-        const gioKetThucInput = document.getElementById("gioKetThuc");
-        const submitButton = document.querySelector("#appointmentModal form button[type=submit]");
+        const gioKetThucInput = document.getElementById("gioKetThuc_update");
+        const tenCongViecInput = document.getElementById("tenCongViec_update");
+        const submitButton = document.querySelector("#calendarModal form button[type=submit]");
+        const timeDiv = document.createElement('div');
+        timeDiv.classList.add('fc-event-time');
+        timeDiv.style.fontSize = 'smaller';
+        eventDiv.appendChild(timeDiv);
+
+        let isFormInvalid = false;
         // Hàm kiểm tra thời gian kết thúc
         function checkEndTime() {
             const ngayLam = ngayLamInput.value;
             const gioBatDau = gioBatDauInput.value;
             const gioKetThuc = gioKetThucInput.value;
+            const tenCongViec = tenCongViecInput.value;
+            if (!ngayLam || !gioBatDau || !gioKetThuc || !tenCongViec) {
+                if (!isFormInvalid) { // Chỉ hiển thị thông báo lỗi một lần
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Attention!',
+                        text: 'Please fill in the complete date and time information!',
+                    });
+                    isFormInvalid = true; // Đánh dấu form là không hợp lệ
+                }
+                submitButton.disabled = true; // Vô hiệu hóa nút Save
+                return false; // Form không hợp lệ
+            }
+            if (ngayLam && gioBatDau && gioKetThuc) {
+                const startDateTime = new Date(ngayLam + "T" + gioBatDau);
+                const endDateTime = new Date(ngayLam + "T" + gioKetThuc);
 
+                // Tạo một đối tượng Date đại diện cho 8 giờ sáng của ngày đã chọn
+                const eightAM = new Date(ngayLam + "T08:00");
+
+                if (startDateTime < eightAM || endDateTime < eightAM) {
+                    submitButton.disabled = true; // Vô hiệu hóa nút Save
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Warning!',
+                        text: 'Start and end times cannot be before 8:00 AM!',
+                    });
+
+                    return false;
+                }
+            }
             if (ngayLam && gioBatDau && gioKetThuc) {
                 const startDateTime = new Date(ngayLam + "T" + gioBatDau);
                 const endDateTime = new Date(ngayLam + "T" + gioKetThuc);
@@ -336,7 +523,6 @@
                 if (endDateTime <= startDateTime) {
                     submitButton.disabled = true; // Vô hiệu hóa nút Save
 
-                    // Hiển thị SweetAlert2
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
@@ -346,8 +532,9 @@
                     return false;
                 }
             }
+
             if (ngayLam && gioBatDau) {
-                const now = new Date(); // Lấy thời gian hiện tại của client (trình duyệt)
+                const now = new Date();
                 const inputDateTime = new Date(ngayLam + "T" + gioBatDau);
                 if (inputDateTime < now) {
                     submitButton.disabled = true;
@@ -356,20 +543,22 @@
                         title: 'Error!',
                         text: 'Start time must be after the current time!'
                     });
-                    return false;
+                    return false; // Form không hợp lệ
                 }
             }
 
-            submitButton.disabled = false; // Kích hoạt lại nút Save
-            return true;
+            submitButton.disabled = false;
+            return true; // Form hợp lệ
         }
 
         // Gắn sự kiện input cho các trường thời gian
         ngayLamInput.addEventListener("input", checkEndTime);
         gioBatDauInput.addEventListener("input", checkEndTime);
         gioKetThucInput.addEventListener("input", checkEndTime);
+        tenCongViecInput.addEventListener("input", checkEndTime);
     });
 </script>
+
 <script>
     // Lấy ngày hiện tại
     var currentDate = new Date().toISOString().split('T')[0];
@@ -431,6 +620,144 @@
         gioKetThucInput.addEventListener("input", checkEndTime);
     });
 </script>
+<script>
+    var currentDate = new Date().toISOString().split('T')[0];
+
+    // Thiết lập giá trị min của input type date
+    document.getElementById("ngayLam").setAttribute("min", currentDate);
+    document.addEventListener('DOMContentLoaded', function () {
+        // Lấy các phần tử input
+        const ngayLamInput = document.getElementById("ngayLam");
+        const gioBatDauInput = document.getElementById("gioBatDau");
+        const gioKetThucInput = document.getElementById("gioKetThuc");
+        const tenCongViecInput = document.getElementById("tenCongViec");
+        const submitButton = document.querySelector("#appointmentModal form button[type=submit]");
+        let isFormInvalid = false;
+        // Hàm kiểm tra thời gian kết thúc
+        function checkEndTime() {
+            const ngayLam = ngayLamInput.value;
+            const gioBatDau = gioBatDauInput.value;
+            const gioKetThuc = gioKetThucInput.value;
+            const tenCongViec = tenCongViecInput.value;
+            if (!ngayLam || !gioBatDau || !gioKetThuc || !tenCongViec) {
+                if (!isFormInvalid) { // Chỉ hiển thị thông báo lỗi một lần
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Attention!',
+                        text: 'Please fill in the complete date and time information!',
+                    });
+                    isFormInvalid = true; // Đánh dấu form là không hợp lệ
+                }
+                submitButton.disabled = true; // Vô hiệu hóa nút Save
+                return false; // Form không hợp lệ
+            }
+            if (ngayLam && gioBatDau && gioKetThuc) {
+                const startDateTime = new Date(ngayLam + "T" + gioBatDau);
+                const endDateTime = new Date(ngayLam + "T" + gioKetThuc);
+
+                // Tạo một đối tượng Date đại diện cho 8 giờ sáng của ngày đã chọn
+                const eightAM = new Date(ngayLam + "T08:00");
+
+                if (startDateTime < eightAM || endDateTime < eightAM) {
+                    submitButton.disabled = true; // Vô hiệu hóa nút Save
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Warning!',
+                        text: 'Start and end times cannot be before 8:00 AM!',
+                    });
+
+                    return false;
+                }
+            }
+            if (ngayLam && gioBatDau && gioKetThuc) {
+                const startDateTime = new Date(ngayLam + "T" + gioBatDau);
+                const endDateTime = new Date(ngayLam + "T" + gioKetThuc);
+
+                if (endDateTime <= startDateTime) {
+                    submitButton.disabled = true; // Vô hiệu hóa nút Save
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'End time must be after start time!',
+                    });
+
+                    return false;
+                }
+            }
+
+            if (ngayLam && gioBatDau) {
+                const now = new Date();
+                const inputDateTime = new Date(ngayLam + "T" + gioBatDau);
+                if (inputDateTime < now) {
+                    submitButton.disabled = true;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Start time must be after the current time!'
+                    });
+                    return false; // Form không hợp lệ
+                }
+            }
+
+            submitButton.disabled = false;
+            return true; // Form hợp lệ
+        }
+
+        // Gắn sự kiện input cho các trường thời gian
+        ngayLamInput.addEventListener("input", checkEndTime);
+        gioBatDauInput.addEventListener("input", checkEndTime);
+        gioKetThucInput.addEventListener("input", checkEndTime);
+        tenCongViecInput.addEventListener("input", checkEndTime);
+        // Gửi form khi nút "Save" được click
+        submitButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Ngăn chặn submit mặc định
+
+            if (checkEndTime()) { // Kiểm tra tính hợp lệ của form
+                $.ajax({
+                    url: '/lichlamviec/save',
+                    type: 'POST',
+                    data: $('#appointmentModal form').serialize(), // Lấy dữ liệu từ form
+                    success: function(response) {
+                        // Hiển thị SweetAlert2 khi tạo lịch thành công
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Work schedule has been created.',
+                            icon: 'success'
+                        });
+
+                        $('#appointmentModal').modal('hide'); // Đóng modal
+                        setTimeout(function() {
+                            location.reload(); // Reload trang sau 1 giây
+                        }, 1000); // 1000 milliseconds = 1 giây
+                    },
+                    error: function(xhr, status, error) {
+                        if (xhr.status === 400) { // Kiểm tra lỗi validation
+                            const errors = xhr.responseJSON.errors; // Lấy danh sách lỗi từ response
+                            let errorMessage = "Đã có lỗi xảy ra:\n";
+                            for (let i = 0; i < errors.length; i++) {
+                                errorMessage += "- " + errors[i].defaultMessage + "\n";
+                            }
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: errorMessage
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'An error has occurred!',
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+
 </body>
 
 </html>
