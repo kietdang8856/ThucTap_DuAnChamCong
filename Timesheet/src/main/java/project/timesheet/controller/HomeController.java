@@ -58,7 +58,9 @@ public class    HomeController {
             NhanVien currentUser = userDetails.getNV();
             nv=currentUser;
             if (currentUser != null) {
-                session.setAttribute("currentUser", currentUser);
+                currentUser = nhanVienService.findById(currentUser.getId());
+
+                session.setAttribute("currentUser", currentUser); // Cập nhật lại session
 
                 // Lấy lịch làm việc cho người dùng hiện tại
                 List<LichLamViec> listLich;
@@ -92,12 +94,16 @@ public class    HomeController {
     @GetMapping("/profile")
     public String showProfile(Model model, HttpSession session) {
         NhanVien currentUser = (NhanVien) session.getAttribute("currentUser");
-        model.addAttribute("currentUser", currentUser);
+
+        // Tải lại thông tin người dùng từ database
+        currentUser = nhanVienService.findById(currentUser.getId()); // Hoặc bất kỳ phương thức nào tương ứng để lấy thông tin người dùng theo ID
+
+        model.addAttribute("currentUser", currentUser); // Cập nhật model với thông tin mới nhất
+
         return "profile";
     }
     @PostMapping("/profile/update/{id}")
     public String updateProfile(
-            // ... (các tham số giống như phương thức editUser trong UserController)
             @PathVariable int id,
             @RequestParam("tenNV") String tenNV,
             @RequestParam("sdt") String sdt,
@@ -147,7 +153,8 @@ public class    HomeController {
             return "/profile";
         }
         nhanVienService.saveUser(existingNhanVien);
-        session.setAttribute("currentUser", existingNhanVien);
+        session.setAttribute("currentUser", nhanVienService.findById(id)); // Tải lại thông tin từ database sau khi cập nhật.
+        model.addAttribute("updateSuccess", true); // Thêm thuộc tính này vào model
         return "redirect:/";
     }
     @GetMapping("/profile/changepass")
