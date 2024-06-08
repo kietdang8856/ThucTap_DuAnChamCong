@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'home','Home')}">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'home','Home')}"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security6">
 <head>
     <!-- Add necessary CSS and JS links here -->
 
@@ -98,11 +100,14 @@
                                                         </div>
 
                                                         <button type="submit" id="updateButton" class="btn btn-primary">Save</button>
+
+                                                        <button  type="submit" class="btn btn-primary" id="updateButton">Save</button>
                                                     </form>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                                                     <button class="btn btn-danger" id="deleteButton">Delete</button>
+                                                    <button th:href="@{/lichlamviec/delete/}" class="btn btn-danger" id="deleteButton">Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -329,6 +334,7 @@
             events: listEvent,
             eventClick: function(arg) {
                 console.log(arg);
+
                 var title=arg.event._def.extendedProps.tenCV;
                 var ngay=arg.event._def.extendedProps.ngayLam;
                 var giobd=arg.event._def.extendedProps.gioBatDau;
@@ -443,13 +449,46 @@
                     confirmDelete(this); // Gọi hàm confirmDelete khi nút được click
                 };
                 // $('#deleteButton input[name="id"]').val(lichId); // Đặt giá trị cho input ẩn chứa ID
+                if(userId !== arg.event._def.extendedProps.nhanVienId)
+                {
+                    document.getElementById("deleteButton").disabled = true;
+                    document.getElementById("updateButton").disabled = true;
+                }
+                else{
+                    let date=new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString().split('.')[0].slice(0,10);
+                    let time=new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString().split('.')[0].slice(11,19);
+                    if(arg.event._def.extendedProps.ngayLam> date)
+                    {
+                    document.getElementById("deleteButton").disabled = false;
+                    document.getElementById("updateButton").disabled = false;
+                    }
+                    if (arg.event._def.extendedProps.ngayLam===date
+                        && arg.event._def.extendedProps.gioBatDau<time)
+                    {
+                        document.getElementById("deleteButton").disabled =true;
+                        document.getElementById("updateButton").disabled = true;
+                    }
+                    else
+                    {
+                        document.getElementById("deleteButton").disabled =false;
+                        document.getElementById("updateButton").disabled =false;
+                    }
 
-                $('#tenCongViec_update').val(title);
-                $('#ngayLam_update').val(ngay);
-                $('#gioBatDau_update').val(giobd);
-                $('#gioKetThuc_update').val(giokt);
-                $('#vpCT_id_update').val(vanPhongCTId.toString());
-                $('#trangThaiLV_Id_update').val(trangThaiId.toString());
+                }
+
+                    var updateLink = '/lichlamviec/update/' + lichId;
+                    $('#updateForm').attr('action', updateLink);
+                    $('#updateForm input[name="id"]').val(lichId); // Đặt giá trị cho input ẩn chứa ID
+
+                    var deleteLink = '/lichlamviec/delete/' + lichId;
+                    $('#deleteButton').attr('href', deleteLink);
+                    $('#tenCongViec_update').val(title);
+                    $('#ngayLam_update').val(ngay);
+                    $('#gioBatDau_update').val(giobd);
+                    $('#gioKetThuc_update').val(giokt);
+                    $('#vpCT_id_update').val(vanPhongCTId.toString());
+                    $('#trangThaiLV_Id_update').val(trangThaiId.toString());
+
                 $('#calendarModal').modal();
 
             },

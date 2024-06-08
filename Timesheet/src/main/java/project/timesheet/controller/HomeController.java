@@ -54,7 +54,6 @@ public class    HomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
             NhanVien currentUser = userDetails.getNV();
             nv=currentUser;
             if (currentUser != null) {
