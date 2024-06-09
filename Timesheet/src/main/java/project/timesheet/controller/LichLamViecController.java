@@ -194,13 +194,28 @@
                     filter1.removeIf(lich -> lich.getTrangThai().getId() != filter.getTrangThaiLamViec_Id());
                 }
 
-            if (!Objects.equals(filter.getTenNV(), "")) {
-                    filter1.removeIf(lich -> !lich.getNhanVien().getTenNV().contains(filter.getTenNV()));
-                }
+//            if (filter.getTenNV() != null && !filter.getTenNV().isEmpty()) {
+//                String searchName = filter.getTenNV().toLowerCase(); // Chuyển về chữ thường
+//                filter1.removeIf(lich -> !lich.getNhanVien().getTenNV().toLowerCase().contains(searchName)); // So sánh sau khi chuyển về chữ thường
+//            }
+
 
                 if (filter.getVpCongTac_id() != null) {
                     filter1.removeIf(lich -> lich.getVpCongTac().getId() != filter.getVpCongTac_id());
                 }
+            // Cải tiến tìm kiếm tên nhân viên
+            if (filter.getTenNV() != null && !filter.getTenNV().isEmpty()) {
+                String[] searchTerms = filter.getTenNV().toLowerCase().split("\\s+"); // Tách thành các từ riêng biệt
+                filter1.removeIf(lich -> {
+                    String tenNV = lich.getNhanVien().getTenNV().toLowerCase();
+                    for (String term : searchTerms) {
+                        if (!tenNV.contains(term)) {
+                            return true; // Loại bỏ nếu có bất kỳ từ nào không khớp
+                        }
+                    }
+                    return false; // Giữ lại nếu tất cả các từ đều khớp
+                });
+            }
             LichLamViecModel lichlam = new LichLamViecModel();
             model.addAttribute("lichlam",lichlam);
                 model.addAttribute("listLichLam", filter1);
@@ -211,14 +226,30 @@
                 return "result";
             }
         @RequestMapping("/update/{id}")
-        public String update(@ModelAttribute("lichlam") LichLamViecModel update,@PathVariable("id") int id) {
+        public String update(@ModelAttribute("lichlam") LichLamViecModel update,@PathVariable("id") int id,Model model) {
             LichLamViec lich=service.getOne(id);
             LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")).plusMinutes(1);
-
+            boolean hasError = false; // Biến đánh dấu có lỗi hay không
             // Chuyển đổi ngày và giờ bắt đầu của lịch làm việc thành LocalDateTime
             LocalDateTime lichDateTime = LocalDateTime.of(lich.getNgayLam().toLocalDate(), lich.getGioBatDau());
+            if (update.getGioBatDau().isAfter(update.getGioKetThuc()) || update.getGioKetThuc().isBefore(update.getGioBatDau())) {
+                hasError = true; // Đánh dấu có lỗi
+            }
+            if (update.getTenCongViec().trim().isEmpty()) {
+                model.addAttribute("sweetAlertType", "error");
+                model.addAttribute("sweetAlertTitle", "Lỗi");
+                model.addAttribute("sweetAlertText", "Tên công việc không được để trống.");
+                hasError = true;
+            }
             if (lichDateTime.isAfter(now))//th ngay lam cua lich > ngay hien tai
             {
+                if (hasError) {
+                    // Hiển thị SweetAlert2 nếu có lỗi
+                    model.addAttribute("sweetAlertType", "error");
+                    model.addAttribute("sweetAlertTitle", "Lỗi");
+                    model.addAttribute("sweetAlertText", "Giờ bắt đầu phải nhỏ hơn giờ kết thúc.");
+                    return "redirect:/";
+                } else {
                 lich.setGioBatDau(update.getGioBatDau());
                 lich.setGioKetThuc(update.getGioKetThuc());
                 lich.setNgayLam(update.getNgayLam());
@@ -227,7 +258,7 @@
 
                 lich.setTrangThai(trangThaiLamViecService.getOne(update.getTrangThaiLamViec_Id()));
                 lich.setVpCongTac(vanPhongService.getVanPhongById(update.getVpCongTac_id()));
-                service.update(lich);
+                service.update(lich);}
             }
             return "redirect:/";
         }

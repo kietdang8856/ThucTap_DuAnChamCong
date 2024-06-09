@@ -380,3 +380,23 @@ button:hover{
 .fc-h-event .fc-event-title {
 	font-size: 12px;
 }
+.fc-daygrid-event-harness {
+	margin-bottom: 5px;
+	padding: 3px; /* Thêm padding vào bên trong sự kiện */
+
+}
+.fc-timegrid-event-harness-inset {
+	margin-bottom: 5px; /* Khoảng cách giữa các sự kiện */
+	padding: 3px; /* Thêm padding vào bên trong sự kiện */
+}
+/* CSS cho dropdown */
+.dropdown-menu {
+	max-height: 150px;    /* Giới hạn chiều cao của dropdown */
+	overflow-y: auto;     /* Cho phép cuộn nếu danh sách dài hơn chiều cao */
+	white-space: nowrap;  /* Ngăn không cho tên nhân viên xuống dòng */
+}
+
+.dropdown-item {
+	display: block;      /* Hiển thị mỗi mục trên một dòng riêng biệt */
+	width: fit-content;   /* Tự động điều chỉnh chiều rộng theo nội dung */
+}
