@@ -47,6 +47,20 @@
 
                                     </div>
                                 </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title text-center"><strong>Work status</strong></h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="external-events">
+                                            <div class="external-event bg-success ui-draggable ui-draggable-handle" style="position: relative; background-color:#EA4215 ">Work At Company</div>
+                                            <div class="external-event bg-warning ui-draggable ui-draggable-handle" style="position: relative;background-color:#15BDEA">Work At Home</div>
+                                            <div class="external-event bg-info ui-draggable ui-draggable-handle" style="position: relative;background-color:#AC15EA">Go On Business</div>
+                                            <div class="external-event bg-danger ui-draggable ui-draggable-handle" style="position: relative;background-color:#53EA15">Leave of absence</div>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                         <!-- /.col -->
@@ -257,7 +271,7 @@
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay,list' // Thêm chế độ xem tùy chỉnh
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek' // Thêm chế độ xem tùy chỉnh
             }, // buttons for switching between views
             allDaySlot: false,
             slotMinTime: '08:00:00',
@@ -583,6 +597,7 @@
                     confirmUpdate(lichId);
                 });
                 function confirmUpdate(lichId) {
+
                     Swal.fire({
                         title: 'Are you sure you want to update?',
                         text: "Your work schedule information will be updated!",
@@ -613,6 +628,16 @@
                                 },
                                 error: function (xhr, status, error) {
                                     // Xử lý lỗi (nếu cần)
+                                    if (xhr.status === 400) { // Kiểm tra lỗi từ server
+                                        const responseJSON = JSON.parse(xhr.responseText);
+                                        const errorMessage = responseJSON.sweetAlertText || "Đã có lỗi xảy ra.";
+
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Lỗi',
+                                            text: errorMessage
+                                        });
+                                    }
                                     Swal.fire({
                                         icon: 'error',
                                         title: 'Oops...',
