@@ -391,7 +391,7 @@ button:hover{
 }
 /* CSS cho dropdown */
 .dropdown-menu {
-	max-height: 150px;    /* Giới hạn chiều cao của dropdown */
+	max-height: 300px;    /* Giới hạn chiều cao của dropdown */
 	overflow-y: auto;     /* Cho phép cuộn nếu danh sách dài hơn chiều cao */
 	white-space: nowrap;  /* Ngăn không cho tên nhân viên xuống dòng */
 }
