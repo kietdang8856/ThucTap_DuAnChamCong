@@ -22,3 +22,14 @@ update 08/05/2024
 
 update 09/05/2024
 + Login thành công
+
+update 11/06/2024
++ Hoàn thiện chức năng đăng nhập , tạo tài khoản user trong admin 
++ Hoàn thiện chức năng đăg lịch , sửa , xóa
++ Admin có thể xem và tìm tất cả lịch của toàn bộ user , User chỉ có thể xem lịch của bản thân 
++ tạo văn phòng , tạo chức vụ 
++ thực hiện deloy lên aws 
++ http://datlichchamcong-env.eba-k2xrewug.ap-northeast-1.elasticbeanstalk.com/
+
++ Các công nghệ sử dụng 
++ Spring boot mvc , api , thymeleaf , Mysql , aws 
