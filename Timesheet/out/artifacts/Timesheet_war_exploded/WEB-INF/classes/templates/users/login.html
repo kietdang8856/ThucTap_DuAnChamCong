@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" th:href="@{/user/css/style.css}">
+</head>
+<body>
+<div class="login-container">
+    <div class="welcome">
+        <img id="img-cty" src="/user/img/urban.png" alt="Avatar" >
+        <div>Welcome back!</div>
+    </div>
+    <form id="login-form" th:action="@{/login}" method="post">
+        <div class="input-group">
+            <input type="text" id="username" name="username" required>
+            <label for="username">Username</label>
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" name="password" required>
+            <label for="password">Password</label>
+        </div>
+        <button type="submit">Sign In</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script th:src="@{/user/js/main.js}"></script>
+<script>
+    $(document).ready(function() {
+        $('#login-form').submit(function(event) {
+            event.preventDefault();
+
+            const formData = $(this).serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: '/login',
+                data: formData,
+                success: function(response) {
+                    if (response === "success") {
+                        // Đăng nhập thành công
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Login successful!',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        }).then(function() {
+                            window.location.href = "/";
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401 || xhr.status === 403) { // Kiểm tra trạng thái 401 hoặc 403
+                        // Đăng nhập thất bại hoặc vượt quá số lần thử
+                        const errorMessage = xhr.responseText;
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'error',
+                            title: errorMessage,
+                            showConfirmButton: true, // Hiển thị nút xác nhận
+                            toast: false, // Hiển thị dưới dạng popup bình thường
+                            customClass: {
+                                popup: 'custom-popup'
+                            }
+                        });
+                    } else {
+                        // Xử lý các lỗi khác (nếu có)
+                        console.error("Error:", xhr.statusText);
+                    }
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

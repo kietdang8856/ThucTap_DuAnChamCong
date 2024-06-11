@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'edit','Edit User')}">
+<body>
+<div class="col-xs-12">
+    <div class="box">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1><a th:text="${pageTitle}">.</a></h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+        <hr>
+        <form th:action="@{/admin/users/edit/{id}(id=${user.id})}" id="changePasswordForm" method="post" enctype="multipart/form-data" class="forms-sample">
+            <div class="form-row">
+                <div class="col-md-6 form-group ">
+                    <label for="tenNV">Fullname:</label>
+                    <input type="text" class="form-control text-light" id="tenNV" name="tenNV" th:value="${user.tenNV}" required />
+                </div>
+                <div class="col-md-6 form-group ">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" th:value="${user.username}" readonly class="disabled-input form-control text-light" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="password">Password:</label>
+                    <input class="form-control text-light" type="password" id="password" name="password" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="sdt">Phone:</label>
+                    <input class="form-control text-light" type="text" id="sdt" name="sdt" th:value="${user.sdt}" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="diaChi">Address:</label>
+                    <input type="text" class="form-control text-light" id="diaChi" name="diaChi" th:value="${user.diaChi}" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="avatar">Avatar:</label>
+
+                    <div class="avatar-section"> <input type="file" class="form-control text-light" id="avatar" name="avatar" accept="image/*" onchange="previewImage(this);" />
+                        <img id="avatarPreview" src="#" alt="New Avatar Preview" style="display: none; max-width: 200px; max-height: 200px;"/>
+                    </div>
+
+                    <div class="avatar-section" th:if="${user.avatarPath != null}">  <span>Current Avatar:</span>
+                        <img th:src="@{'/user/img/' + ${user.avatarPath}}" alt="Current Avatar" style="width: 100px; height: 100px;"/>
+                    </div>
+
+                    <div th:if="${avatarError}" class="error" th:text="${avatarError}"></div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="ngayBatDauLam">Work Start Date:</label>
+                    <input type="date" class="form-control text-light" id="ngayBatDauLam" name="ngayBatDauLam" th:value="${#dates.format(user.ngayBatDauLam, 'yyyy-MM-dd')}" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="gioiTinh">Gender:</label>
+                    <select id="gioiTinh" class="form-control text-light" name="gioiTinh">
+                        <option value="0" th:selected="${user.gioiTinh == 0}">Male</option>
+                        <option value="1" th:selected="${user.gioiTinh == 1}">Female</option>
+                        <option value="2" th:selected="${user.gioiTinh == 2}">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="email">Email:</label>
+                    <input type="email"  id="email" name="email" th:value="${user.email}" readonly class="disabled-input form-control text-light" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="chucvuId">Position:</label>
+                    <select id="chucvuId" class="form-control text-light" name="chucvuId">
+                        <option th:each="chucvu : ${chucVus}"
+                                th:value="${chucvu.id}"
+                                th:text="${chucvu.tenChucVu}"
+                                th:selected="${chucvu.id == user.chucvu.id}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="vpchinhId">Main Office:</label>
+                    <select id="vpchinhId" class="form-control text-light" name="vpchinhId">
+                        <option th:each="vanPhong : ${vanPhongs}"
+                                th:value="${vanPhong.id}"
+                                th:text="${vanPhong.tenVP}"
+                                th:selected="${vanPhong.id == user.vpLamViecChinh.id}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="roles">Roles:</label>
+                    <select id="roles" class="form-control text-light" name="roles">
+                        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"
+                                th:selected="${userRoles.contains(role)}"></option>
+                    </select>
+                    <div th:if="${roleError}" class="error" th:text="${roleError}"></div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Save</button>
+            <a th:href="@{'/admin/users/list'}" class="btn btn-danger btn-lg btn-block">Back</a>
+        </form>
+    </div>
+</div>
+
+<script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#avatarPreview').attr('src', e.target.result);
+                $('#avatarPreview').show();
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    changePasswordForm.addEventListener('submit', (event) => {
+        const tenNV = document.getElementById('tenNV').value;
+        const sdt = document.getElementById('sdt').value;
+        const diaChi = document.getElementById('diaChi').value;
+        const ngayBatDauLam = document.getElementById('ngayBatDauLam').value;
+        const chucvuId = document.getElementById('chucvuId').value;
+        const vpchinhId = document.getElementById('vpchinhId').value;
+        const errors = [];
+        if(tenNV ===""){
+            errors.push('-Please enter your name.')
+        }
+        if(sdt ===""){
+            errors.push('-Please enter your phone number.')
+        }
+        if(diaChi ===""){
+            errors.push('-Please enter your address.')
+        }
+        if(ngayBatDauLam ===""){
+            errors.push('-Please select your start date.')
+        }
+        if(chucvuId ===""){
+            errors.push('-Please select your job title.')
+        }
+        if(vpchinhId ===""){
+            errors.push('-Please select your main office.')
+        }
+        if (errors.length > 0) {
+            event.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'ERROR!',
+                html: errors.join('<br>'),
+            });
+        }
+    });
+</script>
+</body>
+</html>

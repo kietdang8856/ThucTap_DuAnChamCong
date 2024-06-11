@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'editVanPhong','Edit Office')}">
+<head>
+    <title>Chỉnh Sửa Văn Phòng</title>
+    <meta charset="UTF-8">
+    <!-- Thay thế layout bằng layout phù hợp -->
+</head>
+<body>
+<section>
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><a th:href="@{/admin/office/list}" th:text="${pageTitle}">.</a></h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+            <hr>
+            <!-- Form chỉnh sửa thông tin văn phòng -->
+            <form th:action="@{/admin/office/update/{id}(id=${vanphong.id})}" th:object="${vanphong}" method="post">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="name">Name Office:</label>
+                        <input type="text" id="name" th:field="*{tenVP}" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="officeAddress">Address Office:</label>
+                        <input type="text" id="officeAddress" th:field="*{diaChi}" class="form-control" />
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button a th:href="@{/admin/office/list}" class="btn btn-danger">Back</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.box -->
+    </div>
+</section>
+</body>
+</html>

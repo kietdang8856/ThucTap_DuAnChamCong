@@ -1,0 +1,402 @@
+.box-tools .breadcrumb{
+	margin-bottom: 0;
+	padding: 5px;
+	background: none;
+}
+.box-tools .breadcrumb li{
+	margin-right: 15px;
+	float: left
+}
+.box-tools .breadcrumb li a{
+	color: #333
+}
+.content-header > .breadcrumb{
+	padding: 0 7px
+}
+.content .panel-body{
+	padding: 5px
+}
+.table-form .form-inline .input-group>.form-control{
+	width: 300px;
+}
+.panel-pagination .panel-body{
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.post-category{
+	padding-left: 0
+}
+.post-category ul{
+	padding-left: 15px
+}
+.btn-social{
+	padding-left: 32px
+}
+.btn-social > :first-child {
+    width: 32px;
+    line-height: 32px;
+    font-size: 16px;
+}
+.table-action a.label{
+	margin-left: 5px
+}
+/* Trong file CSS của bạn (ví dụ: style.css) */
+.disabled-input {
+
+	color: #999; /* Màu chữ nhạt hơn */
+}
+@import url('https://fonts.googleapis.com/css2?family=Rowdies&family=Titillium+Web&display=swap');
+
+.strike {
+	text-decoration: line-through;
+}
+
+
+
+.todo-input{
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	row-gap: 1rem;
+}
+
+.todoTable-block{
+	margin-top: 1rem;
+}
+
+.pagination-pages{
+	text-align: right;
+}
+
+.pagination-pages > * {
+	margin-right: 0.5rem;
+	cursor: pointer;
+}
+
+.material-icons{
+	cursor: pointer;
+}
+
+::-ms-input-placeholder{
+	color: #2532e2;
+}
+
+::-webkit-input-placeholder{
+	color: #2532e2;
+}
+
+::placeholder{
+	color: #2532e2;
+}
+
+input {
+	color:#2532e2;
+}
+
+h3 {
+	color:#2532e2;
+	font-family: 'Rowdies', cursive;
+}
+
+
+body{
+
+	font-family: 'Titillium Web', sans-serif;
+}
+
+.todo-block{
+	border: 1px solid #ff8e72;
+	padding: 1rem;
+	border-radius: 20px;
+	color: #a11e12;
+}
+
+@media screen and (max-width: 767px) {
+	/* for mobile or small screen device */
+	#todoTable, .todo-calendar{
+		margin-top: 1rem;
+	}
+}
+
+@media screen and (min-width: 768px) {
+	/* for tablets or laptops or desktops */
+	.todo-grid-parent{
+		display: grid;
+		grid-template-columns: 2fr 3fr;
+		column-gap: 1rem;
+	}
+
+	#calendar{
+		position: sticky;
+		top: 0;
+	}
+}
+
+.todo-overlay{
+	width: 100vw;
+	height: 100vh;
+	background-color: #ddd;
+	position: fixed;
+	top: 0;
+	left: 0;
+	opacity: 0.9;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transform: translateX(-100vw);
+	transition: transform 250ms;
+	z-index: 2;
+}
+
+.todo-modal{
+	min-width: 50vw;
+	height: 50vh;
+	/*border: 1px solid green;*/
+	background-color: #ffd6cc;
+}
+
+.todo-modal-close-btn{
+	background-color: red;
+	position: absolute;
+	top: 2rem;
+	right: 2rem;
+	width: 2rem;
+	height: 2rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
+	color: white;
+	font-weight: bold;
+}
+
+.slidedIntoView {
+	transform: translateX(0);
+	transition: transform 650ms;
+}
+
+#todoTable tr:nth-child(even) {
+	background-color: #ffd6cc;
+}
+
+button{
+	background-color: #ffd6cc;
+	color: #a11e12;
+	border: 1px outset #ed6a5e;
+}
+
+button:active{
+	border: 1px inset #ed6a5e;
+}
+
+button:hover{
+	background-color: #ffad99;
+}
+
+.chevron{
+	transform: translateY(0.4rem);
+}
+
+.itemsPerPage{
+	text-align: right;
+	margin-bottom: 0.5rem;
+}
+.fc-tooltip {
+	position: relative;
+	background-color: #606c84; /* Màu xanh nhạt */
+	border: 1px solid #b2ebf2; /* Viền xanh nhạt */
+	padding: 10px;
+	z-index: 1000;
+	display: none; /* Ẩn tooltip ban đầu */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+	width: 250px; /* Độ rộng của tooltip */
+	text-align: left; /* Căn trái nội dung */
+}
+
+.fc-tooltip .tooltip-content {
+	font-size: 14px;
+}
+
+.fc-tooltip table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.fc-tooltip th, .fc-tooltip td {
+	padding: 5px;
+	text-align: left;
+	border-bottom: 1px solid #b2ebf2; /* Đường kẻ ngang màu xanh nhạt */
+}
+
+.fc-tooltip th {
+	font-weight: bold;
+}
+.chuc-vu-span {
+	display: block; /* Hoặc inline-block để hiển thị trên cùng dòng */
+	font-size: 12px; /* Điều chỉnh kích thước font */
+	color: #FFFFFF;      /* Điều chỉnh màu sắc */
+	margin-top: 5px;  /* Điều chỉnh khoảng cách */
+	/* Các thuộc tính CSS khác */
+}
+.btn-primary {
+	background-color: #007bff; /* Or your desired primary color */
+	border-color: #007bff;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+	transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition effect */
+}
+
+.btn-primary:hover {
+	background-color: #0069d9; /* Slightly darker on hover */
+	box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+.error{
+	color: red;
+}
+.avatar-section {
+	border: 1px solid #ccc; /* Add a border to each section */
+	padding: 10px;            /* Add some padding for spacing */
+	margin-bottom: 10px;     /* Space between sections */
+}
+.fc-direction-ltr .fc-daygrid-event.fc-event-end,
+.fc-event-main-frame {
+	flex-direction: row;
+}
+
+.fc-event-desc,
+.fc-event-title {
+	white-space: break-spaces;
+	font-size:xx-small;
+}
+.box-body table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.box-body th,
+.box-body td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
+}
+
+.box-body th {
+	background-color: #f2f2f2;
+	font-weight: bold;
+}
+
+.box-body tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+.box-body tr:hover {
+	background-color: #ddd;
+}
+
+.box-body td:last-child {
+	width: 150px;
+	white-space: nowrap;
+}
+
+.box-body a {
+	margin-right: 5px;
+}
+.avatar-small {
+	width: 150px; /* Điều chỉnh kích thước ảnh nhỏ */
+	height: 150px;
+	cursor: pointer;
+}
+
+.avatar-large {
+	max-width: 80%; /* Điều chỉnh kích thước tối đa của ảnh lớn */
+	max-height: 80vh; /* Điều chỉnh chiều cao tối đa của ảnh lớn */
+}
+.swal2-popup {
+	width: 350px !important;
+	border-radius: 10px !important;
+	font-size: 12px !important; /* Đặt kích thước chữ là 12px */
+
+}
+
+.swal2-title {
+	text-align: center; /* Căn giữa tiêu đề */
+	display: flex; /* Sử dụng Flexbox */
+	align-items: center; /* Căn giữa theo chiều dọc */
+	justify-content: center; /* Căn giữa theo chiều ngang */
+}
+/* Style mặc định cho sidebar toggle */
+.sidebar-toggle {
+	transition: transform 0.3s ease; /* Thêm chuyển động mượt mà */
+}
+
+/* Hiệu ứng khi hover */
+.sidebar-toggle:hover {
+	transform: scale(1.1); /* Phóng to 110% */
+	/* Thêm các hiệu ứng khác tùy thích (ví dụ: thay đổi màu sắc) */
+}
+.user-image {
+	width: 25px; /* Điều chỉnh kích thước ảnh */
+	height: 25px;
+	border-radius: 50%; /* Tạo hình tròn */
+	margin-right: 10px; /* Tạo khoảng cách giữa ảnh và tên */
+}
+
+
+.fc-daygrid-event .fc-event-name {
+	font-weight: bold;
+	font-size: 14px;
+	color: #212529; /* Màu đen */
+}
+
+.fc-daygrid-event .fc-event-main > div {
+	text-align: left; /* Căn lề trái */
+	padding: 2px 5px; /* Điều chỉnh padding */
+}
+
+.fc-daygrid-event {
+	/* ... các styles khác ... */
+	overflow: hidden;
+	white-space: normal; /* Cho phép xuống dòng */
+	line-height: 1.4;    /* Tăng khoảng cách giữa các dòng */
+	height: auto;  /* Cho phép sự kiện tự động điều chỉnh chiều cao */
+	min-height: 35px;
+	box-sizing: border-box;
+}
+
+.fc-event-main {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	width: 100%;
+
+}
+
+.fc-event-name, .fc-event-tcv, .fc-event-time, .fc-event-nlv, .fc-event-nct, .fc-event-tt {
+	width: 100%; /* Đảm bảo các phần tử con chiếm toàn bộ chiều rộng */
+}
+
+.fc-timegrid-body {
+	overflow-x: auto;
+}
+
+.fc-h-event .fc-event-title {
+	font-size: 12px;
+}
+.fc-daygrid-event-harness {
+	margin-bottom: 5px;
+	padding: 3px; /* Thêm padding vào bên trong sự kiện */
+
+}
+.fc-timegrid-event-harness-inset {
+	margin-bottom: 5px; /* Khoảng cách giữa các sự kiện */
+	padding: 3px; /* Thêm padding vào bên trong sự kiện */
+}
+/* CSS cho dropdown */
+.dropdown-menu {
+	max-height: 300px;    /* Giới hạn chiều cao của dropdown */
+	overflow-y: auto;     /* Cho phép cuộn nếu danh sách dài hơn chiều cao */
+	white-space: nowrap;  /* Ngăn không cho tên nhân viên xuống dòng */
+}
+
+.dropdown-item {
+	display: block;      /* Hiển thị mỗi mục trên một dòng riêng biệt */
+	width: fit-content;   /* Tự động điều chỉnh chiều rộng theo nội dung */
+}

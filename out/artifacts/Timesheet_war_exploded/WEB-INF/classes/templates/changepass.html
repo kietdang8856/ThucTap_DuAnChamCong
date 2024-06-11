@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'home','Change Password')}">
+<body>
+<div class="col-xs-12">
+  <div class="box box-primary">
+    <div class="box-header with-border">
+      <h3 class="box-title">Change Pass</h3>
+    </div>
+    <div class="box-body"  id="changePasswordForm" th:if="${session.currentUser != null}">
+      <form th:action="@{/profile/changepass/{id}(id=${session.currentUser.id})}" method="post" class="form-horizontal">
+        <input type="hidden" th:name="id" th:value="${session.currentUser.id}">
+        <div class="form-group">
+          <label for="oldPassword" class="col-sm-2 control-label">Old Password</label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control" id="oldPassword" th:name="oldPassword" placeholder="Enter old password">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="button" id="checkPasswordBtn" class="btn btn-primary">Check pass</button>
+            <span id="passwordCheckResult" style="display: none;">
+                            <i class="fas fa-check" style="color: green; margin-left: 10px;"></i>
+                        </span>
+          </div>
+        </div>
+        <div id="newPasswordFields" style="display: none;">
+          <input type="hidden" id="verifiedOldPassword" th:name="oldPassword">
+          <div class="form-group">
+            <label for="newPassword" class="col-sm-2 control-label">New password</label>
+            <div class="col-sm-10">
+              <input type="password" class="form-control" id="newPassword" th:name="newPassword" placeholder="Input new pass">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword" class="col-sm-2 control-label">confirmPassword</label>
+            <div class="col-sm-10">
+              <input type="password" class="form-control" id="confirmPassword" th:name="confirmPassword" placeholder="confirmPassword">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-success">Change password</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="box-body" th:unless="${session.currentUser != null}">
+      <p>Bạn cần đăng nhập để xem trang này.</p>
+    </div>
+  </div>
+</div>
+
+<script th:inline="javascript">
+  const oldPasswordInput = document.getElementById('oldPassword');
+  const verifiedOldPasswordInput = document.getElementById('verifiedOldPassword');
+  const checkPasswordBtn = document.getElementById('checkPasswordBtn');
+  const newPasswordFields = document.getElementById('newPasswordFields');
+  const passwordCheckResult = document.getElementById('passwordCheckResult');
+
+  checkPasswordBtn.addEventListener('click', async () => {
+    const oldPassword = oldPasswordInput.value;
+    const userId = /*[[${session.currentUser.id}]]*/ 0; // Lấy ID từ Thymeleaf
+
+    const response = await fetch(`/profile/checkPassword/${userId}?oldPassword=${oldPassword}`);
+    const data = await response.json();
+
+
+    if (data.valid) {
+      oldPasswordInput.disabled = true;
+      oldPasswordInput.style.opacity = 0.5;
+      passwordCheckResult.style.display = 'inline-block';
+      newPasswordFields.style.display = 'block';
+
+      // Lưu giá trị mật khẩu cũ vào input hidden
+      verifiedOldPasswordInput.value = oldPassword;
+
+      // Ẩn nút "Kiểm tra mật khẩu"
+      checkPasswordBtn.style.display = 'none';
+    } else {
+      // Hiển thị popup thông báo lỗi
+      Swal.fire({
+        position: 'Center',
+        icon: 'error',
+        title: 'Incorrect old password!',
+        showConfirmButton: false,
+        timer: 3000,
+        toast: true,
+        customClass: {
+          popup: 'custom-popup' // Áp dụng class CSS tùy chỉnh
+        }
+      });
+    }
+    //kiểm tra mật khẩu mới trống hoặc một trong hai bị sai
+    const changePasswordForm = document.getElementById('changePasswordForm');
+
+    changePasswordForm.addEventListener('submit', (event) => {
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (newPassword === '' || confirmPassword === '') {
+        event.preventDefault(); // Ngăn submit form
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'Please do not leave the new password and confirm password fields blank !',
+          showConfirmButton: false,
+          timer: 3000,
+          toast: true,
+          customClass: {
+            popup: 'custom-popup' // Áp dụng class CSS tùy chỉnh
+          }
+        });
+      } else if (newPassword !== confirmPassword) {
+        event.preventDefault(); // Ngăn submit form
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'The new password and confirm password do not match !',
+          showConfirmButton: false,
+          timer: 3000,
+          toast: true,
+          customClass: {
+            popup: 'custom-popup' // Áp dụng class CSS tùy chỉnh
+          }
+        });
+      }
+    });
+  });
+</script>
+  </div>
+</div>
+</body>
+</html>

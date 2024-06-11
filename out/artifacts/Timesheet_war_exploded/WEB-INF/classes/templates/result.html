@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'home','Home')}"
+>
+
+<body>
+<section class="content-header">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><a th:href="@{/}" th:text="${pageTitle}">.</a></h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+            <hr>
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="sticky-top mb-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title text-center"><strong>APPOINTMENT</strong></h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <form th:action="@{/lichlamviec/search}" th:object="${searchFilter}" method="post" class="form-row align-items-center"> <div class="form-group col-md-6">
+                                            <label for="fromDate">Start date:</label>
+                                            <input type="date" class="form-control" id="fromDate" th:field="*{tuNgay}" required>
+                                        </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="toDate">End date:</label>
+                                                <input type="date" class="form-control" id="toDate" th:field="*{denNgay}" required>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="office">Office:</label>
+                                                <select class="form-control" id="office" th:field="*{vpCongTac_id}">
+                                                    <option value="">All</option>
+                                                    <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="workStatus">Status:</label>
+                                                <select class="form-control" id="workStatus" th:field="*{trangThaiLamViec_Id}">
+                                                    <option value="">All</option>
+                                                    <option th:each="trangthai : ${trangThaiList}" th:value="${trangthai.id}" th:text="${trangthai.tenTrangThai}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-9">
+                                                <label for="staffName">Staff name:</label>
+                                                <input type="text" class="form-control" id="staffName" th:field="*{tenNV}" />
+                                            </div>
+
+                                            <div class="form-group col-md-3 d-flex align-items-center">
+                                                <div class="input-group">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top:25px">Chọn</button>
+                                                        <div class="dropdown-menu dropdown-menu-right" style="max-height: 150px; overflow-y: auto;">
+                                                            <a class="dropdown-item" href="#" th:each="nhanVien : ${listNhanVien}" th:text="${nhanVien.tenNV}" th:data-nhan-vien-id="${nhanVien.id}" onclick="selectNhanVien(this)">Nhân viên 1</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group col-md-12 d-flex justify-content-end">
+                                                <button type="submit" class="btn btn-primary me-2">Search</button>
+                                                <button type="button" class="btn btn-secondary me-2" id="clear-button">Delete</button>
+                                                <a href="/" type="button" class="btn btn-primary">Back</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title text-center"><strong>Work status</strong></h4>
+                                    </div>
+                                    <div class="card-body">
+
+                                        <div id="external-events">
+                                            <div class="external-event bg-success ui-draggable ui-draggable-handle" style="position: relative; background-color:#EA4215 ">Work At Company</div>
+                                            <div class="external-event bg-warning ui-draggable ui-draggable-handle" style="position: relative;background-color:#15BDEA">Work At Home</div>
+                                            <div class="external-event bg-info ui-draggable ui-draggable-handle" style="position: relative;background-color:#AC15EA">Go On Business</div>
+                                            <div class="external-event bg-danger ui-draggable ui-draggable-handle" style="position: relative;background-color:#53EA15">Leave of absence</div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-9">
+                            <div class="card card-primary">
+                                <div class="card-body p-0">
+                                    <!-- THE CALENDAR -->
+                                    <div id="calendar"></div>
+                                    <!-- Modal -->
+                                    <div id="calendarModal" class="modal fade">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title">Event Details</h4>
+
+                                                </div>
+                                                <div id="modalBody" class="modal-body">
+                                                    <form action="#" th:action="@{/lichlamviec/update/}" th:object="${lichlam}" method="post" id="updateForm">
+                                                        <div class="form-group">
+                                                            <label for="tenCongViec">Appointment Name</label>
+                                                            <input type="text" class="form-control" id="tenCongViec" value="" th:field="*{tenCongViec}">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="ngayLam">Working Day</label>
+                                                            <input type="date" class="form-control" id="ngayLam" th:field="*{ngayLam}">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="gioBatDau">Start Time</label>
+                                                            <input type="time" class="form-control" id="gioBatDau" th:field="*{gioBatDau}" min="08:00">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="gioKetThuc">End Time</label>
+                                                            <input type="time" class="form-control" id="gioKetThuc" th:field="*{gioKetThuc}" min="08:00">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="vpCT_id">Office</label>
+                                                            <select class="form-control" id="vpCT_id" th:field="*{vpCongTac_id}">
+                                                                <option th:each="vanphong : ${vanPhongList}" th:value="${vanphong.id}" th:text="${vanphong.tenVP}"></option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="trangThaiLV_Id">Work Status</label>
+                                                            <select class="form-control" id="trangThaiLV_Id" th:field="*{trangThaiLamViec_Id}">
+                                                                <option th:each="trangthai : ${trangThaiList}"  th:value="${trangthai.id}"th:text="${trangthai.tenTrangThai}"></option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="modal-footer d-flex justify-content-center">
+                                                            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                                            <button type="submit" id="updateButton" class="btn btn-primary mx-2">Save</button>
+                                                            <button class="btn btn-danger" id="deleteButton">Delete</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
+    </div>
+    <div class="todo-overlay" id="todo-overlay">
+        <div class="todo-modal" id="todo-modal">
+            <div class="todo-input todo-block">
+                <span>To-do: </span>
+                <input type="text" placeholder="Enter new to-do" id="todo-edit-todo">
+                <span>Category: </span>
+                <input type="text" placeholder="Enter category" list="categoryList" id="todo-edit-category">
+                <datalist id="categoryList">
+                    <option value="Personal"></option>
+                    <option value="Work"></option>
+                </datalist>
+                <span>Date:</span>
+                <input type="date" id="todo-edit-date">
+                <span>Time:</span>
+                <input type="time" id="todo-edit-time">
+                <span>Link:</span>
+                <input type="text" id="todo-edit-url">
+                <span></span>
+                <button id="changeBtn">Save Change</button>
+            </div>
+        </div>
+        <div class="todo-modal-close-btn" id="todo-modal-close-btn">X</div>
+    </div>
+</section>
+<script th:inline="javascript">
+    var isAdmin = /*[[${isAdmin}]]*/ false;
+    var currentUserId = /*[[${currentUserId}]]*/ -1;
+    document.addEventListener('DOMContentLoaded', function() {
+        let listLichLam = [[${listLichLam}]];
+        let userId=[[${currentUserId}]]
+        console.log(listLichLam);
+        var listEvent =[];
+
+        listLichLam.forEach(function(lich){
+            let fullTitle= "Title:"+" " +lich.tenCongViec+
+                "\n" +"Time"+" "+lich.gioBatDau + "-" +lich.gioKetThuc +
+                "\n" + "Name: "+" "+ lich.nhanVien.tenNV +
+                "\n" + "Head Quater name:"+" "+  lich.nhanVien.vpLamViecChinh.tenVP+
+                "\n" + "Work Place Name:"+" "+ lich.vpCongTac.tenVP +
+                "\n" + "Work type:"+" " + lich.trangThai.tenTrangThai;
+            let color;
+            if(lich.trangThai.id===1){
+                color="#EA4215";
+            }
+            if(lich.trangThai.id===2){
+                color="#15BDEA";
+            }
+            if(lich.trangThai.id===3){
+                color="#AC15EA";
+            }
+            if(lich.trangThai.id===4){
+                color="#53EA15";
+            }
+            var event={
+                id:lich.id,
+                tenCV:lich.tenCongViec.toString(),
+                title:fullTitle ,
+                start: lich.ngayLam + "T" + lich.gioBatDau.slice(0, -3),
+                //end: endTime.concat(lich.ngayLam,"T",lich.gioKetThuc,":00:00"),
+                end: lich.ngayLam + "T" + lich.gioKetThuc.slice(0, -3),
+                allDay:false,
+                display: 'block',
+                backgroundColor:color,
+                trangthai:lich.trangThai.tenTrangThai,
+                extendedProps: { // Thêm thông tin người dùng
+                    nhanVienId: lich.nhanVien.id,
+                    hoTen: lich.nhanVien.tenNV,
+                    username: lich.nhanVien.username,
+                    chucVu: lich.nhanVien.chucvu ? lich.nhanVien.chucvu.tenChucVu : "N/A" ,// Lấy tên chức vụ, kiểm tra null
+                    noiCongTac: lich.vpCongTac.tenVP,
+                    noiLamViec: lich.nhanVien.vpLamViecChinh ? lich.nhanVien.vpLamViecChinh.tenVP : "N/A",
+                    //thêm thông tin ngày tháng
+                    ngayLam:lich.ngayLam,
+                    gioBatDau:lich.gioBatDau.slice(0, -3),
+                    gioKetThuc:lich.gioKetThuc.slice(0, -3),
+                    vpCongTacId:lich.vpCongTac.id,
+                    trangThaiId:lich.trangThai.id,
+
+                }
+            };
+            listEvent.push(event);
+        });
+
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            height: 1000,
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,list' // Thêm chế độ xem tùy chỉnh
+            }, // buttons for switching between views
+            allDaySlot: false,
+            slotMinTime: '08:00:00',
+            slotMaxTime: '24:00:00',
+            firstDay: 1,
+            height: 700,
+            contentHeight: 800,
+            eventTimeFormat: { // like '14:30:00'
+                hour: 'numeric',
+                minute: '2-digit',
+                meridiem: false // Ẩn ký hiệu AM/PM
+            },
+            views: {
+                dayGridMonth: {
+                    // eventContent: function (arg) {
+                    //     const { event } = arg;
+                    //     const { gioBatDau, gioKetThuc, hoTen, noiLamViec, noiCongTac, tenCV, trangthai } = event.extendedProps; // Lấy thêm hoTen
+                    //
+                    //     // Tạo event element
+                    //     const eventElement = document.createElement('div');
+                    //     eventElement.classList.add('fc-event', 'fc-event-main');
+                    //     eventElement.style.backgroundColor = event.backgroundColor;
+                    //     eventElement.dataset.bsToggle = "modal";
+                    //     eventElement.dataset.bsTarget = "#calendarModal";
+                    //
+                    //     // Tạo div chứa nội dung sự kiện
+                    //     const eventContentDiv = document.createElement('div');
+                    //     eventContentDiv.classList.add('fc-event-content');
+                    //
+                    //     // Thêm các phần tử con vào eventContentDiv
+                    //     const nameDiv = document.createElement('div');
+                    //     nameDiv.classList.add('fc-event-name');
+                    //     nameDiv.textContent = 'Name:' + " " + hoTen;
+                    //     eventContentDiv.appendChild(nameDiv);
+                    //
+                    //     const tcv = document.createElement('div');
+                    //     tcv.classList.add('fc-event-tcv');
+                    //     tcv.textContent = 'Title:' + " " + tenCV;
+                    //     eventContentDiv.appendChild(tcv);
+                    //
+                    //     const timeDiv = document.createElement('div');
+                    //     timeDiv.classList.add('fc-event-time');
+                    //     timeDiv.textContent = "Time:" + " " + `${gioBatDau} - ${gioKetThuc}`;
+                    //     eventContentDiv.appendChild(timeDiv);
+                    //
+                    //     const nlv = document.createElement('div');
+                    //     nlv.classList.add('fc-event-nlv');
+                    //     nlv.textContent = "Head Quarter name:" + " " + noiLamViec;
+                    //     eventContentDiv.appendChild(nlv);
+                    //
+                    //     const nct = document.createElement('div');
+                    //     nct.classList.add('fc-event-nct');
+                    //     nct.textContent = "Work Place Name:" + " " + noiCongTac;
+                    //     eventContentDiv.appendChild(nct);
+                    //
+                    //     const tt = document.createElement('div');
+                    //     tt.classList.add('fc-event-tt');
+                    //     tt.textContent = "Work type:" + " " + trangthai;
+                    //     eventContentDiv.appendChild(tt);
+                    //
+                    //     // Thêm eventContentDiv vào eventElement
+                    //     eventElement.appendChild(eventContentDiv);
+                    //
+                    //     return { domNodes: [eventElement] };
+                    // },
+                    eventContent: function (arg) {
+                        const { event } = arg;
+                        const { gioBatDau, gioKetThuc, hoTen, noiLamViec, noiCongTac, tenCV, trangthai } = event.extendedProps; // Lấy thêm hoTen
+
+                        // Tạo event element
+                        const eventElement = document.createElement('div');
+                        eventElement.classList.add('fc-event', 'fc-event-main');
+                        eventElement.style.backgroundColor = event.backgroundColor;
+
+                        // Tạo div chứa nội dung sự kiện
+                        const eventContentDiv = document.createElement('div');
+                        eventContentDiv.classList.add('fc-event-content');
+
+                        // Thêm các phần tử con vào eventContentDiv
+                        const nameDiv = document.createElement('div');
+                        nameDiv.classList.add('fc-event-name');
+                        nameDiv.textContent = 'Name:' + " " + hoTen;
+                        eventContentDiv.appendChild(nameDiv);
+
+                        const tcv = document.createElement('div');
+                        tcv.classList.add('fc-event-tcv');
+                        tcv.textContent = 'Title:' + " " + tenCV;
+                        eventContentDiv.appendChild(tcv);
+
+                        const timeDiv = document.createElement('div');
+                        timeDiv.classList.add('fc-event-time');
+                        timeDiv.textContent = "Time:" + " " + `${gioBatDau} - ${gioKetThuc}`;
+                        eventContentDiv.appendChild(timeDiv);
+
+                        const nlv = document.createElement('div');
+                        nlv.classList.add('fc-event-nlv');
+                        nlv.textContent = "Head Quarter name:" + " " + noiLamViec;
+                        eventContentDiv.appendChild(nlv);
+
+                        const nct = document.createElement('div');
+                        nct.classList.add('fc-event-nct');
+                        nct.textContent = "Work Place Name:" + " " + noiCongTac;
+                        eventContentDiv.appendChild(nct);
+
+                        const tt = document.createElement('div');
+                        tt.classList.add('fc-event-tt');
+                        tt.textContent = "Work type:" + " " + trangthai;
+                        eventContentDiv.appendChild(tt);
+
+                        // Thêm eventContentDiv vào eventElement
+                        eventElement.appendChild(eventContentDiv);
+
+                        // Tạo một lớp phủ trong suốt và gán sự kiện click
+                        const overlayDiv = document.createElement('div');
+                        overlayDiv.classList.add('fc-event-overlay');
+                        overlayDiv.style.position = 'absolute';
+                        overlayDiv.style.top = 0;
+                        overlayDiv.style.left = 0;
+                        overlayDiv.style.right = 0;
+                        overlayDiv.style.bottom = 0;
+                        overlayDiv.style.zIndex = 10; // Đặt z-index cao hơn để lớp phủ nằm trên cùng
+                        overlayDiv.style.cursor = 'pointer';
+                        overlayDiv.addEventListener('click', () => {
+                            // ... (code xử lý sự kiện click của bạn ở đây) ...
+                            // Ví dụ: mở modal
+                            $('#calendarModal').modal('show');
+                        });
+                        eventElement.appendChild(overlayDiv); // Thêm lớp phủ vào eventElement
+
+                        return { domNodes: [eventContentDiv] };
+                    }
+                },
+                timeGridDay: { // name of view
+                    titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit',  hour: 'numeric', minute: '2-digit', },
+                    slotEventOverlap : false,
+                    eventShortHeight : 50,
+                    expandRows : true,
+                    eventContent: function (arg) {
+                        const { event } = arg;
+                        const { gioBatDau, gioKetThuc, hoTen, noiLamViec, noiCongTac, tenCV, trangthai } = event.extendedProps; // Lấy thêm hoTen
+
+                        // Tạo event element
+                        const eventElement = document.createElement('div');
+                        eventElement.classList.add('fc-event', 'fc-event-main');
+                        eventElement.style.backgroundColor = event.backgroundColor;
+
+                        // Tạo div chứa nội dung sự kiện
+                        const eventContentDiv = document.createElement('div');
+                        eventContentDiv.classList.add('fc-event-content');
+
+                        // Thêm các phần tử con vào eventContentDiv
+                        const nameDiv = document.createElement('div');
+                        nameDiv.classList.add('fc-event-name');
+                        nameDiv.textContent = 'Name:' + " " + hoTen;
+                        eventContentDiv.appendChild(nameDiv);
+
+                        const tcv = document.createElement('div');
+                        tcv.classList.add('fc-event-tcv');
+                        tcv.textContent = 'Title:' + " " + tenCV;
+                        eventContentDiv.appendChild(tcv);
+
+                        const timeDiv = document.createElement('div');
+                        timeDiv.classList.add('fc-event-time');
+                        timeDiv.textContent = "Time:" + " " + `${gioBatDau} - ${gioKetThuc}`;
+                        eventContentDiv.appendChild(timeDiv);
+
+                        const nlv = document.createElement('div');
+                        nlv.classList.add('fc-event-nlv');
+                        nlv.textContent = "Head Quarter name:" + " " + noiLamViec;
+                        eventContentDiv.appendChild(nlv);
+
+                        const nct = document.createElement('div');
+                        nct.classList.add('fc-event-nct');
+                        nct.textContent = "Work Place Name:" + " " + noiCongTac;
+                        eventContentDiv.appendChild(nct);
+
+                        const tt = document.createElement('div');
+                        tt.classList.add('fc-event-tt');
+                        tt.textContent = "Work type:" + " " + trangthai;
+                        eventContentDiv.appendChild(tt);
+
+                        // Thêm eventContentDiv vào eventElement
+                        eventElement.appendChild(eventContentDiv);
+
+                        // Tạo một lớp phủ trong suốt và gán sự kiện click
+                        const overlayDiv = document.createElement('div');
+                        overlayDiv.classList.add('fc-event-overlay');
+                        overlayDiv.style.position = 'absolute';
+                        overlayDiv.style.top = 0;
+                        overlayDiv.style.left = 0;
+                        overlayDiv.style.right = 0;
+                        overlayDiv.style.bottom = 0;
+                        overlayDiv.style.zIndex = 10; // Đặt z-index cao hơn để lớp phủ nằm trên cùng
+                        overlayDiv.style.cursor = 'pointer';
+                        overlayDiv.addEventListener('click', () => {
+                            // ... (code xử lý sự kiện click của bạn ở đây) ...
+                            // Ví dụ: mở modal
+                            $('#calendarModal').modal('show');
+                        });
+                        eventElement.appendChild(overlayDiv); // Thêm lớp phủ vào eventElement
+
+                        return { domNodes: [eventContentDiv] };
+                    }
+                    // other view-specific options here
+                },
+                timeGridWeek:{
+                    slotEventOverlap : false,
+                    eventShortHeight: 50,
+                    eventMaxStack : 1,
+                    expandRows : true,
+                    eventContent: function (arg) {
+                        const { event } = arg;
+                        const { gioBatDau, gioKetThuc, hoTen, noiLamViec, noiCongTac, tenCV, trangthai } = event.extendedProps; // Lấy thêm hoTen
+
+                        // Tạo event element
+                        const eventElement = document.createElement('div');
+                        eventElement.classList.add('fc-event', 'fc-event-main');
+                        eventElement.style.backgroundColor = event.backgroundColor;
+
+                        // Tạo div chứa nội dung sự kiện
+                        const eventContentDiv = document.createElement('div');
+                        eventContentDiv.classList.add('fc-event-content');
+
+                        // Thêm các phần tử con vào eventContentDiv
+                        const nameDiv = document.createElement('div');
+                        nameDiv.classList.add('fc-event-name');
+                        nameDiv.textContent = 'Name:' + " " + hoTen;
+                        eventContentDiv.appendChild(nameDiv);
+
+                        const tcv = document.createElement('div');
+                        tcv.classList.add('fc-event-tcv');
+                        tcv.textContent = 'Title:' + " " + tenCV;
+                        eventContentDiv.appendChild(tcv);
+
+                        const timeDiv = document.createElement('div');
+                        timeDiv.classList.add('fc-event-time');
+                        timeDiv.textContent = "Time:" + " " + `${gioBatDau} - ${gioKetThuc}`;
+                        eventContentDiv.appendChild(timeDiv);
+
+                        const nlv = document.createElement('div');
+                        nlv.classList.add('fc-event-nlv');
+                        nlv.textContent = "Head Quarter name:" + " " + noiLamViec;
+                        eventContentDiv.appendChild(nlv);
+
+                        const nct = document.createElement('div');
+                        nct.classList.add('fc-event-nct');
+                        nct.textContent = "Work Place Name:" + " " + noiCongTac;
+                        eventContentDiv.appendChild(nct);
+
+                        const tt = document.createElement('div');
+                        tt.classList.add('fc-event-tt');
+                        tt.textContent = "Work type:" + " " + trangthai;
+                        eventContentDiv.appendChild(tt);
+
+                        // Thêm eventContentDiv vào eventElement
+                        eventElement.appendChild(eventContentDiv);
+
+                        // Tạo một lớp phủ trong suốt và gán sự kiện click
+                        const overlayDiv = document.createElement('div');
+                        overlayDiv.classList.add('fc-event-overlay');
+                        overlayDiv.style.position = 'absolute';
+                        overlayDiv.style.top = 0;
+                        overlayDiv.style.left = 0;
+                        overlayDiv.style.right = 0;
+                        overlayDiv.style.bottom = 0;
+                        overlayDiv.style.zIndex = 10; // Đặt z-index cao hơn để lớp phủ nằm trên cùng
+                        overlayDiv.style.cursor = 'pointer';
+                        overlayDiv.addEventListener('click', () => {
+                            // ... (code xử lý sự kiện click của bạn ở đây) ...
+                            // Ví dụ: mở modal
+                            $('#calendarModal').modal('show');
+                        });
+                        eventElement.appendChild(overlayDiv); // Thêm lớp phủ vào eventElement
+
+                        return { domNodes: [eventContentDiv] };
+                    }
+                }
+            },
+
+            events: listEvent,
+            eventClick: function(arg) {
+                console.log(arg);
+                var hoTen=arg.event._def.extendedProps.hoTen;
+                var title=arg.event._def.extendedProps.tenCV;
+                var ngay=arg.event._def.extendedProps.ngayLam;
+                var giobd=arg.event._def.extendedProps.gioBatDau;
+                var giokt=arg.event._def.extendedProps.gioKetThuc;
+                var vanPhongCTId=arg.event._def.extendedProps.vpCongTacId;
+                var trangThaiId=arg.event._def.extendedProps.trangThaiId;
+                var lichId=arg.event._def.publicId;
+                let timeOneMinuteLater;
+                const deleteButton = document.getElementById("deleteButton"); // Lấy nút Delete
+                if(userId !== arg.event._def.extendedProps.nhanVienId)
+                {
+                    document.getElementById("deleteButton").disabled = true;
+                    document.getElementById("updateButton").disabled = true;
+                }
+                else {
+                    let date = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại (YYYY-MM-DD)
+                    let time = new Date().toISOString().split('T')[1].slice(0, 5); // Lấy giờ hiện tại (HH:mm)
+
+                    let oneMinuteLater = new Date();
+                    oneMinuteLater.setMinutes(oneMinuteLater.getMinutes() + 1); // Cộng thêm 1 phút
+                    timeOneMinuteLater = oneMinuteLater.toISOString().split('T')[1].slice(0, 5);
+
+                    // So sánh ngày và thời gian của sự kiện với ngày và giờ hiện tại + 1 phút
+                    if (ngay < date || (ngay === date && giobd < timeOneMinuteLater)) {
+                        document.getElementById("deleteButton").disabled = true;
+                        document.getElementById("updateButton").disabled = true;
+                    } else {
+                        document.getElementById("deleteButton").disabled = false;
+                        document.getElementById("updateButton").disabled = false;
+                    }
+
+                }
+
+                // var updateLink = '/lichlamviec/update/' + lichId;
+                // $('#updateForm').attr('action', updateLink);
+                // $('#updateForm input[name="id"]').val(lichId); // Đặt giá trị cho input ẩn chứa ID
+                //phần update
+                $('#updateButton').click(function(event) {
+                    event.preventDefault(); // Ngăn chặn hành vi submit mặc định của form
+
+                    confirmUpdate(lichId);
+                });
+                function confirmUpdate(lichId) {
+
+                    Swal.fire({
+                        title: 'Are you sure you want to update?',
+                        text: "Your work schedule information will be updated!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Update',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Gửi request AJAX để cập nhật lịch làm việc
+                            $.ajax({
+                                url: '/lichlamviec/update/' + lichId,
+                                type: 'POST',
+                                data: $('#updateForm').serialize(), // Lấy dữ liệu từ form
+                                success: function (response) {
+                                    // Xử lý kết quả trả về từ server (nếu cần)
+                                    Swal.fire({
+                                        title: 'Success!',
+                                        text: 'Work schedule has been updated.',
+                                        icon: 'success'
+                                    });
+                                    $('#calendarModal').modal('hide'); // Đóng modal
+                                    setTimeout(function() {
+                                        location.reload(); // Reload trang sau 1 giây
+                                    }, 1000); // 1000 milliseconds = 1 giây
+                                },
+                                error: function (xhr, status, error) {
+                                    // Xử lý lỗi (nếu cần)
+                                    if (xhr.status === 400) { // Kiểm tra lỗi từ server
+                                        const responseJSON = JSON.parse(xhr.responseText);
+                                        const errorMessage = responseJSON.sweetAlertText || "Đã có lỗi xảy ra.";
+
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Lỗi',
+                                            text: errorMessage
+                                        });
+                                    }
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: 'An error has occurred!',
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+                //phần delete
+                function confirmDelete(button) {
+                    Swal.fire({
+                        title: 'Are you sure you want to delete?',
+                        text: "You will not be able to restore this schedule!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Delete',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Thực hiện xóa lịch làm việc tại đây
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Work schedule has been updated.',
+                                icon: 'success'
+                            });
+                            setTimeout(function() {
+                                window.location.href = '/lichlamviec/delete/' + lichId;
+                            }, 1000); // 1000 milliseconds = 1 giây
+
+                        }
+                    });
+                }
+                // var deleteLink = '/lichlamviec/delete/' + lichId;
+                deleteButton.onclick = function() {
+                    confirmDelete(this); // Gọi hàm confirmDelete khi nút được click
+                };
+                // $('#deleteButton input[name="id"]').val(lichId); // Đặt giá trị cho input ẩn chứa ID
+                $('#hoTen').val(hoTen);
+                $('#tenCongViec_update').val(title);
+                $('#ngayLam_update').val(ngay);
+                $('#gioBatDau_update').val(giobd);
+                $('#gioKetThuc_update').val(giokt);
+                $('#vpCT_id_update').val(vanPhongCTId.toString());
+                $('#trangThaiLV_Id_update').val(trangThaiId.toString());
+                $('#calendarModal').modal();
+
+            },
+        });
+        calendar.render();
+    });
+</script>
+
+<script>
+    // Lấy ngày hiện tại
+    var currentDate = new Date().toISOString().split('T')[0];
+
+    // Thiết lập giá trị min của input type date
+    document.getElementById("ngayLam_update").setAttribute("min", currentDate);
+    document.addEventListener('DOMContentLoaded', function () {
+        // ... (code của bạn)
+
+        // Lấy các phần tử input
+        const ngayLamInput = document.getElementById("ngayLam_update");
+        const gioBatDauInput = document.getElementById("gioBatDau_update");
+        const gioKetThucInput = document.getElementById("gioKetThuc_update");
+        const tenCongViecInput = document.getElementById("tenCongViec_update");
+        const submitButton = document.querySelector("#calendarModal form button[type=submit]");
+        const timeDiv = document.createElement('div');
+        timeDiv.classList.add('fc-event-time');
+        timeDiv.style.fontSize = 'smaller';
+        // eventDiv.appendChild(timeDiv);
+
+        let isFormInvalid = false;
+        // Hàm kiểm tra thời gian kết thúc
+        function checkEndTime() {
+            const ngayLam = ngayLamInput.value;
+            const gioBatDau = gioBatDauInput.value;
+            const gioKetThuc = gioKetThucInput.value;
+            const tenCongViec = tenCongViecInput.value;
+            if (!ngayLam || !gioBatDau || !gioKetThuc || !tenCongViec) {
+                if (!isFormInvalid) { // Chỉ hiển thị thông báo lỗi một lần
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Attention!',
+                        text: 'Please fill in the complete date and time information!',
+                    });
+                    isFormInvalid = true; // Đánh dấu form là không hợp lệ
+                }
+                submitButton.disabled = true; // Vô hiệu hóa nút Save
+                return false; // Form không hợp lệ
+            }
+            if (ngayLam && gioBatDau && gioKetThuc) {
+                const startDateTime = new Date(ngayLam + "T" + gioBatDau);
+                const endDateTime = new Date(ngayLam + "T" + gioKetThuc);
+
+                // Tạo một đối tượng Date đại diện cho 8 giờ sáng của ngày đã chọn
+                const eightAM = new Date(ngayLam + "T08:00");
+
+                if (startDateTime < eightAM || endDateTime < eightAM) {
+                    submitButton.disabled = true; // Vô hiệu hóa nút Save
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Warning!',
+                        text: 'Start and end times cannot be before 8:00 AM!',
+                    });
+
+                    return false;
+                }
+            }
+            if (ngayLam && gioBatDau && gioKetThuc) {
+                const startDateTime = new Date(ngayLam + "T" + gioBatDau);
+                const endDateTime = new Date(ngayLam + "T" + gioKetThuc);
+
+                if (endDateTime <= startDateTime) {
+                    submitButton.disabled = true; // Vô hiệu hóa nút Save
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'End time must be after start time!',
+                    });
+
+                    return false;
+                }
+            }
+
+            if (ngayLam && gioBatDau) {
+                const now = new Date();
+                const inputDateTime = new Date(ngayLam + "T" + gioBatDau);
+                if (inputDateTime < now) {
+                    submitButton.disabled = true;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Start time must be after the current time!'
+                    });
+                    return false; // Form không hợp lệ
+                }
+            }
+
+            submitButton.disabled = false;
+            return true; // Form hợp lệ
+        }
+
+        // Gắn sự kiện input cho các trường thời gian
+        ngayLamInput.addEventListener("input", checkEndTime);
+        gioBatDauInput.addEventListener("input", checkEndTime);
+        gioKetThucInput.addEventListener("input", checkEndTime);
+        tenCongViecInput.addEventListener("input", checkEndTime);
+    });
+</script>
+
+<script>
+    var currentDate = new Date().toISOString().split('T')[0];
+
+    // Thiết lập giá trị min của input type date
+    document.getElementById("ngayLam").setAttribute("min", currentDate);
+    document.addEventListener('DOMContentLoaded', function () {
+        // Lấy các phần tử input
+        const ngayLamInput = document.getElementById("ngayLam");
+        const gioBatDauInput = document.getElementById("gioBatDau");
+        const gioKetThucInput = document.getElementById("gioKetThuc");
+        const tenCongViecInput = document.getElementById("tenCongViec");
+        const submitButton = document.querySelector("#appointmentModal form button[type=submit]");
+        let isFormInvalid = false;
+        // Hàm kiểm tra thời gian kết thúc
+        function checkEndTimeForCreate() {
+            const ngayLam = ngayLamInput.value;
+            const gioBatDau = gioBatDauInput.value;
+            const gioKetThuc = gioKetThucInput.value;
+            const tenCongViec = tenCongViecInput.value;
+            if (!ngayLam || !gioBatDau || !gioKetThuc || !tenCongViec) {
+                if (!isFormInvalid) { // Chỉ hiển thị thông báo lỗi một lần
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Attention!',
+                        text: 'Please fill in the complete date and time information!',
+                    });
+                    isFormInvalid = true; // Đánh dấu form là không hợp lệ
+                }
+                submitButton.disabled = true; // Vô hiệu hóa nút Save
+                return false; // Form không hợp lệ
+            }
+            if (ngayLam && gioBatDau && gioKetThuc) {
+                const startDateTime = new Date(ngayLam + "T" + gioBatDau);
+                const endDateTime = new Date(ngayLam + "T" + gioKetThuc);
+
+                // Tạo một đối tượng Date đại diện cho 8 giờ sáng của ngày đã chọn
+                const eightAM = new Date(ngayLam + "T08:00");
+
+                if (startDateTime < eightAM || endDateTime < eightAM) {
+                    submitButton.disabled = true; // Vô hiệu hóa nút Save
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Warning!',
+                        text: 'Start and end times cannot be before 8:00 AM!',
+                    });
+
+                    return false;
+                }
+            }
+            if (ngayLam && gioBatDau && gioKetThuc) {
+                const startDateTime = new Date(ngayLam + "T" + gioBatDau);
+                const endDateTime = new Date(ngayLam + "T" + gioKetThuc);
+
+                if (endDateTime <= startDateTime) {
+                    submitButton.disabled = true; // Vô hiệu hóa nút Save
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'End time must be after start time!',
+                    });
+
+                    return false;
+                }
+            }
+
+            if (ngayLam && gioBatDau) {
+                const now = new Date();
+                const inputDateTime = new Date(ngayLam + "T" + gioBatDau);
+                if (inputDateTime < now) {
+                    submitButton.disabled = true;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Start time must be after the current time!'
+                    });
+                    return false; // Form không hợp lệ
+                }
+            }
+
+            submitButton.disabled = false;
+            return true; // Form hợp lệ
+        }
+
+        // Gắn sự kiện input cho các trường thời gian
+        ngayLamInput.addEventListener("input", checkEndTimeForCreate);
+        gioBatDauInput.addEventListener("input", checkEndTimeForCreate);
+        gioKetThucInput.addEventListener("input", checkEndTimeForCreate);
+        tenCongViecInput.addEventListener("input", checkEndTimeForCreate);
+        // Gửi form khi nút "Save" được click
+        submitButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Ngăn chặn submit mặc định
+
+            if (checkEndTimeForCreate()) { // Kiểm tra tính hợp lệ của form
+                $.ajax({
+                    url: '/lichlamviec/save',
+                    type: 'POST',
+                    data: $('#appointmentModal form').serialize(), // Lấy dữ liệu từ form
+                    success: function(response) {
+                        // Hiển thị SweetAlert2 khi tạo lịch thành công
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Work schedule has been created.',
+                            icon: 'success'
+                        });
+
+                        $('#appointmentModal').modal('hide'); // Đóng modal
+                        setTimeout(function() {
+                            location.reload(); // Reload trang sau 1 giây
+                        }, 1000); // 1000 milliseconds = 1 giây
+                    },
+                    error: function(xhr, status, error) {
+                        if (xhr.status === 400) { // Kiểm tra lỗi validation
+                            const errors = xhr.responseJSON.errors; // Lấy danh sách lỗi từ response
+                            let errorMessage = "Đã có lỗi xảy ra:\n";
+                            for (let i = 0; i < errors.length; i++) {
+                                errorMessage += "- " + errors[i].defaultMessage + "\n";
+                            }
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: errorMessage
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'An error has occurred!',
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+<script th:inline="javascript">
+    function selectNhanVien(element) {
+        const nhanVienId = element.getAttribute('data-nhan-vien-id');
+        const nhanVienTen = element.textContent;
+        document.getElementById('staffName').value = nhanVienTen;
+        // Nếu cần, bạn có thể thêm một hidden input để lưu trữ nhanVienId
+         const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+         hiddenInput.name = 'nhanVienId';
+         hiddenInput.value = nhanVienId;
+         document.querySelector('#searchForm').appendChild(hiddenInput);
+    }
+</script>
+
+<script>
+    document.getElementById('clear-button').addEventListener('click', function() {
+        // Get all input and select elements within the form
+        const inputs = document.querySelectorAll('.card-body form input, .card-body form select');
+
+        // Iterate through each input element and reset its value
+        inputs.forEach(input => {
+            if (input.type === 'date') {
+                input.valueAsNumber = "dd/mm/yyyy";
+            } else if (input.type === 'select-one') {
+                input.selectedIndex = 0;
+            } else {
+                input.value = '';
+            }
+        });
+    });
+</script>
+<script>
+    // Lấy ngày hiện tại
+    var currentDate = new Date().toISOString().split('T')[0];
+
+    // Thiết lập giá trị min của input type date
+    document.getElementById("ngayLam").setAttribute("min", currentDate);
+</script>
+
+</body>
+
+</html>

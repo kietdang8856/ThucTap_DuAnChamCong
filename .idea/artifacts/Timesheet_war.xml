@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="war" build-on-make="true" name="Timesheet:war">
+    <output-path>$PROJECT_DIR$/out/artifacts/Timesheet_war</output-path>
+    <root id="archive" name="Timesheet_war.war">
+      <element id="artifact" artifact-name="Timesheet:war exploded" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>

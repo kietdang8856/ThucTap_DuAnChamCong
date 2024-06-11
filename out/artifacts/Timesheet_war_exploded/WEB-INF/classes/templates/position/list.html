@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listUser','List Position')}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+</head>
+<body>
+<section>
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><a th:href="@{/admin/position/list}" th:text="${pageTitle}">.</a></h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+            <hr>
+            <div class="box-header">
+                <a th:href="@{/admin/position/add}" class="btn btn-success">Add Positon</a>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+                <table class="table table-hover">
+                    <!-- Table header -->
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name Position</th>
+                        <th>Adjust</th>
+                    </tr>
+                    </thead>
+                    <!-- Table body -->
+                    <tbody>
+                    <!-- Iterate over the list of NhanVien and display their attributes -->
+                    <tr th:each="position : ${allSPosition}">
+                        <td th:text="${position.id}"></td>
+                        <td th:text="${position.tenChucVu}"></td>
+                        <td>
+                            <a th:href="@{'/admin/position/edit/'+ ${position.id}}" class="btn btn-sm btn-success">Edit</a>
+                            <a class="btn btn-sm btn-danger"
+                               th:href="@{/admin/position/delete/{id}(id=${position.id})}"
+                               onclick="return confirm('Do you want to delete?')">Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example" style="font-size: 15px; display: flex; justify-content: center;">
+                    <ul class="pagination">
+                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                            <a class="page-link" th:href="@{/admin/position/list(pageNo=${currentPage > 0 ? currentPage - 1 : 0})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'" style="margin: 0 3px;">
+                            <a class="page-link" th:href="@{/admin/position/list(pageNo=${i})}" th:text="${i + 1}"></a>
+                        </li>
+                        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/admin/position/list(pageNo=${currentPage < totalPages - 1 ? currentPage + 1 : totalPages - 1})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+</section>
+</body>
+<script th:inline="javascript">
+    function deletePosition(positionId) {
+        if (confirm('Bạn có chắc chắn muốn xóa?')) {
+            // Send an AJAX request to delete the position
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/admin/position/delete/' + positionId, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Position deleted successfully, reload the page or update the UI as needed
+                        location.reload(); // Reload the page after deletion
+                    } else {
+                        // Handle error, if any
+                        console.error('Error occurred while deleting position:', xhr.statusText);
+                    }
+                }
+            };
+            xhr.send();
+        }
+    }
+</script>
+</html>

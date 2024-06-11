@@ -144,7 +144,7 @@ public class UserController {
                 // Tạo tên file duy nhất , sử dụng UUID
                 String uniqueFileName = UUID.randomUUID().toString() + "." + fileExtension;
 
-                String uploadDir = "src/main/resources/static/user/img";
+                String uploadDir = "/user/img";
                 Path uploadPath = Paths.get(uploadDir);
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);

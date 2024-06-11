@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html th:fragment="layout (content, activeLink, pageTitle)" xmlns:th="http://www.w3.org/1999/html" xmlns:sec="https://www.thymeleaf.org/extras/spring-security6">
+<intercept-url pattern="/**" access="authenticated"/>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/assets/css/AdminLTE.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/_all-skins.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/jquery-ui.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <!-- Fullcalendar CSS -->
+    <link rel="stylesheet" th:href="@{/assets/css/vendor/fullcalendar.css}"/>
+
+    <!--Moment-->
+    <script type="text/javascript" th:src="@{/assets/js/vendor/moment.js}"></script>
+    <!--FullCalendar-->
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/assets/js/angular.min.js}"></script>
+    <script th:src="@{/assets/js/app.js}"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+    <header class="main-header">
+        <!-- Logo -->
+
+        <a th:href="@{/}" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <img th:src="@{/assets/img/logo-hutech.jpg}" class="logo-mini">
+            <span class="logo-mini"></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg">HUTECH </span>
+            <img th:src="@{/assets/img/logo-hutech.jpg}" class="logo-lg">
+        </a>
+
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img th:if="${session.currentUser.avatarPath != null}"
+                                 th:src="@{'/user/img/' + ${session.currentUser.avatarPath}}"
+                                 class="user-image" alt="User Avatar">
+                            <img th:unless="${session.currentUser.avatarPath != null}"
+                                 th:src="@{/user/img/default_avatar.jpg}"
+                                 class="user-image" alt="User Image">
+
+                            <span th:text="${session.currentUser.tenNV}"></span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header" th:if="${session.currentUser != null}">
+                                <img  th:if="${session.currentUser.avatarPath != null}" th:src="@{'/user/img/' + ${session.currentUser.avatarPath}}" class="img-circle" alt="User Image">
+                                <i th:unless="${session.currentUser.avatarPath != null}" class="fas fa-user fa-3x"></i>
+                                <p>
+                                    <span th:text="${session.currentUser.tenNV}"></span>
+                                    <small th:text="'Member role : ' +${#strings.listJoin(session.currentUser.userRoles.![role.name], ', ')}" class="user-roles"></small>
+                                    <small th:text="'Member since:' + ${#dates.format(session.currentUser.ngayBatDauLam, 'dd/MM/yyyy')}"></small>
+                                </p>
+                                </p>
+                            </li>
+                            <!-- Menu Body -->
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a th:href="@{/profile}" class="btn btn-default btn-flat">Profile</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a th:href="@{/logout}" class="btn btn-default btn-flat">Sign out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- =============================================== -->
+
+    <!-- Left side column. contains the sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                    <div class="pull-left image"th:if="${session.currentUser != null}">
+                        <img  th:if="${session.currentUser.avatarPath != null}" th:src="@{'/user/img/' + ${session.currentUser.avatarPath}}" class="img-circle" alt="User Image">
+                        <i th:unless="${session.currentUser.avatarPath != null}" class="fas fa-user fa-3x"></i>
+                    </div>
+                <div class="pull-left info">
+                    <p><span th:text="${session.currentUser.tenNV}"></span></p>
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
+            </div>
+            <!-- search form -->
+            <form action="#" method="get" class="sidebar-form" >
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search...">
+                    <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+                </div>
+            </form>
+            <!-- /.search form -->
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+
+            <ul class="sidebar-menu" data-widget="tree"z>
+
+                <li>
+                    <a th:href="@{/}">
+                        <i class="fa fa-dashboard"></i> <span>Home Page</span>
+                    </a>
+                </li>
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-user"></i> <span>Account</span>
+                        <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a th:href="@{/profile}"><i class="fa-regular fa-id-card"></i> Profile</a></li>
+                        <li><a th:href="@{/profile/changepass}"><i class="fa-solid fa-lock"></i> Change Password</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a th:href="@{/admin/users/list}">
+                        <i class="fa-solid fa-users"></i> <span>User management</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/position/list}">
+                        <i class="fa fa-list"></i> <span>Position</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/office/list}">
+                        <i class="fa fa-building"></i> <span>Office</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- =============================================== -->
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content" th:block th:include="${content}">
+
+        </section>
+        </section>
+
+        <!-- Main content -->
+
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 1.0.0
+        </div>
+        <strong>Copyright &copy; 2024 <a href="/">URBAN</a>.</strong>
+    </footer>
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 3 -->
+
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/js/jquery-ui.js}"></script>
+<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/js/adminlte.min.js}"></script>
+<script th:src="@{/assets/js/dashboard.js}"></script>
+<script th:src="@{/assets/js/function.js}"></script>
+
+
+<script>
+    // Lấy ngày hiện tại
+    var currentDate = new Date().toISOString().split('T')[0];
+
+    // Thiết lập giá trị min của input type date
+    document.getElementById("ngayLam").setAttribute("min", currentDate);
+</script>
+</body>
+</html>

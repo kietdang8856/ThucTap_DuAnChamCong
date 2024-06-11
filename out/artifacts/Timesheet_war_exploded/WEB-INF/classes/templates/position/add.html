@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listVanPhong','Create Position')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Tạo Văn Phòng</title>
+</head>
+<body>
+<section>
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <!-- Tiêu đề trang -->
+                        <h1><a th:href="@{/admin/position/list}" th:text="${pageTitle}">.</a></h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+
+            <!-- Form tạo văn phòng -->
+            <div class="box-body">
+                <form th:action="@{/admin/position/add}" th:object="${chucVu}" method="post">
+                    <div class="form-group">
+                        <label for="tenChucVu">Name position:</label>
+                        <input type="text" id="tenChucVu" th:field="*{TenChucVu}" class="form-control"/>
+                        <div th:if="${#fields.hasErrors('tenChucVu')}" th:errors="*{tenChucVu}" class="text-danger"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+        <!-- /.box -->
+    </div>
+</section>
+</body>
+</html>

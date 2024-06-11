@@ -1,0 +1,79 @@
+body {
+    margin: 0;
+    padding-top: 50px; /* Thêm khoảng trống phía trên */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 50px); /* Đảm bảo chiều cao vẫn đúng */
+    background-color: #f1f1f1;
+}
+
+.login-container {
+    width: 350px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #999;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    background-color: #fff;
+    padding: 0 5px;
+}
+
+input:focus + label, input:valid + label {
+    top: 0;
+    font-size: 12px;
+    color: #333;
+}
+
+input:focus {
+    border-color: #007bff;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.welcome {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.welcome img {
+    width: 200px;
+    margin-bottom: 10px;
+}

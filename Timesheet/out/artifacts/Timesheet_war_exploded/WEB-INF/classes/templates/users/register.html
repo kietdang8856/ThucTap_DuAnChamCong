@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'listUser','Create account')}">
+<body>
+<div class="col-xs-12">
+    <div class="box">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1><a th:href="@{/admin/users/list}" th:text="${pageTitle}">.</a></h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+        <hr>
+
+        <form th:action="@{/admin/users/register}" method="post" enctype="multipart/form-data" class="forms-sample">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="tenNV">Fullname:</label>
+                    <input type="text" class="form-control text-light"   id="tenNV" name="tenNV" th:value="${nhanVien?.tenNV}" required />
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" class="form-control text-light"  name="username" th:value="${nhanVien?.username}" required />
+                    <div th:if="${usernameError}" class="error" th:text="${usernameError}"></div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control text-light"  id="password" name="password" />
+                        <div th:if="${passwordError}" class="error" th:text="${passwordError}"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="sdt">Phone:</label>
+                        <input type="text" class="form-control text-light"  id="sdt" name="sdt" th:value="${nhanVien?.sdt}" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="diaChi">Address:</label>
+                        <input type="text"  class="form-control text-light" id="diaChi" name="diaChi" th:value="${nhanVien?.diaChi}" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="avatar">Avatar:</label>
+                        <div class="avatar-section">  <input type="file" class="form-control text-light"  id="avatar" name="avatar" accept="image/*" onchange="previewImage(this);" />
+                            <img id="avatarPreview" src="#" alt="Avatar Preview" style="display: none; max-width: 200px; max-height: 200px;"/>
+                        </div>
+                        <div th:if="${avatarError}" class="error" th:text="${avatarError}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="gioiTinh">Gender:</label>
+                        <select id="gioiTinh" class="form-control text-light"  name="gioiTinh">
+                            <option value="0" th:selected="${nhanVien?.gioiTinh == 0}">Male</option>
+                            <option value="1" th:selected="${nhanVien?.gioiTinh == 1}">Female</option>
+                            <option value="2" th:selected="${nhanVien?.gioiTinh == 2}">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control text-light"  id="email" name="email" th:value="${nhanVien?.email}" />
+                        <div th:if="${emailError}" class="error" th:text="${emailError}"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="chucvuId">Position:</label>
+                        <select id="chucvuId" class="form-control text-light"  name="chucvuId">
+                            <option th:each="chucvu : ${chucVus}"
+                                    th:value="${chucvu.id}"
+                                    th:text="${chucvu.tenChucVu}"
+                                    th:selected="${nhanVien?.chucvu != null && nhanVien?.chucvu.id == chucvu.id}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="vpchinhId">Main Office:</label>
+                        <select id="vpchinhId" class="form-control text-light"  name="vpchinhId">
+                            <option th:each="vanPhong : ${vanPhongs}"
+                                    th:value="${vanPhong.id}"
+                                    th:text="${vanPhong.tenVP}"
+                                    th:selected="${nhanVien?.vpLamViecChinh != null && nhanVien?.vpLamViecChinh.id == vanPhong.id}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="roles">Roles:</label>
+                        <select id="roles" class="form-control text-light"  name="roles">
+                            <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+                        </select>
+                        <div th:if="${roleError}" class="error" th:text="${roleError}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
+            <a th:href="@{'/admin/users/list'}" class="btn btn-danger btn-lg btn-block">Back</a>
+        </form>
+        <!-- /.box -->
+    </div>
+</div>
+<script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#avatarPreview').attr('src', e.target.result);
+                $('#avatarPreview').show();
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+</body>
+</html>

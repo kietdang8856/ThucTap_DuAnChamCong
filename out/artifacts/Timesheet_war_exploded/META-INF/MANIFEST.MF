@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Created-By: IntelliJ IDEA
+Built-By: dioda
+Build-Jdk: Oracle OpenJDK version 17.0.10
+Implementation-Title: Timesheet
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: project
+Main-Class: ${start-class}
+
